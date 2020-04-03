@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/Heptathlon.iml" filepath="$PROJECT_DIR$/Heptathlon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RMI/RMI.iml" filepath="$PROJECT_DIR$/RMI/RMI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
     </modules>
   </component>
 </project>
