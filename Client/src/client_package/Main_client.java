@@ -8,7 +8,7 @@ import java.rmi.registry.Registry;
 import java.util.List;
 
 
-public class Client {
+public class Main_client {
     public static void main(String[] args)throws Exception {
         try {
             // Getting the registry
