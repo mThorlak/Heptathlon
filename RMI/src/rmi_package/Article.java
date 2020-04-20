@@ -2,15 +2,15 @@ package rmi_package;
 
 public class Article implements java.io.Serializable {
 
-    private int Reference, Stock;
+    private String Reference, Description;
     private float Price;
-    private String Family;
+    private int Stock;
 
-    public int getReference() {
+    public String getReference() {
         return Reference;
     }
 
-    public void setReference(int reference) {
+    public void setReference(String reference) {
         Reference = reference;
     }
 
@@ -30,11 +30,11 @@ public class Article implements java.io.Serializable {
         Price = price;
     }
 
-    public String getFamily() {
-        return Family;
+    public String getDescription() {
+        return Description;
     }
 
-    public void setFamily(String family) {
-        Family = family;
+    public void setDescription(String description) {
+        Description = description;
     }
 }
