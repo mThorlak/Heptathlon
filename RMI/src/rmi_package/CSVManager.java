@@ -1,36 +1,36 @@
 package rmi_package;
 
+import au.com.bytecode.opencsv.CSVReader;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
-
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CSVManager {
 
-    /**
-     * OpenCSV CSVReader Example, Read line by line
-     */
-    public void OpenCSVReaderLineByLine() throws IOException, CsvValidationException {
+    private final static String BILL_PATH = "Server/resources/bill.csv";
+    private final static char SEPARATOR = ';';
 
-        CSVReader reader = new CSVReader(new FileReader("RMI/resources/bill.csv"));
-
-        // List<Employee> emps = new ArrayList<Employee>();
-
-        // read line by line
-        String[] record = null;
-
-        while ((record = reader.readNext()) != null) {
-            System.out.println(record[0]);
-//            Employee emp = new Employee();
-//            emp.setId(record[0]);
-//            emp.setName(record[1]);
-//            emp.setAge(record[2]);
-//            emp.setCountry(record[3]);
-//            emps.add(emp);
+    public List<String[]> readLineByLine() {
+    try (
+            Reader reader = Files.newBufferedReader(Paths.get(BILL_PATH));
+            CSVReader csvReader = new CSVReader(reader, SEPARATOR);
+        ) {
+        List<String[]> bill = new ArrayList<>();
+        // Reading Records One by One in a String array
+        String[] nextRecord;
+        while ((nextRecord = csvReader.readNext()) != null) {
+            System.out.println("Name : " + nextRecord[0]);
+            System.out.println("Email : " + nextRecord[1]);
+            bill.add(nextRecord);
         }
-
-        reader.close();
+        return bill;
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return null;
     }
 }
