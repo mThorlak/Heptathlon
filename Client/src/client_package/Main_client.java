@@ -1,6 +1,7 @@
 package client_package;
 
 import rmi_package.Article;
+import rmi_package.Bill;
 import rmi_package.CSVManager;
 import rmi_package.QueryShopInterface;
 
@@ -36,13 +37,15 @@ public class Main_client {
             //queryInterface.updatePrice("L00001", 150);
 
             CSVManager csvManager = new CSVManager();
-            List<String[]> bill = csvManager.readLineByLine();
+            // List<String[]> bill = csvManager.readLineByLine();
+            Bill bill1 = new Bill("21/04/2020", 150, "carte bleu", list);
+            csvManager.writeNewBill(bill1);
 
-            for (String[] line:bill) {
+/*            for (String[] line:bill) {
                 for (String s : line) {
                     System.out.println(s);
                 }
-            }
+            }*/
 
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());
