@@ -15,10 +15,11 @@ public class Main_client {
             Registry registry = LocateRegistry.getRegistry(null);
 
             // Looking up the registry for the remote object
-            QueryInterface stub = (QueryInterface) registry.lookup("article");
+            QueryInterface queryInterface = (QueryInterface) registry.lookup("article");
 
             // Calling the remote method using the obtained object
-            List<Article> list = (List)stub.getAllArticle();
+            // List<Article> list = (List)stub.getAllArticle();
+            List<Article> list = (List)queryInterface.getArticleByFamily("Rugby");
             for (Article a:list) {
 
                 // System.out.println("bc "+s.getBranch());
@@ -27,7 +28,10 @@ public class Main_client {
                 System.out.println("Stock: " + a.getStock());
                 System.out.println("Description: " + a.getDescription());
             }
-            // System.out.println(list);
+            //queryInterface.insertNewReference("Longboard","L00001");
+            //queryInterface.insertNewArticle("L00001", 40, 50, "Roues orangatang");
+            //queryInterface.updateStock("L00001", 130);
+            //queryInterface.updatePrice("L00001", 150);
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();

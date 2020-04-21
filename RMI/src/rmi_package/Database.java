@@ -28,11 +28,11 @@ public class Database {
         return statement.executeQuery(query);
     }
 
-    public Connection getConn() {
+    public Connection getConnection() {
         return connection;
     }
 
-    public Statement getStmt() {
+    public Statement getStatement() {
         return statement;
     }
 }
