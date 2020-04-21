@@ -41,6 +41,8 @@ public class Main_client {
             Bill bill1 = new Bill("21/04/2020", 150, "carte bleu", list);
             csvManager.writeNewBill(bill1);
 
+            csvManager.payBill(5);
+
 /*            for (String[] line:bill) {
                 for (String s : line) {
                     System.out.println(s);

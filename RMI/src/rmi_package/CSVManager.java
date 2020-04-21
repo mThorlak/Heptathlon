@@ -27,6 +27,7 @@ public class CSVManager {
             while ((nextRecord = csvReader.readNext()) != null) {
                 bills.add(nextRecord);
             }
+            csvReader.close();
             return bills;
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,14 +46,14 @@ public class CSVManager {
                 )
         {
             List<Article> articleBought = bill.getArticles();
-            List<String[]> listRandom = readLineByLine();
+            List<String[]> allBills = readLineByLine();
             String articleFormatted = "";
             String idBill;
 
-            if (listRandom.isEmpty())
+            if (allBills.isEmpty())
                 idBill = "1";
             else {
-                String[] lastLine = listRandom.get(listRandom.size() - 1);
+                String[] lastLine = allBills.get(allBills.size() - 1);
                 idBill = Integer.toString(Integer.parseInt(lastLine[1]) + 1);
             }
 
@@ -78,6 +79,29 @@ public class CSVManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void payBill (int idBill) throws IOException {
+
+        List<String[]> allBills = readLineByLine();
+        int cpt = -1;
+        for (String[] bill : allBills) {
+            cpt++;
+            if (Integer.parseInt(bill[1]) == idBill) {
+                allBills.remove(cpt);
+                break;
+            }
+        }
+
+        FileWriter fileWriter = new FileWriter(BILL_PATH);
+        CSVWriter csvWriter = new CSVWriter(fileWriter,
+                SEPARATOR,
+                CSVWriter.NO_QUOTE_CHARACTER,
+                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                CSVWriter.DEFAULT_LINE_END);
+
+        csvWriter.writeAll(allBills);
+        csvWriter.close();
     }
 }
 
