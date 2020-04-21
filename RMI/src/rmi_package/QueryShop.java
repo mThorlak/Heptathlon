@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 
-public class Query implements QueryInterface {
+public class QueryShop implements QueryShopInterface {
 
     private List<Article> getArticles(List<Article> list, ResultSet resultQuery) throws SQLException {
         while(resultQuery.next()) {
@@ -108,4 +108,5 @@ public class Query implements QueryInterface {
         query.setString(2, reference);
         query.executeUpdate();
     }
+
 }

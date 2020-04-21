@@ -3,7 +3,7 @@ package rmi_package;
 import java.rmi.Remote;
 import java.util.*;
 
-public interface QueryInterface extends Remote {
+public interface QueryShopInterface extends Remote {
     public List<Article> getAllArticle() throws Exception;
     public List<Article> getArticleByFamily(String familyName) throws Exception;
     public void insertNewReference(String familyName, String reference) throws Exception;
