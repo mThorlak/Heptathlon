@@ -22,14 +22,14 @@ public class Main_client {
             // Calling the remote method using the obtained object
             // List<Article> list = (List)stub.getAllArticle();
             List<Article> list = (List) queryShopInterface.getArticleByFamily("Rugby");
-            for (Article a:list) {
+/*            for (Article a:list) {
 
                 // System.out.println("bc "+s.getBranch());
                 System.out.println("Reference: " + a.getReference());
                 System.out.println("Price: " + a.getPrice());
                 System.out.println("Stock: " + a.getStock());
                 System.out.println("Description: " + a.getDescription());
-            }
+            }*/
 
             //queryInterface.insertNewReference("Longboard","L00001");
             //queryInterface.insertNewArticle("L00001", 40, 50, "Roues orangatang");

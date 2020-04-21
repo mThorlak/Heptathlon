@@ -45,19 +45,32 @@ public class CSVManager {
                 )
         {
             List<Article> articleBought = bill.getArticles();
+            List<String[]> listRandom = readLineByLine();
             String articleFormatted = "";
+            String idBill;
+
+            if (listRandom.isEmpty())
+                idBill = "1";
+            else {
+                String[] lastLine = listRandom.get(listRandom.size() - 1);
+                idBill = Integer.toString(Integer.parseInt(lastLine[1]) + 1);
+            }
+
             int cpt = 0;
             for (Article article : articleBought) {
                 cpt ++;
                 articleFormatted = articleFormatted.concat("|" + article.getReference());
-                if (cpt == articleBought.size())
+                if (cpt == articleBought.size()) {
                     articleFormatted = articleFormatted.concat("|" + article.getPrice() + "|;");
+                }
                 else
                     articleFormatted = articleFormatted.concat("|" + article.getPrice() + "|,");
             }
+
             csvWriter.writeNext(
                     new String[]{
                             bill.getDate(),
+                            idBill,
                             Double.toString(bill.getTotal()),
                             bill.getPayment(),
                             articleFormatted
