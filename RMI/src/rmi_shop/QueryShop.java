@@ -2,6 +2,7 @@ package rmi_shop;
 
 import rmi_shop.tables.Article;
 import rmi_general.Database;
+import rmi_siege.QuerySiege;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,17 +90,31 @@ public class QueryShop implements QueryShopInterface {
     }
 
     @Override
-    public void insertNewArticle(String reference, double price, int stock, String description) throws Exception {
+    public void insertNewArticle(String reference, double price, int stock, String description, String shop)
+            throws Exception {
 
-        Database database = new Database(DATABASE_SHOP);
+        Database databaseShop = new Database(DATABASE_SHOP);
+        Database databaseSiege = new Database(DATABASE_SIEGE);
 
-        String sqlInsert = "INSERT INTO Article(Reference, Price, Stock, Description) VALUES (?,?,?,?)";
-        PreparedStatement query = database.getConnection().prepareStatement(sqlInsert);
-        query.setString(1, reference);
-        query.setDouble(2, price);
-        query.setInt(3, stock);
-        query.setString(4, description);
-        query.executeUpdate();
+        QuerySiege querySiege = new QuerySiege();
+        querySiege.insertNewArticle(reference, price, stock, description);
+
+        String sqlInsertShopSiegeDB = "INSERT INTO Shop(Name, Reference, Stock) VALUES (?,?,?)";
+        PreparedStatement queryShopSiegeDB = databaseSiege.getConnection().prepareStatement(sqlInsertShopSiegeDB);
+        queryShopSiegeDB.setString(1, shop);
+        queryShopSiegeDB.setString(2, reference);
+        queryShopSiegeDB.setInt(3, stock);
+        queryShopSiegeDB.executeUpdate();
+
+        String sqlInsertShopDB = "INSERT INTO Article(Reference, Price, Stock, Description) VALUES (?,?,?,?)";
+        PreparedStatement queryShop = databaseShop.getConnection().prepareStatement(sqlInsertShopDB);
+        queryShop.setString(1, reference);
+        queryShop.setDouble(2, price);
+        queryShop.setInt(3, stock);
+        queryShop.setString(4, description);
+        queryShop.executeUpdate();
+
+
     }
 
     @Override

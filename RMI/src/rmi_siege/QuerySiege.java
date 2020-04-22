@@ -79,15 +79,14 @@ public class QuerySiege implements QuerySiegeInterface {
     @Override
     public void insertNewArticle(String reference, double price, int stock, String description) throws Exception {
 
-        Database database = new Database(DATABASE_NAME);
+        Database databaseSiege = new Database(DATABASE_NAME);
 
-        String sql = "INSERT INTO Article(Reference, Price, Stock, Description) VALUES (?,?,?,?)";
-        PreparedStatement query = database.getConnection().prepareStatement(sql);
-        query.setString(1, reference);
-        query.setDouble(2, price);
-        query.setInt(3, stock);
-        query.setString(4, description);
-        query.executeUpdate();
+        String sqlInsertArticleSiegeDB = "INSERT INTO Article(Reference, Price, Description) VALUES (?,?,?)";
+        PreparedStatement queryArticleSiegeDB = databaseSiege.getConnection().prepareStatement(sqlInsertArticleSiegeDB);
+        queryArticleSiegeDB.setString(1, reference);
+        queryArticleSiegeDB.setDouble(2, price);
+        queryArticleSiegeDB.setString(3, description);
+        queryArticleSiegeDB.executeUpdate();
     }
 /*
 

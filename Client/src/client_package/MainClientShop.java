@@ -36,8 +36,8 @@ public class MainClientShop {
             }
 */
 
-            queryShopInterface.insertNewReference("Longboard","L00003");
-            //queryInterface.insertNewArticle("L00001", 40, 50, "Roues orangatang");
+            //queryShopInterface.insertNewReference("Longboard","L00003");
+            queryShopInterface.insertNewArticle("L00003", 40, 50, "Roues orangatang", "shop1");
             //queryInterface.updateStock("L00001", 130);
             //queryInterface.updatePrice("L00001", 150);
 /*
