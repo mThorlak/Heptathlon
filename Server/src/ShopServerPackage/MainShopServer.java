@@ -9,6 +9,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class MainShopServer extends QueryShop {
 
+    private static final int PORT_SHOP = 1101;
+
     public static void main(String[] args) {
         try {
             // Instantiating the implementation class
@@ -19,7 +21,7 @@ public class MainShopServer extends QueryShop {
             QueryShopInterface stub = (QueryShopInterface) UnicastRemoteObject.exportObject(obj, 0);
 
             // Binding the remote object (stub) in the registry
-            Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+            Registry registry = LocateRegistry.createRegistry(PORT_SHOP);
 
             registry.bind("articleShop", stub);
             System.out.println("Server ready");
@@ -27,5 +29,9 @@ public class MainShopServer extends QueryShop {
             System.err.println("Server exception: " + e.toString());
             e.printStackTrace();
         }
+    }
+
+    public int getPort() {
+        return PORT_SHOP;
     }
 }

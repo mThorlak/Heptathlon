@@ -9,6 +9,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class MainSiegeServer extends QuerySiege {
 
+    private static final int PORT_SIEGE = 1100;
+
     public static void main(String[] args) {
         try {
             // Instantiating the implementation class
@@ -19,7 +21,7 @@ public class MainSiegeServer extends QuerySiege {
             QuerySiegeInterface stub = (QuerySiegeInterface) UnicastRemoteObject.exportObject(obj, 0);
 
             // Binding the remote object (stub) in the registry
-            Registry registry = LocateRegistry.createRegistry(1100);
+            Registry registry = LocateRegistry.createRegistry(PORT_SIEGE);
 
             registry.bind("articleSiege", stub);
             System.out.println("Server ready");
@@ -27,5 +29,9 @@ public class MainSiegeServer extends QuerySiege {
             System.err.println("Server exception: " + e.toString());
             e.printStackTrace();
         }
+    }
+
+    public int getPort() {
+        return PORT_SIEGE;
     }
 }
