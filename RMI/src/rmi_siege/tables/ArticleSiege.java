@@ -1,10 +1,9 @@
-package rmi_package;
+package rmi_siege.tables;
 
-public class Article implements java.io.Serializable {
+public class ArticleSiege implements java.io.Serializable {
 
     private String Reference, Description;
     private float Price;
-    private int Stock;
 
     public String getReference() {
         return Reference;
@@ -12,14 +11,6 @@ public class Article implements java.io.Serializable {
 
     public void setReference(String reference) {
         Reference = reference;
-    }
-
-    public int getStock() {
-        return Stock;
-    }
-
-    public void setStock(int stock) {
-        Stock = stock;
     }
 
     public float getPrice() {

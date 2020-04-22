@@ -1,4 +1,6 @@
-package rmi_package;
+package rmi_shop;
+
+import rmi_shop.tables.Article;
 
 import java.rmi.Remote;
 import java.util.*;

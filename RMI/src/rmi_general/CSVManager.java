@@ -1,7 +1,8 @@
-package rmi_package;
+package rmi_general;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
+import rmi_shop.tables.Article;
 
 import java.io.FileWriter;
 import java.io.IOException;

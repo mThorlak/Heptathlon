@@ -1,6 +1,6 @@
-package rmi_package;
+package rmi_siege.tables;
 
-public class Family implements java.io.Serializable {
+public class FamilySiege implements java.io.Serializable {
 
     private String Family, Reference;
 

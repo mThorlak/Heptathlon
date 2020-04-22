@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Heptathlon_Shop@localhost" uuid="3867f01a-8e7f-49a8-a3d2-d5dfbef51167">
+    <data-source source="LOCAL" name="Heptathlon_Siege@localhost" uuid="110c2f29-9ec7-4f4a-8e1b-e590401fc13f">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/Heptathlon_Shop</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/Heptathlon_Siege</jdbc-url>
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
       </driver-properties>

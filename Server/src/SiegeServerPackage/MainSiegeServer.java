@@ -1,27 +1,27 @@
-package ShopServerPackage;
+package SiegeServerPackage;
 
-import rmi_shop.QueryShop;
-import rmi_shop.QueryShopInterface;
+import rmi_siege.QuerySiege;
+import rmi_siege.QuerySiegeInterface;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class MainShopServer extends QueryShop {
+public class MainSiegeServer extends QuerySiege {
 
     public static void main(String[] args) {
         try {
             // Instantiating the implementation class
-            QueryShop obj = new QueryShop();
+            QuerySiege obj = new QuerySiege();
 
             // Exporting the object of implementation class (
             // here we are exporting the remote object to the stub)
-            QueryShopInterface stub = (QueryShopInterface) UnicastRemoteObject.exportObject(obj, 0);
+            QuerySiegeInterface stub = (QuerySiegeInterface) UnicastRemoteObject.exportObject(obj, 0);
 
             // Binding the remote object (stub) in the registry
-            Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+            Registry registry = LocateRegistry.createRegistry(1100);
 
-            registry.bind("articleShop", stub);
+            registry.bind("articleSiege", stub);
             System.out.println("Server ready");
         } catch (Exception e) {
             System.err.println("Server exception: " + e.toString());

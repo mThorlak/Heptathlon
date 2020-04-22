@@ -1,4 +1,6 @@
-package rmi_package;
+package rmi_general;
+
+import rmi_shop.tables.Article;
 
 import java.util.List;
 
