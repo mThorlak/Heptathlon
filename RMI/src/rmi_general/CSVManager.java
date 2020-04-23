@@ -46,9 +46,14 @@ public class CSVManager {
         return null;
     }
 
-    public void writeNewBill(Bill bill) throws IOException {
+    public void writeNewBill(Bill bill, boolean inPaidBill) throws IOException {
+        String path;
+        if (inPaidBill)
+            path = BILL_PAID_PATH;
+        else
+            path = BILL_PATH;
         try (
-                FileWriter writer = new FileWriter(BILL_PATH, true);
+                FileWriter writer = new FileWriter(path, true);
                 CSVWriter csvWriter = new CSVWriter(writer,
                         SEPARATOR,
                         CSVWriter.NO_QUOTE_CHARACTER,
@@ -97,15 +102,17 @@ public class CSVManager {
         List<String[]> allBills = readLineByLine();
         String[] billPaid;
         int cpt = 0;
-        for (String[] bill : allBills) {
+        for (String[] billString : allBills) {
             // Not compare header
             if (cpt == 0) {
                 cpt++;
                 continue;
             }
-            if (Integer.parseInt(bill[1]) == idBill) {
-                billPaid = bill;
+            if (Integer.parseInt(billString[1]) == idBill) {
+                billPaid = billString;
                 allBills.remove(cpt);
+                Bill bill = convertLineInBill(billString);
+                writeNewBill(bill, true);
                 break;
             }
             cpt++;
@@ -125,6 +132,7 @@ public class CSVManager {
     public Bill convertLineInBill(String[] lineCSV) throws FileNotFoundException {
 
         String date = lineCSV[0];
+        String id = lineCSV[1];
         double total = Double.parseDouble(lineCSV[2]);
         String payment = lineCSV[3];
         List<Article> articles = new ArrayList<>();
@@ -167,20 +175,7 @@ public class CSVManager {
             }
         }
 
-        FileReader reader = new FileReader(BILL_PATH);
-
-        Bill bill = new Bill(date, total, payment, articles);
-
-        System.out.println("In convert line into bill");
-        System.out.println("===========================");
-        System.out.println("Date : " + bill.getDate());
-        System.out.println("Total : " + bill.getTotal());
-        System.out.println("Payment : " + bill.getPayment());
-        System.out.println("References : " + bill.getArticles().get(0).getReference());
-        System.out.println("References : " + bill.getArticles().get(1).getReference());
-        System.out.println("==========================");
-
-        return bill;
+        return new Bill(date, id, total, payment, articles);
     }
 
 }

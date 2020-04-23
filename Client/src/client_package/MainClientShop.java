@@ -8,6 +8,7 @@ import rmi_shop.QueryShopInterface;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -45,11 +46,14 @@ public class MainClientShop {
             CSVManager csvManager = new CSVManager();
             List<String[]> billList = csvManager.readLineByLine();
             Bill bill1 = new Bill("21/04/2020", 150, "carte bleu", list);
-            csvManager.writeNewBill(bill1);
+            csvManager.writeNewBill(bill1, false);
 
-            // csvManager.payBill(5);
+            csvManager.payBill(8);
 
-            csvManager.convertLineInBill(billList.get(5));
+            //csvManager.convertLineInBill(billList.get(5));
+
+            Timestamp ts = new Timestamp(System.currentTimeMillis());
+            System.out.println("Current Time Stamp:" + ts.getTime());
 
 /*            for (String[] line:bill) {
                 for (String s : line) {
