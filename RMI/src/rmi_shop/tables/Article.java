@@ -6,6 +6,13 @@ public class Article implements java.io.Serializable {
     private float Price;
     private int Stock;
 
+    public Article() { }
+
+    public Article(String reference, float price) {
+        this.Reference = reference;
+        this.Price = price;
+    }
+
     public String getReference() {
         return Reference;
     }

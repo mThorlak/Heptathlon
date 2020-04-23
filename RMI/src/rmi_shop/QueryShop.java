@@ -78,6 +78,7 @@ public class QueryShop implements QueryShopInterface {
         queryShop.setString(1, familyName);
         querySiege.setString(1, familyName);
         queryShop.setString(2, reference);
+
         querySiege.setString(2, reference);
 
         try {

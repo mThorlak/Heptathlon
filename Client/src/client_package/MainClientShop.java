@@ -26,6 +26,7 @@ public class MainClientShop {
 
 
             //List<Article> list = (List) queryShopInterface.getArticleByFamily("Rugby");
+ /*
             for (Article a:list) {
 
                 // System.out.println("bc "+s.getBranch());
@@ -34,7 +35,7 @@ public class MainClientShop {
                 System.out.println("Stock: " + a.getStock());
                 System.out.println("Description: " + a.getDescription());
             }
-
+*/
 
             //queryShopInterface.insertNewReference("Longboard","L00003");
             //queryShopInterface.insertNewArticle("L00003", 40, 50, "Roues orangatang", "shop1");
@@ -42,11 +43,13 @@ public class MainClientShop {
             //queryInterface.updatePrice("L00001", 150);
 
             CSVManager csvManager = new CSVManager();
-            // List<String[]> bill = csvManager.readLineByLine();
+            List<String[]> billList = csvManager.readLineByLine();
             Bill bill1 = new Bill("21/04/2020", 150, "carte bleu", list);
             csvManager.writeNewBill(bill1);
 
-            csvManager.payBill(5);
+            // csvManager.payBill(5);
+
+            csvManager.convertLineInBill(billList.get(5));
 
 /*            for (String[] line:bill) {
                 for (String s : line) {

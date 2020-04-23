@@ -5,6 +5,7 @@ import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
 import rmi_shop.tables.Article;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -121,18 +122,66 @@ public class CSVManager {
         csvWriter.close();
     }
 
-    /*
-    TODO : create column in csv and use it to make object with line simplier
-     https://www.callicoder.com/java-read-write-csv-file-opencsv/
-     */
-/*
-    public Bill convertLineInBill (String[] lineBill) {
+    public Bill convertLineInBill(String[] lineCSV) throws FileNotFoundException {
 
+        String date = lineCSV[0];
+        double total = Double.parseDouble(lineCSV[2]);
+        String payment = lineCSV[3];
+        List<Article> articles = new ArrayList<>();
 
+        String stringArticles = lineCSV[4];
+        boolean isDone = false;
+        boolean referenceIsDone = false;
+        boolean priceIsDone = false;
+        int i = 0;
 
-        // Bill bill = new Bill();
-        return new bill;
+        String reference = "";
+        float price = 0;
+
+        while (!isDone) {
+            if (stringArticles.charAt(0) == '|' && !referenceIsDone) {
+                stringArticles = stringArticles.substring(1);
+                reference = stringArticles.substring(0, stringArticles.indexOf('|'));
+                referenceIsDone = true;
+                stringArticles = stringArticles.substring(stringArticles.indexOf('|'));
+            }
+            if (stringArticles.charAt(0) == '|' && referenceIsDone && !priceIsDone) {
+                stringArticles = stringArticles.substring(1);
+                price = Float.parseFloat(stringArticles.substring(0, stringArticles.indexOf('|')));
+                priceIsDone = true;
+                stringArticles = stringArticles.substring(stringArticles.indexOf('|'));
+            }
+            if (stringArticles.length() > 1) {
+                if (stringArticles.charAt(1) == ',' && referenceIsDone && priceIsDone) {
+                    stringArticles = stringArticles.substring(2);
+                    referenceIsDone = false;
+                    priceIsDone = false;
+                    articles.add(new Article(reference, price));
+                    System.out.println("+1 article");
+                }
+            }
+            else {
+                isDone = true;
+                articles.add(new Article(reference, price));
+                System.out.println("Only 1 article");
+            }
+        }
+
+        FileReader reader = new FileReader(BILL_PATH);
+
+        Bill bill = new Bill(date, total, payment, articles);
+
+        System.out.println("In convert line into bill");
+        System.out.println("===========================");
+        System.out.println("Date : " + bill.getDate());
+        System.out.println("Total : " + bill.getTotal());
+        System.out.println("Payment : " + bill.getPayment());
+        System.out.println("References : " + bill.getArticles().get(0).getReference());
+        System.out.println("References : " + bill.getArticles().get(1).getReference());
+        System.out.println("==========================");
+
+        return bill;
     }
-    */
+
 }
 
