@@ -1,27 +1,35 @@
 package rmi_general;
 
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
+
+import com.opencsv.*;
+import com.opencsv.exceptions.CsvValidationException;
 import rmi_shop.tables.Article;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CSVManager {
 
     private final static String BILL_PATH = "Server/resources/bill.csv";
+    private final static String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
     private final static char SEPARATOR = ';';
 
     public List<String[]> readLineByLine() {
-        try (
-                Reader reader = Files.newBufferedReader(Paths.get(BILL_PATH));
-                CSVReader csvReader = new CSVReader(reader, SEPARATOR);
-        ) {
+        try {
+            FileReader reader = new FileReader(BILL_PATH);
+
+            CSVParser parser = new CSVParserBuilder()
+                    .withSeparator(';')
+                    .withIgnoreQuotations(true)
+                    .build();
+
+            CSVReader csvReader = new CSVReaderBuilder(reader)
+                    .withCSVParser(parser)
+                    .build();
+
             List<String[]> bills = new ArrayList<>();
             // Reading Records One by One in a String array
             String[] nextRecord;
@@ -30,7 +38,8 @@ public class CSVManager {
             }
             csvReader.close();
             return bills;
-        } catch (IOException e) {
+
+        } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
         }
         return null;
@@ -44,28 +53,28 @@ public class CSVManager {
                         CSVWriter.NO_QUOTE_CHARACTER,
                         CSVWriter.DEFAULT_ESCAPE_CHARACTER,
                         CSVWriter.DEFAULT_LINE_END);
-                )
-        {
+        ) {
             List<Article> articleBought = bill.getArticles();
             List<String[]> allBills = readLineByLine();
             String articleFormatted = "";
             String idBill;
 
-            if (allBills.isEmpty())
+            if (allBills.isEmpty()) {
                 idBill = "1";
-            else {
+                String[] headerRecord = {"Date", "IDBill", "Total", "Payment", "References"};
+                csvWriter.writeNext(headerRecord);
+            } else {
                 String[] lastLine = allBills.get(allBills.size() - 1);
                 idBill = Integer.toString(Integer.parseInt(lastLine[1]) + 1);
             }
 
             int cpt = 0;
             for (Article article : articleBought) {
-                cpt ++;
+                cpt++;
                 articleFormatted = articleFormatted.concat("|" + article.getReference());
                 if (cpt == articleBought.size()) {
                     articleFormatted = articleFormatted.concat("|" + article.getPrice() + "|;");
-                }
-                else
+                } else
                     articleFormatted = articleFormatted.concat("|" + article.getPrice() + "|,");
             }
 
@@ -82,16 +91,23 @@ public class CSVManager {
         }
     }
 
-    public void payBill (int idBill) throws IOException {
+    public void payBill(int idBill) throws IOException {
 
         List<String[]> allBills = readLineByLine();
-        int cpt = -1;
+        String[] billPaid;
+        int cpt = 0;
         for (String[] bill : allBills) {
-            cpt++;
+            // Not compare header
+            if (cpt == 0) {
+                cpt++;
+                continue;
+            }
             if (Integer.parseInt(bill[1]) == idBill) {
+                billPaid = bill;
                 allBills.remove(cpt);
                 break;
             }
+            cpt++;
         }
 
         FileWriter fileWriter = new FileWriter(BILL_PATH);
@@ -104,5 +120,19 @@ public class CSVManager {
         csvWriter.writeAll(allBills);
         csvWriter.close();
     }
+
+    /*
+    TODO : create column in csv and use it to make object with line simplier
+     https://www.callicoder.com/java-read-write-csv-file-opencsv/
+     */
+/*
+    public Bill convertLineInBill (String[] lineBill) {
+
+
+
+        // Bill bill = new Bill();
+        return new bill;
+    }
+    */
 }
 

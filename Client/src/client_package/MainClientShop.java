@@ -22,10 +22,10 @@ public class MainClientShop {
             QueryShopInterface queryShopInterface = (QueryShopInterface) registryShop.lookup("articleShop");
 
             // Calling the remote method using the obtained object
-            // List<Article> list = (List)stub.getAllArticle();
-/*
+             List<Article> list = (List)queryShopInterface.getAllArticle();
 
-            List<Article> list = (List) queryShopInterface.getArticleByFamily("Rugby");
+
+            //List<Article> list = (List) queryShopInterface.getArticleByFamily("Rugby");
             for (Article a:list) {
 
                 // System.out.println("bc "+s.getBranch());
@@ -34,13 +34,12 @@ public class MainClientShop {
                 System.out.println("Stock: " + a.getStock());
                 System.out.println("Description: " + a.getDescription());
             }
-*/
+
 
             //queryShopInterface.insertNewReference("Longboard","L00003");
-            queryShopInterface.insertNewArticle("L00003", 40, 50, "Roues orangatang", "shop1");
+            //queryShopInterface.insertNewArticle("L00003", 40, 50, "Roues orangatang", "shop1");
             //queryInterface.updateStock("L00001", 130);
             //queryInterface.updatePrice("L00001", 150);
-/*
 
             CSVManager csvManager = new CSVManager();
             // List<String[]> bill = csvManager.readLineByLine();
@@ -48,7 +47,6 @@ public class MainClientShop {
             csvManager.writeNewBill(bill1);
 
             csvManager.payBill(5);
-*/
 
 /*            for (String[] line:bill) {
                 for (String s : line) {
