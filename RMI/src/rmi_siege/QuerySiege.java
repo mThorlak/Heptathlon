@@ -1,6 +1,7 @@
 package rmi_siege;
 
 import rmi_general.Database;
+import rmi_shop.tables.Article;
 import rmi_siege.tables.ArticleSiege;
 
 import java.sql.PreparedStatement;
@@ -65,6 +66,29 @@ public class QuerySiege implements QuerySiegeInterface {
     }
 
     @Override
+    public List<Article> getArticleByShop(String shop) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Article.Reference, Article.Price FROM Shop, Article WHERE Shop.name = ? AND Shop.Reference = Article.Reference";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        query.setString(1, shop);
+        ResultSet resultQuery = query.executeQuery();
+
+        List<Article> articleList = new ArrayList<>();
+
+        while(resultQuery.next()) {
+            // Retrieve by column name
+            String reference  = resultQuery.getString("Reference");
+            float price = resultQuery.getFloat("Price");
+            Article article = new Article(reference, price);
+            articleList.add(article);
+        }
+
+        resultQuery.close();
+        return articleList;
+    }
+
+    @Override
     public void insertNewReference(String familyName, String reference) throws Exception {
 
         Database database = new Database(DATABASE_NAME);
@@ -88,20 +112,6 @@ public class QuerySiege implements QuerySiegeInterface {
         queryArticleSiegeDB.setString(3, description);
         queryArticleSiegeDB.executeUpdate();
     }
-/*
-
-    @Override
-    public void updateStock(String reference, int stock) throws Exception {
-
-        Database database = new Database(DATABASE_NAME);
-
-        String sql = "UPDATE Article SET Stock=? WHERE Reference = ?";
-        PreparedStatement query = database.getConnection().prepareStatement(sql);
-        query.setInt(1, stock);
-        query.setString(2, reference);
-        query.executeUpdate();
-    }
-*/
 
     @Override
     public void updatePrice(String reference, double price) throws Exception {

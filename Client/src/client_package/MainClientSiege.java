@@ -22,8 +22,9 @@ public class MainClientSiege {
             // Looking up the registry for the remote object
             QuerySiegeInterface querySiegeInterface = (QuerySiegeInterface) registrySiege.lookup("articleSiege");
 
-            querySiegeInterface.insertNewReference("Longboard","L00010");
-            querySiegeInterface.insertNewArticle("L00010", 50, 200, null);
+            // querySiegeInterface.insertNewReference("Longboard","L00002");
+            // querySiegeInterface.insertNewArticle("L00002", 20, 100, "Test2");
+            querySiegeInterface.updatePrice("L00003", 63.5);
 
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());

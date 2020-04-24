@@ -78,7 +78,6 @@ public class QueryShop implements QueryShopInterface {
         queryShop.setString(1, familyName);
         querySiege.setString(1, familyName);
         queryShop.setString(2, reference);
-
         querySiege.setString(2, reference);
 
         try {
@@ -119,15 +118,24 @@ public class QueryShop implements QueryShopInterface {
     }
 
     @Override
-    public void updateStock(String reference, int stock) throws Exception {
+    public void updateStock(String shop, String reference, int stock) throws Exception {
 
-        Database database = new Database(DATABASE_SHOP);
+        Database databaseShop = new Database(DATABASE_SHOP);
+        Database databaseSiege = new Database(DATABASE_SIEGE);
 
-        String sql = "UPDATE Article SET Stock=? WHERE Reference = ?";
-        PreparedStatement query = database.getConnection().prepareStatement(sql);
-        query.setInt(1, stock);
-        query.setString(2, reference);
-        query.executeUpdate();
+        String sqlUpdateStockShop = "UPDATE Article SET Stock=? WHERE Reference = ?";
+        PreparedStatement queryShop = databaseShop.getConnection().prepareStatement(sqlUpdateStockShop);
+        queryShop.setInt(1, stock);
+        queryShop.setString(2, reference);
+        queryShop.executeUpdate();
+
+        String sqlUpdateStockSiege = "UPDATE Shop SET Stock = ? WHERE Name = ? AND Reference = ?";
+        PreparedStatement querySiege = databaseSiege.getConnection().prepareStatement(sqlUpdateStockSiege);
+        querySiege.setInt(1, stock);
+        querySiege.setString(2, shop);
+        querySiege.setString(3, reference);
+        querySiege.executeUpdate();
+
     }
 
     @Override
@@ -135,11 +143,28 @@ public class QueryShop implements QueryShopInterface {
 
         Database database = new Database(DATABASE_SHOP);
 
-        String sql = "UPDATE Article SET Price=? WHERE Reference = ?";
+        String sql = "UPDATE Article SET Price = ? WHERE Reference = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setDouble(1, price);
         query.setString(2, reference);
         query.executeUpdate();
+    }
+
+    @Override
+    public void importPriceFromSiegeDB(String shop) throws Exception {
+
+        Database database = new Database(DATABASE_SHOP);
+        QuerySiege querySiege  = new QuerySiege();
+        List<Article> articleList = querySiege.getArticleByShop(shop);
+
+        String sql = "UPDATE Article SET Price = ? WHERE Reference = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+
+        for (Article article : articleList) {
+            query.setDouble(1, article.getPrice());
+            query.setString(2, article.getReference());
+            query.executeUpdate();
+        }
     }
 
 }
