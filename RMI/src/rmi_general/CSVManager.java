@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,12 +67,16 @@ public class CSVManager {
             String idBill;
 
             if (allBills.isEmpty()) {
-                idBill = "1";
-                String[] headerRecord = {"Date", "IDBill", "Total", "Payment", "References"};
+                idBill = bill.getId();
+                String[] headerRecord = {"Date", "IDBill", "Shop", "Total", "Payment", "References"};
                 csvWriter.writeNext(headerRecord);
             } else {
                 String[] lastLine = allBills.get(allBills.size() - 1);
-                idBill = Integer.toString(Integer.parseInt(lastLine[1]) + 1);
+                idBill = bill.getId();
+                if (idBill.equals(lastLine[1])) {
+                    Timestamp ts = new Timestamp(System.currentTimeMillis());
+                    idBill = bill.getShop() + ts.getTime()+1;
+                }
             }
 
             int cpt = 0;
@@ -88,6 +93,7 @@ public class CSVManager {
                     new String[]{
                             bill.getDate(),
                             idBill,
+                            bill.getShop(),
                             Double.toString(bill.getTotal()),
                             bill.getPayment(),
                             articleFormatted
@@ -97,7 +103,7 @@ public class CSVManager {
         }
     }
 
-    public void payBill(int idBill) throws IOException {
+    public void payBill(String idBill) throws IOException {
 
         List<String[]> allBills = readLineByLine();
         String[] billPaid;
@@ -108,7 +114,7 @@ public class CSVManager {
                 cpt++;
                 continue;
             }
-            if (Integer.parseInt(billString[1]) == idBill) {
+            if (billString[1].equals(idBill)) {
                 billPaid = billString;
                 allBills.remove(cpt);
                 Bill bill = convertLineInBill(billString);
@@ -133,11 +139,12 @@ public class CSVManager {
 
         String date = lineCSV[0];
         String id = lineCSV[1];
-        double total = Double.parseDouble(lineCSV[2]);
-        String payment = lineCSV[3];
-        List<Article> articles = new ArrayList<>();
+        String shop = lineCSV[2];
+        double total = Double.parseDouble(lineCSV[3]);
+        String payment = lineCSV[4];
+        String stringArticles = lineCSV[5];
 
-        String stringArticles = lineCSV[4];
+        List<Article> articles = new ArrayList<>();
         boolean isDone = false;
         boolean referenceIsDone = false;
         boolean priceIsDone = false;
@@ -175,7 +182,7 @@ public class CSVManager {
             }
         }
 
-        return new Bill(date, id, total, payment, articles);
+        return new Bill(date, id, shop, total, payment, articles);
     }
 
 }

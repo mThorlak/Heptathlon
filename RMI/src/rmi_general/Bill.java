@@ -2,19 +2,32 @@ package rmi_general;
 
 import rmi_shop.tables.Article;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class Bill {
 
     private String date;
     private String id;
+    private String shop;
     private double total;
     private String payment;
     List<Article> articles;
 
-    public Bill(String date, String id, double total, String payment, List<Article> articles) {
+    public Bill(String date, String shop, double total, String payment, List<Article> articles) {
+        this.date = date;
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        this.id = "shop1" + ts.getTime();
+        this.shop = shop;
+        this.total = total;
+        this.payment = payment;
+        this.articles = articles;
+    }
+
+    public Bill(String date, String id, String shop, double total, String payment, List<Article> articles) {
         this.date = date;
         this.id = id;
+        this.shop = shop;
         this.total = total;
         this.payment = payment;
         this.articles = articles;
@@ -34,6 +47,14 @@ public class Bill {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getShop() {
+        return shop;
+    }
+
+    public void setShop(String shop) {
+        this.shop = shop;
     }
 
     public double getTotal() {
