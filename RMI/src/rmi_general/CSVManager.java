@@ -15,13 +15,21 @@ import java.util.List;
 
 public class CSVManager {
 
-    private final static String BILL_PATH = "Server/resources/bill.csv";
-    private final static String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
-    private final static char SEPARATOR = ';';
+    private final String BILL_PATH = "Server/resources/bill.csv";
+    private final String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
+    private final char SEPARATOR = ';';
 
-    public List<String[]> readLineByLine() {
+    public String getBillPath() {
+        return BILL_PATH;
+    }
+
+    public String getBillPaidPath() {
+        return BILL_PAID_PATH;
+    }
+
+    public List<String[]> readLineByLine(String filePath) {
         try {
-            FileReader reader = new FileReader(BILL_PATH);
+            FileReader reader = new FileReader(filePath);
 
             CSVParser parser = new CSVParserBuilder()
                     .withSeparator(';')
@@ -62,7 +70,7 @@ public class CSVManager {
                         CSVWriter.DEFAULT_LINE_END);
         ) {
             List<Article> articleBought = bill.getArticles();
-            List<String[]> allBills = readLineByLine();
+            List<String[]> allBills = readLineByLine(path);
             String articleFormatted = "";
             String idBill;
 
@@ -70,6 +78,7 @@ public class CSVManager {
                 idBill = bill.getId();
                 String[] headerRecord = {"Date", "IDBill", "Shop", "Total", "Payment", "References"};
                 csvWriter.writeNext(headerRecord);
+                System.out.println("ok");
             } else {
                 String[] lastLine = allBills.get(allBills.size() - 1);
                 idBill = bill.getId();
@@ -105,7 +114,7 @@ public class CSVManager {
 
     public void payBill(String idBill) throws IOException {
 
-        List<String[]> allBills = readLineByLine();
+        List<String[]> allBills = readLineByLine(BILL_PATH);
         String[] billPaid;
         int cpt = 0;
         for (String[] billString : allBills) {

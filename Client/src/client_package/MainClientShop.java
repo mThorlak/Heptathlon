@@ -43,11 +43,11 @@ public class MainClientShop {
             //queryInterface.updatePrice("L00001", 150);
 
             CSVManager csvManager = new CSVManager();
-            List<String[]> billList = csvManager.readLineByLine();
+            List<String[]> billList = csvManager.readLineByLine(csvManager.getBillPath());
             Bill bill1 = new Bill("21/04/2020", "shop1", 150, "carte bleu", list);
             csvManager.writeNewBill(bill1, false);
 
-            csvManager.payBill("shop11587729574661");
+            csvManager.payBill("shop11587733041245");
 
             //csvManager.convertLineInBill(billList.get(5));
 
