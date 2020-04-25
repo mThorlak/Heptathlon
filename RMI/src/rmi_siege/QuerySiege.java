@@ -52,7 +52,7 @@ public class QuerySiege implements QuerySiegeInterface {
 
         List<ArticleSiege> list = new ArrayList<>();
         Database database = new Database(DATABASE_NAME);
-        String sql = "SELECT Article.Reference, Price, Stock, Description " +
+        String sql = "SELECT Article.Reference, Price, Description " +
                 "FROM Article, Family " +
                 "WHERE Family.Family = ? " +
                 "GROUP BY Article.Reference";
@@ -101,7 +101,7 @@ public class QuerySiege implements QuerySiegeInterface {
     }
 
     @Override
-    public void insertNewArticle(String reference, double price, int stock, String description) throws Exception {
+    public void insertNewArticle(String reference, double price, String description) throws Exception {
 
         Database databaseSiege = new Database(DATABASE_NAME);
 

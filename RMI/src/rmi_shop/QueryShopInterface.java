@@ -6,6 +6,7 @@ import java.rmi.Remote;
 import java.util.*;
 
 public interface QueryShopInterface extends Remote {
+    public Article findArticleByReference(String reference) throws Exception;
     public List<Article> getAllArticle() throws Exception;
     public List<Article> getArticleByFamily(String familyName) throws Exception;
     public void insertNewReference(String familyName, String reference) throws Exception;

@@ -20,7 +20,7 @@ public class MainClientShop {
 
             // Looking up the registry for the remote object
             QueryShopInterface queryShopInterface = (QueryShopInterface) registryShop.lookup("articleShop");
-            queryShopInterface.importPriceFromSiegeDB("shop1");
+            // queryShopInterface.importPriceFromSiegeDB("shop1");
 
             // Calling the remote method using the obtained object
              // List<Article> list = (List)queryShopInterface.getAllArticle();
@@ -41,8 +41,8 @@ public class MainClientShop {
             System.out.println("#################################################################################");
             */
 
-            // queryShopInterface.insertNewReference("Longboard","L00002");
-            //queryShopInterface.insertNewArticle("L00002", 50, 100, "Test2", "shop1");
+            //queryShopInterface.insertNewReference("Longboard","L00001");
+            queryShopInterface.insertNewArticle("L00008", 50, 100, "Test2", "shop1");
             //queryShopInterface.updateStock("shop1", "L00003", 200);
             //queryShopInterface.updatePrice("L00003", 50);
 

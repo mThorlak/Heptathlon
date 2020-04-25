@@ -3,10 +3,14 @@ package rmi_shop;
 import rmi_shop.tables.Article;
 import rmi_general.Database;
 import rmi_siege.QuerySiege;
+import rmi_siege.tables.ArticleSiege;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+
+import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 public class QueryShop implements QueryShopInterface {
 
@@ -14,9 +18,9 @@ public class QueryShop implements QueryShopInterface {
     private final static String DATABASE_SIEGE = "Siege";
 
     private List<Article> getArticles(List<Article> list, ResultSet resultQuery) throws SQLException {
-        while(resultQuery.next()) {
+        while (resultQuery.next()) {
             // Retrieve by column name
-            String reference  = resultQuery.getString("Reference");
+            String reference = resultQuery.getString("Reference");
             float price = resultQuery.getFloat("Price");
             int stock = resultQuery.getInt("Stock");
             String description = resultQuery.getString("Description");
@@ -33,6 +37,32 @@ public class QueryShop implements QueryShopInterface {
 
         resultQuery.close();
         return list;
+    }
+
+    @Override
+    public Article findArticleByReference(String reference) throws Exception {
+
+        Database database = new Database(DATABASE_SIEGE);
+        String sql = "SELECT * FROM Article WHERE Reference = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        query.setString(1, reference);
+
+        ResultSet resultQuery = query.getResultSet();
+        System.out.println("resultquery");
+        System.out.println(resultQuery);
+
+        Article article = new Article();
+
+        if (isEmpty(resultQuery))
+            return null;
+
+        else {
+            article.setReference(resultQuery.getString("Reference"));
+            article.setPrice(resultQuery.getFloat("Price"));
+        }
+        query.close();
+        return article;
+
     }
 
     @Override
@@ -72,20 +102,29 @@ public class QueryShop implements QueryShopInterface {
         Database databaseShop = new Database(DATABASE_SHOP);
         Database databaseSiege = new Database(DATABASE_SIEGE);
 
-        String sql = "INSERT INTO Family(Family, Reference) VALUES (?,?)";
-        PreparedStatement queryShop = databaseShop.getConnection().prepareStatement(sql);
-        PreparedStatement querySiege = databaseSiege.getConnection().prepareStatement(sql);
-        queryShop.setString(1, familyName);
-        querySiege.setString(1, familyName);
-        queryShop.setString(2, reference);
-        querySiege.setString(2, reference);
+        boolean referenceAlreadyExistInDBSiege = false;
+        QuerySiege querySiegeGetReference = new QuerySiege();
+        List<ArticleSiege> articleSiege = querySiegeGetReference.getArticleByFamily(familyName);
 
-        try {
-            querySiege.executeUpdate();
-        } catch (Exception e) {
-            System.err.println("Insert new reference -> "  + reference +
-                    " already existing in siege database, no action required");
+        for (ArticleSiege article : articleSiege) {
+            if (article.getReference().equals(reference)) {
+                referenceAlreadyExistInDBSiege = true;
+                break;
+            }
         }
+
+        String sql = "INSERT INTO Family(Family, Reference) VALUES (?,?)";
+
+        if (!referenceAlreadyExistInDBSiege) {
+            PreparedStatement querySiege = databaseSiege.getConnection().prepareStatement(sql);
+            querySiege.setString(1, familyName);
+            querySiege.setString(2, reference);
+            querySiege.executeUpdate();
+        }
+
+        PreparedStatement queryShop = databaseShop.getConnection().prepareStatement(sql);
+        queryShop.setString(1, familyName);
+        queryShop.setString(2, reference);
         queryShop.executeUpdate();
     }
 
@@ -96,15 +135,24 @@ public class QueryShop implements QueryShopInterface {
         Database databaseShop = new Database(DATABASE_SHOP);
         Database databaseSiege = new Database(DATABASE_SIEGE);
 
-        QuerySiege querySiege = new QuerySiege();
-        querySiege.insertNewArticle(reference, price, stock, description);
+        boolean articleAlreadyExistInDBSiege = false;
+        Article article1 = findArticleByReference(reference);
 
-        String sqlInsertShopSiegeDB = "INSERT INTO Shop(Name, Reference, Stock) VALUES (?,?,?)";
-        PreparedStatement queryShopSiegeDB = databaseSiege.getConnection().prepareStatement(sqlInsertShopSiegeDB);
-        queryShopSiegeDB.setString(1, shop);
-        queryShopSiegeDB.setString(2, reference);
-        queryShopSiegeDB.setInt(3, stock);
-        queryShopSiegeDB.executeUpdate();
+        if (!isNull(article1)) {
+            articleAlreadyExistInDBSiege = true;
+        }
+
+        if (!articleAlreadyExistInDBSiege) {
+            QuerySiege querySiege = new QuerySiege();
+            querySiege.insertNewArticle(reference, price, description);
+
+            String sqlInsertShopSiegeDB = "INSERT INTO Shop(Name, Reference, Stock) VALUES (?,?,?)";
+            PreparedStatement queryShopSiegeDB = databaseSiege.getConnection().prepareStatement(sqlInsertShopSiegeDB);
+            queryShopSiegeDB.setString(1, shop);
+            queryShopSiegeDB.setString(2, reference);
+            queryShopSiegeDB.setInt(3, stock);
+            queryShopSiegeDB.executeUpdate();
+        }
 
         String sqlInsertShopDB = "INSERT INTO Article(Reference, Price, Stock, Description) VALUES (?,?,?,?)";
         PreparedStatement queryShop = databaseShop.getConnection().prepareStatement(sqlInsertShopDB);
@@ -113,8 +161,6 @@ public class QueryShop implements QueryShopInterface {
         queryShop.setInt(3, stock);
         queryShop.setString(4, description);
         queryShop.executeUpdate();
-
-
     }
 
     @Override
@@ -154,7 +200,7 @@ public class QueryShop implements QueryShopInterface {
     public void importPriceFromSiegeDB(String shop) throws Exception {
 
         Database database = new Database(DATABASE_SHOP);
-        QuerySiege querySiege  = new QuerySiege();
+        QuerySiege querySiege = new QuerySiege();
         List<Article> articleList = querySiege.getArticleByShop(shop);
 
         String sql = "UPDATE Article SET Price = ? WHERE Reference = ?";

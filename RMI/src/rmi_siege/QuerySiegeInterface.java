@@ -11,6 +11,6 @@ public interface QuerySiegeInterface extends Remote {
     public List<ArticleSiege> getArticleByFamily(String familyName) throws Exception;
     public List<Article> getArticleByShop(String shop) throws Exception;
     public void insertNewReference(String familyName, String reference) throws Exception;
-    public void insertNewArticle(String reference, double price, int stock, String description) throws Exception;
+    public void insertNewArticle(String reference, double price, String description) throws Exception;
     public void updatePrice(String reference, double price) throws Exception;
 }
