@@ -9,18 +9,27 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CSVManager {
 
-    private final static String BILL_PATH = "Server/resources/bill.csv";
-    private final static String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
-    private final static char SEPARATOR = ';';
+    private final String BILL_PATH = "Server/resources/bill.csv";
+    private final String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
+    private final char SEPARATOR = ';';
 
-    public List<String[]> readLineByLine() {
+    public String getBillPath() {
+        return BILL_PATH;
+    }
+
+    public String getBillPaidPath() {
+        return BILL_PAID_PATH;
+    }
+
+    public List<String[]> readLineByLine(String filePath) {
         try {
-            FileReader reader = new FileReader(BILL_PATH);
+            FileReader reader = new FileReader(filePath);
 
             CSVParser parser = new CSVParserBuilder()
                     .withSeparator(';')
@@ -46,9 +55,14 @@ public class CSVManager {
         return null;
     }
 
-    public void writeNewBill(Bill bill) throws IOException {
+    public void writeNewBill(Bill bill, boolean inPaidBill) throws IOException {
+        String path;
+        if (inPaidBill)
+            path = BILL_PAID_PATH;
+        else
+            path = BILL_PATH;
         try (
-                FileWriter writer = new FileWriter(BILL_PATH, true);
+                FileWriter writer = new FileWriter(path, true);
                 CSVWriter csvWriter = new CSVWriter(writer,
                         SEPARATOR,
                         CSVWriter.NO_QUOTE_CHARACTER,
@@ -56,34 +70,41 @@ public class CSVManager {
                         CSVWriter.DEFAULT_LINE_END);
         ) {
             List<Article> articleBought = bill.getArticles();
-            List<String[]> allBills = readLineByLine();
+            List<String[]> allBills = readLineByLine(path);
             String articleFormatted = "";
             String idBill;
 
             if (allBills.isEmpty()) {
-                idBill = "1";
-                String[] headerRecord = {"Date", "IDBill", "Total", "Payment", "References"};
+                idBill = bill.getId();
+                String[] headerRecord = {"Date", "IDBill", "Shop", "Total", "Payment", "References"};
                 csvWriter.writeNext(headerRecord);
+                System.out.println("ok");
             } else {
                 String[] lastLine = allBills.get(allBills.size() - 1);
-                idBill = Integer.toString(Integer.parseInt(lastLine[1]) + 1);
+                idBill = bill.getId();
+                if (idBill.equals(lastLine[1])) {
+                    Timestamp ts = new Timestamp(System.currentTimeMillis());
+                    idBill = bill.getShop() + ts.getTime()+1;
+                }
             }
 
             int cpt = 0;
             for (Article article : articleBought) {
                 cpt++;
                 articleFormatted = articleFormatted.concat("|" + article.getReference());
+                articleFormatted = articleFormatted.concat("|" + article.getPrice());
                 if (cpt == articleBought.size()) {
-                    articleFormatted = articleFormatted.concat("|" + article.getPrice() + "|;");
+                    articleFormatted = articleFormatted.concat("|" + article.getStock() + "|;");
                 } else
-                    articleFormatted = articleFormatted.concat("|" + article.getPrice() + "|,");
+                    articleFormatted = articleFormatted.concat("|" + article.getStock() + "|,");
             }
 
             csvWriter.writeNext(
                     new String[]{
                             bill.getDate(),
                             idBill,
-                            Double.toString(bill.getTotal()),
+                            bill.getShop(),
+                            Float.toString(bill.getTotal()),
                             bill.getPayment(),
                             articleFormatted
                     });
@@ -92,20 +113,22 @@ public class CSVManager {
         }
     }
 
-    public void payBill(int idBill) throws IOException {
+    public void payBill(String idBill) throws IOException {
 
-        List<String[]> allBills = readLineByLine();
+        List<String[]> allBills = readLineByLine(BILL_PATH);
         String[] billPaid;
         int cpt = 0;
-        for (String[] bill : allBills) {
+        for (String[] billString : allBills) {
             // Not compare header
             if (cpt == 0) {
                 cpt++;
                 continue;
             }
-            if (Integer.parseInt(bill[1]) == idBill) {
-                billPaid = bill;
+            if (billString[1].equals(idBill)) {
+                billPaid = billString;
                 allBills.remove(cpt);
+                Bill bill = convertLineInBill(billString);
+                writeNewBill(bill, true);
                 break;
             }
             cpt++;
@@ -125,18 +148,21 @@ public class CSVManager {
     public Bill convertLineInBill(String[] lineCSV) throws FileNotFoundException {
 
         String date = lineCSV[0];
-        double total = Double.parseDouble(lineCSV[2]);
-        String payment = lineCSV[3];
-        List<Article> articles = new ArrayList<>();
+        String id = lineCSV[1];
+        String shop = lineCSV[2];
+        float total = Float.parseFloat(lineCSV[3]);
+        String payment = lineCSV[4];
+        String stringArticles = lineCSV[5];
 
-        String stringArticles = lineCSV[4];
+        List<Article> articles = new ArrayList<>();
         boolean isDone = false;
         boolean referenceIsDone = false;
         boolean priceIsDone = false;
-        int i = 0;
+        boolean quantityIsDone = false;
 
         String reference = "";
         float price = 0;
+        int quantity = 0;
 
         while (!isDone) {
             if (stringArticles.charAt(0) == '|' && !referenceIsDone) {
@@ -151,36 +177,28 @@ public class CSVManager {
                 priceIsDone = true;
                 stringArticles = stringArticles.substring(stringArticles.indexOf('|'));
             }
+            if (stringArticles.charAt(0) == '|' && referenceIsDone && priceIsDone && !quantityIsDone) {
+                stringArticles = stringArticles.substring(1);
+                quantity = Integer.parseInt(stringArticles.substring(0, stringArticles.indexOf('|')));
+                quantityIsDone = true;
+                stringArticles = stringArticles.substring(stringArticles.indexOf('|'));
+            }
             if (stringArticles.length() > 1) {
                 if (stringArticles.charAt(1) == ',' && referenceIsDone && priceIsDone) {
                     stringArticles = stringArticles.substring(2);
                     referenceIsDone = false;
                     priceIsDone = false;
-                    articles.add(new Article(reference, price));
-                    System.out.println("+1 article");
+                    quantityIsDone = false;
+                    articles.add(new Article(reference, price, quantity));
                 }
             }
             else {
                 isDone = true;
-                articles.add(new Article(reference, price));
-                System.out.println("Only 1 article");
+                articles.add(new Article(reference, price, quantity));
             }
         }
 
-        FileReader reader = new FileReader(BILL_PATH);
-
-        Bill bill = new Bill(date, total, payment, articles);
-
-        System.out.println("In convert line into bill");
-        System.out.println("===========================");
-        System.out.println("Date : " + bill.getDate());
-        System.out.println("Total : " + bill.getTotal());
-        System.out.println("Payment : " + bill.getPayment());
-        System.out.println("References : " + bill.getArticles().get(0).getReference());
-        System.out.println("References : " + bill.getArticles().get(1).getReference());
-        System.out.println("==========================");
-
-        return bill;
+        return new Bill(date, id, shop, total, payment, articles);
     }
 
 }

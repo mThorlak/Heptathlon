@@ -8,9 +8,10 @@ public class Article implements java.io.Serializable {
 
     public Article() { }
 
-    public Article(String reference, float price) {
+    public Article(String reference, float price, int quantity) {
         this.Reference = reference;
         this.Price = price;
+        this.Stock = quantity;
     }
 
     public String getReference() {
