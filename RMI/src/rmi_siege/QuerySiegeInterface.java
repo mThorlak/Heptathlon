@@ -14,4 +14,5 @@ public interface QuerySiegeInterface extends Remote {
     public void insertNewArticle(String reference, double price, String description) throws Exception;
     public void updatePrice(String reference, double price) throws Exception;
     public void importCSVIntoDBSiege(boolean isBillPaid) throws Exception;
+    public void updateBillIsPaid(String IDBill) throws Exception;
 }

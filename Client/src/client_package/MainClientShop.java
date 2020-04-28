@@ -60,19 +60,24 @@ public class MainClientShop {
             }
             System.out.println("#################################################################################");
             */
-
+/*
             CSVManager csvManager = new CSVManager();
             // List<String[]> billList = csvManager.readLineByLine(csvManager.getBillPath());
-       /*     Article article1 = new Article("L00001", 30, 40);
+            Article article1 = new Article("L00001", 30, 40);
             Article article2 = new Article("L00003", 40, 30);
+            Article article3 = new Article("L00002", 10, 50);
+            Article article4 = new Article("L00008", 1, 20);
             List<Article> listArticle = new ArrayList<>();
             listArticle.add(article1);
             listArticle.add(article2);
+            listArticle.add(article3);
+            listArticle.add(article4);
             Bill bill1 = new Bill("21/04/2020", "shop1", 150, "carte bleu", listArticle);
             csvManager.writeNewBill(bill1, false);
-            */
-            csvManager.payBill("shop1:1588077336156");
-            csvManager.payBill("shop1:1588077349776");
+*/
+
+            //csvManager.payBill("shop1:1588077336156");
+            //csvManager.payBill("shop1:1588077349776");
 
             // csvManager.convertLineInBill(billList.get(1));
 

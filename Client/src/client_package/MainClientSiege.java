@@ -24,7 +24,8 @@ public class MainClientSiege {
             // querySiegeInterface.insertNewReference("Longboard","L00002");
             // querySiegeInterface.insertNewArticle("L00002", 20, 100, "Test2");
             //querySiegeInterface.updatePrice("L00003", 63.5);
-            querySiegeInterface.importCSVIntoDBSiege(true);
+            //querySiegeInterface.importCSVIntoDBSiege(false);
+            querySiegeInterface.updateBillIsPaid("shop1:1588077365880");
 
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());

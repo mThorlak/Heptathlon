@@ -130,6 +130,18 @@ public class QuerySiege implements QuerySiegeInterface {
     }
 
     @Override
+    public void updateBillIsPaid(String IDBill) throws SQLException, ClassNotFoundException {
+
+        Database database = new Database(DATABASE_NAME);
+
+        String sql = "UPDATE Bill SET Paid=? WHERE IDBill = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        query.setBoolean(1, true);
+        query.setString(2, IDBill);
+        query.executeUpdate();
+    }
+
+    @Override
     public void importCSVIntoDBSiege(boolean isBillPaid) throws SQLException, ClassNotFoundException, FileNotFoundException {
 
         Database databaseSiege = new Database(DATABASE_NAME);
