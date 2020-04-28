@@ -130,12 +130,16 @@ public class QuerySiege implements QuerySiegeInterface {
     }
 
     @Override
-    public void importCSVIntoDBSiege() throws SQLException, ClassNotFoundException, FileNotFoundException {
+    public void importCSVIntoDBSiege(boolean isBillPaid) throws SQLException, ClassNotFoundException, FileNotFoundException {
 
         Database databaseSiege = new Database(DATABASE_NAME);
 
         CSVManager csvManager = new CSVManager();
-        List<String[]> CSVBill = csvManager.readLineByLine(csvManager.getBillPath());
+        List<String[]> CSVBill;
+        if (isBillPaid)
+            CSVBill = csvManager.readLineByLine(csvManager.getBillPaidPath());
+        else
+            CSVBill = csvManager.readLineByLine(csvManager.getBillPath());
         int cpt = 0;
 
         String sqlInsertIntoBill = "INSERT INTO Bill(IDBill, Shop, Date, Total, Payment, Paid) VALUES (?,?,?,?,?,?)";
@@ -154,7 +158,7 @@ public class QuerySiege implements QuerySiegeInterface {
             queryInsertIntoBill.setString(3, bill.getDate());
             queryInsertIntoBill.setFloat(4, bill.getTotal());
             queryInsertIntoBill.setString(5, bill.getPayment());
-            queryInsertIntoBill.setBoolean(6, false);
+            queryInsertIntoBill.setBoolean(6, isBillPaid);
             queryInsertIntoBill.executeUpdate();
 
             List<Article> articles = bill.getArticles();
