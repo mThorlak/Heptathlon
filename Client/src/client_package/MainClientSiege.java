@@ -11,7 +11,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
 
-
 public class MainClientSiege {
     public static void main(String[] args)throws Exception {
         try {
@@ -24,7 +23,8 @@ public class MainClientSiege {
 
             // querySiegeInterface.insertNewReference("Longboard","L00002");
             // querySiegeInterface.insertNewArticle("L00002", 20, 100, "Test2");
-            querySiegeInterface.updatePrice("L00003", 63.5);
+            //querySiegeInterface.updatePrice("L00003", 63.5);
+            querySiegeInterface.importCSVIntoDBSiege();
 
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());

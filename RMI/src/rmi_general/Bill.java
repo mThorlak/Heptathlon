@@ -10,21 +10,21 @@ public class Bill {
     private String date;
     private String id;
     private String shop;
-    private double total;
+    private float total;
     private String payment;
     List<Article> articles;
 
-    public Bill(String date, String shop, double total, String payment, List<Article> articles) {
+    public Bill(String date, String shop, float total, String payment, List<Article> articles) {
         this.date = date;
         Timestamp ts = new Timestamp(System.currentTimeMillis());
-        this.id = "shop1" + ts.getTime();
+        this.id = "shop1:" + ts.getTime();
         this.shop = shop;
         this.total = total;
         this.payment = payment;
         this.articles = articles;
     }
 
-    public Bill(String date, String id, String shop, double total, String payment, List<Article> articles) {
+    public Bill(String date, String id, String shop, float total, String payment, List<Article> articles) {
         this.date = date;
         this.id = id;
         this.shop = shop;
@@ -57,11 +57,11 @@ public class Bill {
         this.shop = shop;
     }
 
-    public double getTotal() {
+    public float getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(float total) {
         this.total = total;
     }
 

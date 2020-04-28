@@ -8,6 +8,7 @@ import rmi_shop.QueryShopInterface;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,7 +24,7 @@ public class MainClientShop {
             // queryShopInterface.importPriceFromSiegeDB("shop1");
 
             // Calling the remote method using the obtained object
-             // List<Article> list = (List)queryShopInterface.getAllArticle();
+             List<Article> list = (List)queryShopInterface.getAllArticle();
 
 
             //List<Article> list = (List) queryShopInterface.getArticleByFamily("Rugby");
@@ -42,7 +43,7 @@ public class MainClientShop {
             */
 
             //queryShopInterface.insertNewReference("Longboard","L00001");
-            queryShopInterface.insertNewArticle("L00008", 50, 100, "Test2", "shop1");
+            // queryShopInterface.insertNewArticle("L00008", 50, 100, "Test2", "shop1");
             //queryShopInterface.updateStock("shop1", "L00003", 200);
             //queryShopInterface.updatePrice("L00003", 50);
 
@@ -60,13 +61,18 @@ public class MainClientShop {
             System.out.println("#################################################################################");
             */
 
-            // CSVManager csvManager = new CSVManager();
+            CSVManager csvManager = new CSVManager();
             // List<String[]> billList = csvManager.readLineByLine(csvManager.getBillPath());
-            // Bill bill1 = new Bill("21/04/2020", "shop1", 150, "carte bleu", list);
-            // csvManager.writeNewBill(bill1, false);
+            Article article1 = new Article("L00001", 30, 40);
+            Article article2 = new Article("L00003", 40, 30);
+            List<Article> listArticle = new ArrayList<>();
+            listArticle.add(article1);
+            listArticle.add(article2);
+            Bill bill1 = new Bill("21/04/2020", "shop1", 150, "carte bleu", listArticle);
+            csvManager.writeNewBill(bill1, false);
             // csvManager.payBill("shop11587733041245");
 
-            //csvManager.convertLineInBill(billList.get(5));
+            // csvManager.convertLineInBill(billList.get(1));
 
 /*            for (String[] line:bill) {
                 for (String s : line) {

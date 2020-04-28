@@ -92,10 +92,11 @@ public class CSVManager {
             for (Article article : articleBought) {
                 cpt++;
                 articleFormatted = articleFormatted.concat("|" + article.getReference());
+                articleFormatted = articleFormatted.concat("|" + article.getPrice());
                 if (cpt == articleBought.size()) {
-                    articleFormatted = articleFormatted.concat("|" + article.getPrice() + "|;");
+                    articleFormatted = articleFormatted.concat("|" + article.getStock() + "|;");
                 } else
-                    articleFormatted = articleFormatted.concat("|" + article.getPrice() + "|,");
+                    articleFormatted = articleFormatted.concat("|" + article.getStock() + "|,");
             }
 
             csvWriter.writeNext(
@@ -103,7 +104,7 @@ public class CSVManager {
                             bill.getDate(),
                             idBill,
                             bill.getShop(),
-                            Double.toString(bill.getTotal()),
+                            Float.toString(bill.getTotal()),
                             bill.getPayment(),
                             articleFormatted
                     });
@@ -149,7 +150,7 @@ public class CSVManager {
         String date = lineCSV[0];
         String id = lineCSV[1];
         String shop = lineCSV[2];
-        double total = Double.parseDouble(lineCSV[3]);
+        float total = Float.parseFloat(lineCSV[3]);
         String payment = lineCSV[4];
         String stringArticles = lineCSV[5];
 
@@ -157,10 +158,11 @@ public class CSVManager {
         boolean isDone = false;
         boolean referenceIsDone = false;
         boolean priceIsDone = false;
-        int i = 0;
+        boolean quantityIsDone = false;
 
         String reference = "";
         float price = 0;
+        int quantity = 0;
 
         while (!isDone) {
             if (stringArticles.charAt(0) == '|' && !referenceIsDone) {
@@ -175,19 +177,24 @@ public class CSVManager {
                 priceIsDone = true;
                 stringArticles = stringArticles.substring(stringArticles.indexOf('|'));
             }
+            if (stringArticles.charAt(0) == '|' && referenceIsDone && priceIsDone && !quantityIsDone) {
+                stringArticles = stringArticles.substring(1);
+                quantity = Integer.parseInt(stringArticles.substring(0, stringArticles.indexOf('|')));
+                quantityIsDone = true;
+                stringArticles = stringArticles.substring(stringArticles.indexOf('|'));
+            }
             if (stringArticles.length() > 1) {
                 if (stringArticles.charAt(1) == ',' && referenceIsDone && priceIsDone) {
                     stringArticles = stringArticles.substring(2);
                     referenceIsDone = false;
                     priceIsDone = false;
-                    articles.add(new Article(reference, price));
-                    System.out.println("+1 article");
+                    quantityIsDone = false;
+                    articles.add(new Article(reference, price, quantity));
                 }
             }
             else {
                 isDone = true;
-                articles.add(new Article(reference, price));
-                System.out.println("Only 1 article");
+                articles.add(new Article(reference, price, quantity));
             }
         }
 

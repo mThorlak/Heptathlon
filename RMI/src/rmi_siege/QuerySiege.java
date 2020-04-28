@@ -1,9 +1,12 @@
 package rmi_siege;
 
+import rmi_general.Bill;
+import rmi_general.CSVManager;
 import rmi_general.Database;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.ArticleSiege;
 
+import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -80,7 +83,8 @@ public class QuerySiege implements QuerySiegeInterface {
             // Retrieve by column name
             String reference  = resultQuery.getString("Reference");
             float price = resultQuery.getFloat("Price");
-            Article article = new Article(reference, price);
+            int stock = resultQuery.getInt("Stock");
+            Article article = new Article(reference, price, stock);
             articleList.add(article);
         }
 
@@ -123,6 +127,47 @@ public class QuerySiege implements QuerySiegeInterface {
         query.setDouble(1, price);
         query.setString(2, reference);
         query.executeUpdate();
+    }
+
+    @Override
+    public void importCSVIntoDBSiege() throws SQLException, ClassNotFoundException, FileNotFoundException {
+
+        Database databaseSiege = new Database(DATABASE_NAME);
+
+        CSVManager csvManager = new CSVManager();
+        List<String[]> CSVBill = csvManager.readLineByLine(csvManager.getBillPath());
+        int cpt = 0;
+
+        String sqlInsertIntoBill = "INSERT INTO Bill(IDBill, Shop, Date, Total, Payment, Paid) VALUES (?,?,?,?,?,?)";
+        String sqlInsertIntoBillDetails = "INSERT INTO Bill_Details(IDBill, Reference, Quantity, Price) VALUES (?,?,?,?)";
+        PreparedStatement queryInsertIntoBill = databaseSiege.getConnection().prepareStatement(sqlInsertIntoBill);
+        PreparedStatement queryInsertIntoBillDetails = databaseSiege.getConnection().prepareStatement(sqlInsertIntoBillDetails);
+
+        for (String[] line : CSVBill) {
+            if (cpt == 0) {
+                cpt++;
+                continue;
+            }
+            Bill bill = csvManager.convertLineInBill(line);
+            queryInsertIntoBill.setString(1, bill.getId());
+            queryInsertIntoBill.setString(2, bill.getShop());
+            queryInsertIntoBill.setString(3, bill.getDate());
+            queryInsertIntoBill.setFloat(4, bill.getTotal());
+            queryInsertIntoBill.setString(5, bill.getPayment());
+            queryInsertIntoBill.setBoolean(6, false);
+            queryInsertIntoBill.executeUpdate();
+
+            List<Article> articles = bill.getArticles();
+            for (Article article : articles) {
+                queryInsertIntoBillDetails.setString(1, bill.getId());
+                queryInsertIntoBillDetails.setString(2, article.getReference());
+                queryInsertIntoBillDetails.setInt(3, article.getStock());
+                queryInsertIntoBillDetails.setFloat(4, article.getPrice());
+                queryInsertIntoBillDetails.executeUpdate();
+            }
+        }
+        queryInsertIntoBill.close();
+        queryInsertIntoBillDetails.close();
     }
 
 }
