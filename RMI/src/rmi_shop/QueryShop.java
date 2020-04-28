@@ -36,6 +36,9 @@ public class QueryShop implements QueryShopInterface {
         }
 
         resultQuery.close();
+        System.out.println("ok !");
+        for (Article article : list)
+            System.out.println(article.getReference());
         return list;
     }
 

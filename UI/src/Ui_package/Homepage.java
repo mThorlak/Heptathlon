@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 public class Homepage {
     private JPanel MainPanel;
-    private JButton button1;
+    private JButton EnterButton;
 
     public static void main(String[] args) {
         JFrame homepage = new JFrame("Homepage");
@@ -17,9 +17,10 @@ public class Homepage {
     }
 
     public Homepage() {
-        button1.addActionListener(new ActionListener() {
+        EnterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFrame controlPage = new JFrame("Control page");
 
             }
         });

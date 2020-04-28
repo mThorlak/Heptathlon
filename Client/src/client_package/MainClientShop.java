@@ -1,11 +1,14 @@
 package client_package;
 
 import ShopServerPackage.MainShopServer;
+import rmi_shop.QueryShop;
 import rmi_shop.tables.Article;
 import rmi_general.Bill;
 import rmi_general.CSVManager;
 import rmi_shop.QueryShopInterface;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
@@ -13,6 +16,19 @@ import java.util.List;
 
 
 public class MainClientShop {
+
+    private final QueryShopInterface queryShopInterface;
+
+    public MainClientShop () throws RemoteException, NotBoundException {
+        MainShopServer shopServer = new MainShopServer();
+        Registry registryShop = LocateRegistry.getRegistry(shopServer.getPort());
+        this.queryShopInterface = (QueryShopInterface) registryShop.lookup("articleShop");
+    }
+
+    public QueryShopInterface getQueryShopInterface() {
+        return queryShopInterface;
+    }
+
     public static void main(String[] args)throws Exception {
         try {
             MainShopServer shopServer = new MainShopServer();
