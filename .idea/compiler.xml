@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
-      <module name="Heptathlon" target="1.5" />
+      <module name="Heptathlon" target="14" />
     </bytecodeTargetLevel>
   </component>
 </project>

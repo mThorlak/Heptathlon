@@ -20,21 +20,23 @@ public class ControlPage extends Container {
     private JButton getAllArticleButton;
     private JLabel LabelShop;
 
-    public static void main(String[] args) throws RemoteException, NotBoundException {
-        JFrame controlPage = new JFrame("Control page");
-        controlPage.setContentPane(new ControlPage().PanelMain);
-        controlPage.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        controlPage.pack();
-        controlPage.setVisible(true);
-    }
 
     public ControlPage() throws RemoteException, NotBoundException {
+        JFrame controlFrame = new JFrame("Control page");
+        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(controlFrame);
+        controlFrame.setContentPane(PanelMain);
+        controlFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        controlFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
+        controlFrame.pack();
+        controlFrame.setVisible(true);
+
         MainClientShop clientShop = new MainClientShop();
+
         getAllArticleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    clientShop.getQueryShopInterface().getArticleByFamily("Longboard");
+                    clientShop.getQueryShopInterface().getAllArticle();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
