@@ -27,9 +27,13 @@ public class ControlPage extends Container {
     private JLabel labelSiege;
     private JButton buttonGetAllArticleSiege;
     private JTextField fieldGetArticleByReferenceShop;
-    private JButton getArticleButton;
+    private JButton buttonGetArticleByReferenceShop;
     private JTextField fieldGetArticleByFamilyShop;
-    private JButton getArticleByFamilyButton;
+    private JButton buttonGetArticleByFamilyShop;
+    private JTextField fieldGetArticleByFamilySiege;
+    private JTextField fieldGetArticleByShopSiege;
+    private JButton buttonGetArticleByFamilySiege;
+    private JButton buttonGetArticleByShopSiege;
 
 
     public ControlPage() throws Exception {
@@ -55,19 +59,7 @@ public class ControlPage extends Container {
             }
         });
 
-        buttonGetAllArticleSiege.addActionListener(e -> {
-            try {
-                TableArticleSiege tableArticleSiege = new TableArticleSiege(clientSiege.getQuerySiegeInterface().getAllArticle());
-                tableDisplay = new JTable(tableArticleSiege);
-                JScrollContentPane.setViewportView(tableDisplay);
-                JScrollContentPane.setSize(tableDisplay.getSize());
-                controlFrame.pack();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
-
-        getArticleButton.addActionListener(e -> {
+        buttonGetArticleByReferenceShop.addActionListener(e -> {
             TableArticleShop modelTable;
             List<Article> listArticles = new ArrayList<>();
             try {
@@ -82,11 +74,51 @@ public class ControlPage extends Container {
             }
         });
 
-        getArticleByFamilyButton.addActionListener(e -> {
+        buttonGetArticleByFamilyShop.addActionListener(e -> {
             try {
                 TableArticleShop tableArticleShop = new TableArticleShop(
                         clientShop.getQueryShopInterface().getArticleByFamily(fieldGetArticleByFamilyShop.getText()));
                 tableDisplay = new JTable(tableArticleShop);
+                JScrollContentPane.setViewportView(tableDisplay);
+                JScrollContentPane.setSize(tableDisplay.getSize());
+                controlFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        buttonGetAllArticleSiege.addActionListener(e -> {
+            try {
+                TableArticleSiege tableArticleSiege = new TableArticleSiege(clientSiege.getQuerySiegeInterface().getAllArticle());
+                tableDisplay = new JTable(tableArticleSiege);
+                JScrollContentPane.setViewportView(tableDisplay);
+                JScrollContentPane.setSize(tableDisplay.getSize());
+                controlFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        buttonGetArticleByFamilySiege.addActionListener(e -> {
+            TableArticleSiege tableArticleSiege;
+            try {
+                tableArticleSiege = new TableArticleSiege(
+                        clientSiege.getQuerySiegeInterface().getArticleByFamily(fieldGetArticleByFamilySiege.getText()));
+                tableDisplay = new JTable(tableArticleSiege);
+                JScrollContentPane.setViewportView(tableDisplay);
+                JScrollContentPane.setSize(tableDisplay.getSize());
+                controlFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        buttonGetArticleByShopSiege.addActionListener(e -> {
+            TableArticleSiege tableArticleSiege;
+            try {
+                tableArticleSiege = new TableArticleSiege(
+                        clientSiege.getQuerySiegeInterface().getArticleByShop(fieldGetArticleByShopSiege.getText()));
+                tableDisplay = new JTable(tableArticleSiege);
                 JScrollContentPane.setViewportView(tableDisplay);
                 JScrollContentPane.setSize(tableDisplay.getSize());
                 controlFrame.pack();

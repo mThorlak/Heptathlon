@@ -200,12 +200,12 @@ public class QueryShop implements QueryShopInterface {
 
         Database database = new Database(DATABASE_SHOP);
         QuerySiege querySiege = new QuerySiege();
-        List<Article> articleList = querySiege.getArticleByShop(shop);
+        List<ArticleSiege> articleList = querySiege.getArticleByShop(shop);
 
         String sql = "UPDATE Article SET Price = ? WHERE Reference = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
 
-        for (Article article : articleList) {
+        for (ArticleSiege article : articleList) {
             query.setDouble(1, article.getPrice());
             query.setString(2, article.getReference());
             query.executeUpdate();

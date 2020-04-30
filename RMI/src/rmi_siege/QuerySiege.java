@@ -68,17 +68,15 @@ public class QuerySiege implements QuerySiegeInterface {
     }
 
     @Override
-    public List<Article> getArticleByShop(String shop) throws Exception {
+    public List<ArticleSiege> getArticleByShop(String shop) throws Exception {
 
         Database database = new Database(DATABASE_NAME);
-        String sql = "SELECT Article.Reference, Article.Price FROM Shop, Article WHERE Shop.name = ? AND Shop.Reference = Article.Reference";
+        String sql = "SELECT Article.Reference, Article.Price, Article.Description FROM Shop, Article WHERE Shop.name = ? AND Shop.Reference = Article.Reference";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, shop);
         ResultSet resultQuery = query.executeQuery();
 
-        QueryShop queryShop = new QueryShop();
-
-        return queryShop.convertResultQueryIntoListArticleShop(resultQuery);
+        return convertResultQueryIntoListArticleSiege(resultQuery);
     }
 
     @Override
