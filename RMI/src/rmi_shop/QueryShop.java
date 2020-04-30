@@ -17,7 +17,9 @@ public class QueryShop implements QueryShopInterface {
     private final static String DATABASE_SHOP = "Shop";
     private final static String DATABASE_SIEGE = "Siege";
 
-    private List<Article> getArticles(List<Article> list, ResultSet resultQuery) throws SQLException {
+    private List<Article> convertResultQueryIntoListArticleShop(ResultSet resultQuery) throws SQLException {
+
+        List<Article> list = new ArrayList<>();
         while (resultQuery.next()) {
             // Retrieve by column name
             String reference = resultQuery.getString("Reference");
@@ -36,9 +38,6 @@ public class QueryShop implements QueryShopInterface {
         }
 
         resultQuery.close();
-        System.out.println("ok !");
-        for (Article article : list)
-            System.out.println(article.getReference());
         return list;
     }
 
@@ -51,8 +50,6 @@ public class QueryShop implements QueryShopInterface {
         query.setString(1, reference);
 
         ResultSet resultQuery = query.getResultSet();
-        System.out.println("resultquery");
-        System.out.println(resultQuery);
 
         Article article = new Article();
 
@@ -71,20 +68,16 @@ public class QueryShop implements QueryShopInterface {
     @Override
     public List<Article> getAllArticle() throws Exception {
 
-        List<Article> list = new ArrayList<>();
-
         Database database = new Database(DATABASE_SHOP);
-        String query = "SELECT Article.Reference, Family, Price, Stock, Description FROM `Article`, `Family` WHERE Article.Reference = Family.Reference";
+        String query = "SELECT * FROM Article";
         ResultSet resultQuery = database.CreateAndExecuteStatement(query);
 
-        //Extract data from result set
-        return getArticles(list, resultQuery);
+        return convertResultQueryIntoListArticleShop(resultQuery);
     }
 
     @Override
     public List<Article> getArticleByFamily(String familyName) throws Exception {
 
-        List<Article> list = new ArrayList<>();
         Database database = new Database(DATABASE_SHOP);
         String sql = "SELECT Article.Reference, Price, Stock, Description " +
                 "FROM Article, Family " +
@@ -95,8 +88,7 @@ public class QueryShop implements QueryShopInterface {
 
         ResultSet resultQuery = query.executeQuery();
 
-        //Extract data from result set
-        return getArticles(list, resultQuery);
+        return convertResultQueryIntoListArticleShop(resultQuery);
     }
 
     @Override

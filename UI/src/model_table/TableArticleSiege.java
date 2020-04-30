@@ -1,18 +1,18 @@
-package Ui_package;
+package model_table;
 
-import rmi_shop.tables.Article;
+import rmi_siege.tables.ArticleSiege;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableArticleModel extends AbstractTableModel {
+public class TableArticleSiege extends AbstractTableModel {
 
-        private List<Article> articles = new ArrayList<Article>();
+        private List<ArticleSiege> articles = new ArrayList<>();
 
-        private final String[] header = {"Reference", "Price", "Quantity", "Description"};
+        private final String[] header = {"Reference", "Price", "Description"};
 
-        public TableArticleModel(List<Article> articles) {
+        public TableArticleSiege(List<ArticleSiege> articles) {
             super();
             this.articles = articles;
         }
@@ -35,20 +35,9 @@ public class TableArticleModel extends AbstractTableModel {
             else if (columnIndex == 1)
                 return articles.get(rowIndex).getPrice();
             else if (columnIndex == 2)
-                return articles.get(rowIndex).getStock();
-            else if (columnIndex == 3)
                 return articles.get(rowIndex).getDescription();
             else
                 return null;
         }
 
-        public void addAmi(Article article) {
-            articles.add(article);
-            fireTableRowsInserted(articles.size() - 1, articles.size() - 1);
-        }
-
-        public void removeAmi(int rowIndex) {
-            articles.remove(rowIndex);
-            fireTableRowsDeleted(rowIndex, rowIndex);
-        }
     }

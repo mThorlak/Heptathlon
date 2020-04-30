@@ -17,7 +17,9 @@ public class QuerySiege implements QuerySiegeInterface {
 
     private final static String DATABASE_NAME = "Siege";
 
-    private List<ArticleSiege> getArticles(List<ArticleSiege> list, ResultSet resultQuery) throws SQLException {
+    private List<ArticleSiege> convertResultQueryIntoListArticleSiege(ResultSet resultQuery) throws SQLException {
+
+        List<ArticleSiege> list = new ArrayList<>();
         while(resultQuery.next()) {
             // Retrieve by column name
             String reference  = resultQuery.getString("Reference");
@@ -40,20 +42,16 @@ public class QuerySiege implements QuerySiegeInterface {
     @Override
     public List<ArticleSiege> getAllArticle() throws Exception {
 
-        List<ArticleSiege> list = new ArrayList<>();
-
         Database database = new Database(DATABASE_NAME);
-        String query = "SELECT Article.Reference, Family, Price, Stock, Description FROM `Article`, `Family` WHERE Article.Reference = Family.Reference";
+        String query = "SELECT * FROM Article";
         ResultSet resultQuery = database.CreateAndExecuteStatement(query);
 
-        //Extract data from result set
-        return getArticles(list, resultQuery);
+        return convertResultQueryIntoListArticleSiege(resultQuery);
     }
 
     @Override
     public List<ArticleSiege> getArticleByFamily(String familyName) throws Exception {
-
-        List<ArticleSiege> list = new ArrayList<>();
+        
         Database database = new Database(DATABASE_NAME);
         String sql = "SELECT Article.Reference, Price, Description " +
                 "FROM Article, Family " +
@@ -65,7 +63,7 @@ public class QuerySiege implements QuerySiegeInterface {
         ResultSet resultQuery = query.executeQuery();
 
         //Extract data from result set
-        return getArticles(list, resultQuery);
+        return convertResultQueryIntoListArticleSiege(resultQuery);
     }
 
     @Override

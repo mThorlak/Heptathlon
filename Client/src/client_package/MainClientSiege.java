@@ -1,17 +1,27 @@
 package client_package;
 
 import SiegeServerPackage.MainSiegeServer;
-import rmi_general.Bill;
-import rmi_general.CSVManager;
-import rmi_shop.QueryShopInterface;
-import rmi_shop.tables.Article;
 import rmi_siege.QuerySiegeInterface;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.List;
 
 public class MainClientSiege {
+
+    private final QuerySiegeInterface querySiegeInterface;
+
+    public MainClientSiege() throws RemoteException, NotBoundException {
+        MainSiegeServer siegeServer = new MainSiegeServer();
+        Registry registrySiege = LocateRegistry.getRegistry(siegeServer.getPort());
+        this.querySiegeInterface = (QuerySiegeInterface) registrySiege.lookup("articleSiege");;
+    }
+
+    public QuerySiegeInterface getQuerySiegeInterface() {
+        return querySiegeInterface;
+    }
+
     public static void main(String[] args)throws Exception {
         try {
 

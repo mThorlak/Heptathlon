@@ -1,12 +1,10 @@
-package Ui_package;
+package ui_package;
 
 import client_package.MainClientShop;
+import model_table.TableArticleShop;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 
 public class TableFrame extends JFrame {
 
@@ -14,7 +12,7 @@ public class TableFrame extends JFrame {
         super();
 
         MainClientShop clientShop = new MainClientShop();
-        TableArticleModel modelTable = new TableArticleModel(clientShop.getQueryShopInterface().getAllArticle());
+        TableArticleShop modelTable = new TableArticleShop(clientShop.getQueryShopInterface().getAllArticle());
         setTitle("JTable avec modèle dynamique");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
