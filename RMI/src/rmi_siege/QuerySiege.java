@@ -3,6 +3,7 @@ package rmi_siege;
 import rmi_general.Bill;
 import rmi_general.CSVManager;
 import rmi_general.Database;
+import rmi_shop.QueryShop;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.ArticleSiege;
 
@@ -17,7 +18,7 @@ public class QuerySiege implements QuerySiegeInterface {
 
     private final static String DATABASE_NAME = "Siege";
 
-    private List<ArticleSiege> convertResultQueryIntoListArticleSiege(ResultSet resultQuery) throws SQLException {
+    public List<ArticleSiege> convertResultQueryIntoListArticleSiege(ResultSet resultQuery) throws SQLException {
 
         List<ArticleSiege> list = new ArrayList<>();
         while(resultQuery.next()) {
@@ -51,7 +52,7 @@ public class QuerySiege implements QuerySiegeInterface {
 
     @Override
     public List<ArticleSiege> getArticleByFamily(String familyName) throws Exception {
-        
+
         Database database = new Database(DATABASE_NAME);
         String sql = "SELECT Article.Reference, Price, Description " +
                 "FROM Article, Family " +
@@ -75,19 +76,9 @@ public class QuerySiege implements QuerySiegeInterface {
         query.setString(1, shop);
         ResultSet resultQuery = query.executeQuery();
 
-        List<Article> articleList = new ArrayList<>();
+        QueryShop queryShop = new QueryShop();
 
-        while(resultQuery.next()) {
-            // Retrieve by column name
-            String reference  = resultQuery.getString("Reference");
-            float price = resultQuery.getFloat("Price");
-            int stock = resultQuery.getInt("Stock");
-            Article article = new Article(reference, price, stock);
-            articleList.add(article);
-        }
-
-        resultQuery.close();
-        return articleList;
+        return queryShop.convertResultQueryIntoListArticleShop(resultQuery);
     }
 
     @Override

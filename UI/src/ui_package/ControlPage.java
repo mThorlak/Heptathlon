@@ -4,11 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import client_package.MainClientShop;
 import client_package.MainClientSiege;
 import model_table.TableArticleShop;
 import model_table.TableArticleSiege;
+import rmi_shop.tables.Article;
 
 public class ControlPage extends Container {
 
@@ -23,6 +26,8 @@ public class ControlPage extends Container {
     private JLabel labelShop;
     private JLabel labelSiege;
     private JButton buttonGetAllArticleSiege;
+    private JTextField fieldGetArticleByReferenceShop;
+    private JButton getArticleButton;
 
 
     public ControlPage() throws Exception {
@@ -36,38 +41,47 @@ public class ControlPage extends Container {
         MainClientShop clientShop = new MainClientShop();
         MainClientSiege clientSiege = new MainClientSiege();
 
-        buttonGetAllArticleShop.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    TableArticleShop modelTable = new TableArticleShop(clientShop.getQueryShopInterface().getAllArticle());
-                    tableDisplay = new JTable(modelTable);
-                    JScrollContentPane.setViewportView(tableDisplay);
-                    JScrollContentPane.setSize(tableDisplay.getSize());
-                    controlFrame.pack();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+        buttonGetAllArticleShop.addActionListener(e -> {
+            try {
+                TableArticleShop modelTable = new TableArticleShop(clientShop.getQueryShopInterface().getAllArticle());
+                tableDisplay = new JTable(modelTable);
+                JScrollContentPane.setViewportView(tableDisplay);
+                JScrollContentPane.setSize(tableDisplay.getSize());
+                controlFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        buttonGetAllArticleSiege.addActionListener(e -> {
+            try {
+                TableArticleSiege tableArticleSiege = new TableArticleSiege(clientSiege.getQuerySiegeInterface().getAllArticle());
+                tableDisplay = new JTable(tableArticleSiege);
+                JScrollContentPane.setViewportView(tableDisplay);
+                JScrollContentPane.setSize(tableDisplay.getSize());
+                controlFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        getArticleButton.addActionListener(e -> {
+            TableArticleShop modelTable;
+            List<Article> listArticles = new ArrayList<>();
+            try {
+                listArticles.add(clientShop.getQueryShopInterface().findArticleByReference(fieldGetArticleByReferenceShop.getText()));
+                modelTable = new TableArticleShop(listArticles);
+                tableDisplay = new JTable(modelTable);
+                JScrollContentPane.setViewportView(tableDisplay);
+                JScrollContentPane.setSize(tableDisplay.getSize());
+                controlFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         });
 
         controlFrame.pack();
         controlFrame.setVisible(true);
-
-        buttonGetAllArticleSiege.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    TableArticleSiege tableArticleSiege = new TableArticleSiege(clientSiege.getQuerySiegeInterface().getAllArticle());
-                    tableDisplay = new JTable(tableArticleSiege);
-                    JScrollContentPane.setViewportView(tableDisplay);
-                    JScrollContentPane.setSize(tableDisplay.getSize());
-                    controlFrame.pack();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-            }
-        });
     }
 
     // place custom component creation code here

@@ -17,7 +17,7 @@ public class QueryShop implements QueryShopInterface {
     private final static String DATABASE_SHOP = "Shop";
     private final static String DATABASE_SIEGE = "Siege";
 
-    private List<Article> convertResultQueryIntoListArticleShop(ResultSet resultQuery) throws SQLException {
+    public List<Article> convertResultQueryIntoListArticleShop(ResultSet resultQuery) throws SQLException {
 
         List<Article> list = new ArrayList<>();
         while (resultQuery.next()) {
@@ -44,25 +44,29 @@ public class QueryShop implements QueryShopInterface {
     @Override
     public Article findArticleByReference(String reference) throws Exception {
 
-        Database database = new Database(DATABASE_SIEGE);
+        Database database = new Database(DATABASE_SHOP);
         String sql = "SELECT * FROM Article WHERE Reference = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, reference);
 
-        ResultSet resultQuery = query.getResultSet();
+        ResultSet resultQuery = query.executeQuery();
 
         Article article = new Article();
 
-        if (isEmpty(resultQuery))
+        if (isEmpty(resultQuery)) {
             return null;
+        }
 
         else {
-            article.setReference(resultQuery.getString("Reference"));
-            article.setPrice(resultQuery.getFloat("Price"));
+            while (resultQuery.next()) {
+                article.setReference(resultQuery.getString("Reference"));
+                article.setPrice(resultQuery.getFloat("Price"));
+                article.setStock(resultQuery.getInt("Stock"));
+                article.setDescription(resultQuery.getString("Description"));
+            }
         }
         query.close();
         return article;
-
     }
 
     @Override

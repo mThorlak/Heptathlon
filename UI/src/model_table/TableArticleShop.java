@@ -42,7 +42,6 @@ public class TableArticleShop extends AbstractTableModel {
                 return null;
         }
 
-        // TODO : delete if not useful
 /*
         public void addAmi(Article article) {
             articles.add(article);
