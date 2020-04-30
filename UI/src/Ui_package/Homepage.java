@@ -33,8 +33,11 @@ public class Homepage {
                     remoteException.printStackTrace();
                 } catch (NotBoundException notBoundException) {
                     notBoundException.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
+
         });
     }
 }

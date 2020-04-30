@@ -5,7 +5,7 @@ import client_package.MainClientShop;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.rmi.NotBoundException;  
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class TableFrame extends JFrame {
