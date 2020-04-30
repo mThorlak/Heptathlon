@@ -28,6 +28,8 @@ public class ControlPage extends Container {
     private JButton buttonGetAllArticleSiege;
     private JTextField fieldGetArticleByReferenceShop;
     private JButton getArticleButton;
+    private JTextField fieldGetArticleByFamilyShop;
+    private JButton getArticleByFamilyButton;
 
 
     public ControlPage() throws Exception {
@@ -72,6 +74,19 @@ public class ControlPage extends Container {
                 listArticles.add(clientShop.getQueryShopInterface().findArticleByReference(fieldGetArticleByReferenceShop.getText()));
                 modelTable = new TableArticleShop(listArticles);
                 tableDisplay = new JTable(modelTable);
+                JScrollContentPane.setViewportView(tableDisplay);
+                JScrollContentPane.setSize(tableDisplay.getSize());
+                controlFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        getArticleByFamilyButton.addActionListener(e -> {
+            try {
+                TableArticleShop tableArticleShop = new TableArticleShop(
+                        clientShop.getQueryShopInterface().getArticleByFamily(fieldGetArticleByFamilyShop.getText()));
+                tableDisplay = new JTable(tableArticleShop);
                 JScrollContentPane.setViewportView(tableDisplay);
                 JScrollContentPane.setSize(tableDisplay.getSize());
                 controlFrame.pack();
