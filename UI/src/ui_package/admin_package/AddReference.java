@@ -12,6 +12,9 @@ public class AddReference {
     private JTextField textFieldReference;
     private JButton buttonValidate;
     private JLabel labelState;
+    private JLabel labelHeader;
+    private JLabel labelFamilyName;
+    private JLabel labelReference;
 
     public AddReference(boolean requestFromShop) {
         JFrame addReferenceFrame = new JFrame("Admin page");

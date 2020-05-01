@@ -48,7 +48,7 @@ public class Adminpage {
         });
 
         buttonAddArticleShop.addActionListener(e -> {
-
+            new InsertNewArticleShop();
         });
 
         buttonUpdatePriceShop.addActionListener(e -> {
@@ -65,7 +65,7 @@ public class Adminpage {
         });
 
         buttonAddArticleSiege.addActionListener(e -> {
-
+            new InsertNewArticleSiege();
         });
 
         buttonAddShopSiege.addActionListener(e -> {
