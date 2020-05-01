@@ -2,8 +2,6 @@ package ui_package;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +14,7 @@ import rmi_shop.tables.Article;
 public class Getterpage extends Container {
 
     private JPanel panelMain;
-    private JLabel labelTitle;
+    private JLabel labelHeader;
     private JPanel panelControl;
     private JPanel panelShop;
     private JPanel PanelSiege;
@@ -34,15 +32,22 @@ public class Getterpage extends Container {
     private JTextField fieldGetArticleByShopSiege;
     private JButton buttonGetArticleByFamilySiege;
     private JButton buttonGetArticleByShopSiege;
+    private JButton buttonBillPage;
+    private JButton buttonGetterPage;
+    private JButton buttonAdminPage;
 
 
     public Getterpage() throws Exception {
+
+        // Frame settings
         JFrame controlFrame = new JFrame("Control page");
         GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(controlFrame);
         controlFrame.setContentPane(panelMain);
         controlFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         controlFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
 
+        // Navigation bar
+        new NavigationBar(controlFrame, buttonGetterPage, buttonBillPage, buttonAdminPage);
 
         MainClientShop clientShop = new MainClientShop();
         MainClientSiege clientSiege = new MainClientSiege();
@@ -132,6 +137,6 @@ public class Getterpage extends Container {
     }
 
     // place custom component creation code here
-    private void createUIComponents() throws Exception {
+    private void createUIComponents() {
     }
 }
