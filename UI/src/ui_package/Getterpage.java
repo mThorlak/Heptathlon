@@ -13,7 +13,7 @@ import model_table.TableArticleShop;
 import model_table.TableArticleSiege;
 import rmi_shop.tables.Article;
 
-public class ControlPage extends Container {
+public class Getterpage extends Container {
 
     private JPanel panelMain;
     private JLabel labelTitle;
@@ -36,7 +36,7 @@ public class ControlPage extends Container {
     private JButton buttonGetArticleByShopSiege;
 
 
-    public ControlPage() throws Exception {
+    public Getterpage() throws Exception {
         JFrame controlFrame = new JFrame("Control page");
         GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(controlFrame);
         controlFrame.setContentPane(panelMain);

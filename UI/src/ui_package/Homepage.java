@@ -28,7 +28,7 @@ public class Homepage {
             public void actionPerformed(ActionEvent e) {
                 try {
                     homepage.dispose();
-                    new ControlPage();
+                    new Getterpage();
                 } catch (RemoteException remoteException) {
                     remoteException.printStackTrace();
                 } catch (NotBoundException notBoundException) {
