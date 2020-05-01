@@ -1,5 +1,7 @@
 package ui_package;
 
+import ui_package.admin_package.Adminpage;
+
 import javax.swing.*;
 
 public class NavigationBar {
