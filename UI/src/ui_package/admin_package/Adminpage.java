@@ -61,7 +61,7 @@ public class Adminpage {
         });
 
         buttonImportBillSiege.addActionListener(e -> {
-
+            new ImportBill();
         });
 
         adminPage.pack();
