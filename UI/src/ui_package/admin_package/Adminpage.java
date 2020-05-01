@@ -1,13 +1,9 @@
 package ui_package.admin_package;
 
-import client_package.MainClientShop;
-import client_package.MainClientSiege;
 import ui_package.GeneralFrameSettings;
 import ui_package.NavigationBar;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
@@ -36,13 +32,6 @@ public class Adminpage {
         // Navigation bar
         new NavigationBar(adminPage, buttonGetterPage, buttonBillPage, buttonAdminPage);
 
-        MainClientShop clientShop = new MainClientShop();
-        MainClientSiege clientSiege = new MainClientSiege();
-
-        adminPage.pack();
-        adminPage.setVisible(true);
-
-
         buttonAddReferenceShop.addActionListener(e -> {
             new AddReference(true);
         });
@@ -52,13 +41,12 @@ public class Adminpage {
         });
 
         buttonUpdatePriceShop.addActionListener(e -> {
-
+            new ImportPriceShop();
         });
 
         buttonCalculateCAShop.addActionListener(e -> {
 
         });
-
 
         buttonAddReferenceSiege.addActionListener(e -> {
             new AddReference(false);
@@ -75,5 +63,8 @@ public class Adminpage {
         buttonImportBillSiege.addActionListener(e -> {
 
         });
+
+        adminPage.pack();
+        adminPage.setVisible(true);
     }
 }

@@ -3,7 +3,6 @@ package rmi_siege;
 import rmi_general.Bill;
 import rmi_general.CSVManager;
 import rmi_general.Database;
-import rmi_shop.QueryShop;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.ArticleSiege;
 
