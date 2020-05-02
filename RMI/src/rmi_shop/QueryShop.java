@@ -107,7 +107,6 @@ public class QueryShop implements QueryShopInterface {
         List<String> families = new ArrayList<>();
         while (resultQuery.next()) {
             families.add(resultQuery.getString("Family"));
-            System.out.println(resultQuery.getString("Family"));
         }
 
         return families;

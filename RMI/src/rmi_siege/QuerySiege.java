@@ -90,10 +90,26 @@ public class QuerySiege implements QuerySiegeInterface {
         List<String> families = new ArrayList<>();
         while (resultQuery.next()) {
             families.add(resultQuery.getString("Family"));
-            System.out.println(resultQuery.getString("Family"));
         }
 
         return families;
+    }
+
+    @Override
+    public List<String> getAllShop() throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT DISTINCT Name FROM Shop";
+
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        ResultSet resultQuery = query.executeQuery();
+
+        List<String> shops = new ArrayList<>();
+        while (resultQuery.next()) {
+            shops.add(resultQuery.getString("Name"));
+        }
+
+        return shops;
     }
 
     @Override

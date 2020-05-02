@@ -29,7 +29,7 @@ public class Getterpage extends Container {
     private JButton buttonGetArticleByFamilyShop;
     private JComboBox<String> comboBoxFamilyShop;
     private JComboBox<String> comboBoxFamilySiege;
-    private JTextField fieldGetArticleByShopSiege;
+    private JComboBox<String> comboBoxShopSiege;
     private JButton buttonGetArticleByFamilySiege;
     private JButton buttonGetArticleByShopSiege;
     private JButton buttonBillPage;
@@ -122,7 +122,7 @@ public class Getterpage extends Container {
             TableArticleSiege tableArticleSiege;
             try {
                 tableArticleSiege = new TableArticleSiege(
-                        clientSiege.getQuerySiegeInterface().getArticleByShop(fieldGetArticleByShopSiege.getText()));
+                        clientSiege.getQuerySiegeInterface().getArticleByShop((String) comboBoxShopSiege.getSelectedItem()));
                 tableDisplay = new JTable(tableArticleSiege);
                 JScrollContentPane.setViewportView(tableDisplay);
                 JScrollContentPane.setSize(tableDisplay.getSize());
@@ -145,11 +145,15 @@ public class Getterpage extends Container {
         familyShopList.toArray(familyShopArray);
         comboBoxFamilyShop = new JComboBox<>(familyShopArray);
 
-
         ClientSiege clientSiege = new ClientSiege();
         List<String> familySiegeList = clientSiege.getQuerySiegeInterface().getAllFamily();
         String[] familySiegeArray = new String[familySiegeList.size()];
         familySiegeList.toArray(familySiegeArray);
         comboBoxFamilySiege = new JComboBox<>(familySiegeArray);
+
+        List<String> shopSiegeList = clientSiege.getQuerySiegeInterface().getAllShop();
+        String[] shopSiegeArray = new String[shopSiegeList.size()];
+        shopSiegeList.toArray(shopSiegeArray);
+        comboBoxShopSiege = new JComboBox<>(shopSiegeArray);
     }
 }

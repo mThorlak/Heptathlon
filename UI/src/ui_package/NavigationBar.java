@@ -1,6 +1,7 @@
 package ui_package;
 
 import ui_package.admin_package.Adminpage;
+import ui_package.bill_package.BillMainPage;
 
 import javax.swing.*;
 
@@ -20,7 +21,7 @@ public class NavigationBar {
         buttonBillPage.addActionListener(e -> {
             jFrame.dispose();
             try {
-                new Billpage();
+                new BillMainPage();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
