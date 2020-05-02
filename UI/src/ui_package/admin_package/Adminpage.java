@@ -56,10 +56,6 @@ public class Adminpage {
             new InsertNewArticleSiege();
         });
 
-        buttonAddShopSiege.addActionListener(e -> {
-
-        });
-
         buttonImportBillSiege.addActionListener(e -> {
             new ImportBill();
         });

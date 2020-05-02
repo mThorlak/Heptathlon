@@ -10,6 +10,7 @@ import java.util.List;
 import java.sql.*;
 
 import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 public class QueryShop implements QueryShopInterface {
 
@@ -41,7 +42,7 @@ public class QueryShop implements QueryShopInterface {
     }
 
     @Override
-    public String findArticleByReferenceShop(String reference) throws Exception {
+    public Article getArticleByReference(String reference) throws Exception {
 
         Database database = new Database(DATABASE_SHOP);
         String sql = "SELECT * FROM Article WHERE Reference = ?";
@@ -52,15 +53,20 @@ public class QueryShop implements QueryShopInterface {
 
         Article article = new Article();
 
-        while (resultQuery.next()) {
-            article.setReference(resultQuery.getString("Reference"));
-            article.setPrice(resultQuery.getFloat("Price"));
-            article.setStock(resultQuery.getInt("Stock"));
-            article.setDescription(resultQuery.getString("Description"));
+        if (isEmpty(resultQuery)) {
+            return null;
         }
 
+        else {
+            while (resultQuery.next()) {
+                article.setReference(resultQuery.getString("Reference"));
+                article.setPrice(resultQuery.getFloat("Price"));
+                article.setStock(resultQuery.getInt("Stock"));
+                article.setDescription(resultQuery.getString("Description"));
+            }
+        }
         query.close();
-        return article.getReference();
+        return article;
     }
 
     @Override
@@ -77,16 +83,34 @@ public class QueryShop implements QueryShopInterface {
     public List<Article> getArticleByFamily(String familyName) throws Exception {
 
         Database database = new Database(DATABASE_SHOP);
-        String sql = "SELECT Article.Reference, Price, Stock, Description " +
-                "FROM Article, Family " +
-                "WHERE Family.Family = ? " +
-                "GROUP BY Article.Reference";
+        String sql = "SELECT Article.Reference, Price, Stock, Description, Family \n" +
+                "FROM Article JOIN  Family \n" +
+                "ON Article.Reference = Family.Reference \n" +
+                "WHERE Family.Family = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, familyName);
 
         ResultSet resultQuery = query.executeQuery();
 
         return convertResultQueryIntoListArticleShop(resultQuery);
+    }
+
+    @Override
+    public List<String> getAllFamily() throws Exception {
+
+        Database database = new Database(DATABASE_SHOP);
+        String sql = "SELECT DISTINCT Family FROM Family";
+
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        ResultSet resultQuery = query.executeQuery();
+
+        List<String> families = new ArrayList<>();
+        while (resultQuery.next()) {
+            families.add(resultQuery.getString("Family"));
+            System.out.println(resultQuery.getString("Family"));
+        }
+
+        return families;
     }
 
     @Override
@@ -145,9 +169,8 @@ public class QueryShop implements QueryShopInterface {
             queryShopSiegeDB.setString(2, reference);
             queryShopSiegeDB.setInt(3, stock);
             queryShopSiegeDB.executeUpdate();
-        } else {
-            System.out.println(referenceSiege);
-            System.out.println("_____");
+        }
+        else {
             String sqlInsertShopSiegeDB = "INSERT INTO Shop(Name, Reference, Stock) VALUES (?,?,?)";
             PreparedStatement queryShopSiegeDB = databaseSiege.getConnection().prepareStatement(sqlInsertShopSiegeDB);
             queryShopSiegeDB.setString(1, shop);

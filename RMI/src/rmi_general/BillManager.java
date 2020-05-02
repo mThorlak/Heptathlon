@@ -4,6 +4,7 @@ package rmi_general;
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
 import rmi_shop.tables.Article;
+import rmi_siege.tables.Bill;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,7 +14,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVManager {
+public class BillManager {
 
     private final String BILL_PATH = "Server/resources/bill.csv";
     private final String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
@@ -78,7 +79,6 @@ public class CSVManager {
                 idBill = bill.getId();
                 String[] headerRecord = {"Date", "IDBill", "Shop", "Total", "Payment", "References"};
                 csvWriter.writeNext(headerRecord);
-                System.out.println("ok");
             } else {
                 String[] lastLine = allBills.get(allBills.size() - 1);
                 idBill = bill.getId();

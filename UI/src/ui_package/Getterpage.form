@@ -73,14 +73,6 @@
                       <text value="Get article by reference"/>
                     </properties>
                   </component>
-                  <component id="775ae" class="javax.swing.JTextField" binding="fieldGetArticleByFamilyShop">
-                    <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="-1"/>
-                      </grid>
-                    </constraints>
-                    <properties/>
-                  </component>
                   <vspacer id="4b3ee">
                     <constraints>
                       <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
@@ -93,6 +85,12 @@
                     <properties>
                       <text value="Get article by family"/>
                     </properties>
+                  </component>
+                  <component id="fe40c" class="javax.swing.JComboBox" binding="comboBoxFamilyShop" custom-create="true">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
                   </component>
                 </children>
               </grid>
@@ -128,14 +126,6 @@
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="dd9ca" class="javax.swing.JTextField" binding="fieldGetArticleByFamilySiege">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="-1"/>
-                      </grid>
-                    </constraints>
-                    <properties/>
-                  </component>
                   <component id="1bca3" class="javax.swing.JButton" binding="buttonGetArticleByFamilySiege">
                     <constraints>
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -156,6 +146,12 @@
                     <properties>
                       <text value="Get article by shop"/>
                     </properties>
+                  </component>
+                  <component id="ad840" class="javax.swing.JComboBox" binding="comboBoxFamilySiege" custom-create="true">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
                   </component>
                 </children>
               </grid>

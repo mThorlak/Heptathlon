@@ -1,4 +1,4 @@
-package rmi_general;
+package rmi_siege.tables;
 
 import rmi_shop.tables.Article;
 

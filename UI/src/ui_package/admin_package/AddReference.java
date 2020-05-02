@@ -1,7 +1,7 @@
 package ui_package.admin_package;
 
-import client_package.MainClientShop;
-import client_package.MainClientSiege;
+import client_package.ClientShop;
+import client_package.ClientSiege;
 import ui_package.GeneralFrameSettings;
 
 import javax.swing.*;
@@ -28,7 +28,7 @@ public class AddReference {
                 labelState.setText("Error : reference name is too long");
             else if (requestFromShop) {
                 try {
-                    MainClientShop clientShop = new MainClientShop();
+                    ClientShop clientShop = new ClientShop();
                     clientShop.getQueryShopInterface().insertNewReference(
                             textFieldFamilyName.getText(),
                             textFieldReference.getText()
@@ -41,7 +41,7 @@ public class AddReference {
             }
             else {
                 try {
-                    MainClientSiege clientSiege = new MainClientSiege();
+                    ClientSiege clientSiege = new ClientSiege();
                     clientSiege.getQuerySiegeInterface().insertNewReference(
                             textFieldFamilyName.getText(),
                             textFieldReference.getText()

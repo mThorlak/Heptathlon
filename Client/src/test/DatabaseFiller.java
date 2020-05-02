@@ -1,7 +1,7 @@
 package test;
 
-import client_package.MainClientShop;
-import client_package.MainClientSiege;
+import client_package.ClientShop;
+import client_package.ClientSiege;
 
 public class DatabaseFiller {
 
@@ -13,7 +13,7 @@ public class DatabaseFiller {
     public static void FillSiege() throws Exception {
 
         // Fill reference
-        MainClientSiege clientSiege = new MainClientSiege();
+        ClientSiege clientSiege = new ClientSiege();
         String reference1 = "L00000";
         String reference2 = "R00000";
 
@@ -45,7 +45,7 @@ public class DatabaseFiller {
 
     public static void FillShop() throws Exception {
 
-        MainClientShop clientShop = new MainClientShop();
+        ClientShop clientShop = new ClientShop();
 
         // Fill reference
         String reference2 = "R00000";
@@ -73,9 +73,7 @@ public class DatabaseFiller {
         for (int i = 1; i < 6; i++) {
             reference2 = reference2.substring(0, reference2.length() - 1) + i;
             reference3 = reference3.substring(0, reference3.length() - 1) + i;
-            System.out.println(reference2);
             clientShop.getQueryShopInterface().insertNewArticle(reference2, price, stock,  reference2 + " description", shopName);
-            System.out.println(reference3);
             clientShop.getQueryShopInterface().insertNewArticle(reference3, price, stock,  reference3 + " description", shopName);
             price = price + 10;
             stock = stock + 20;

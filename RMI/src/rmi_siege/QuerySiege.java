@@ -1,7 +1,7 @@
 package rmi_siege;
 
-import rmi_general.Bill;
-import rmi_general.CSVManager;
+import rmi_siege.tables.Bill;
+import rmi_general.BillManager;
 import rmi_general.Database;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.ArticleSiege;
@@ -53,10 +53,10 @@ public class QuerySiege implements QuerySiegeInterface {
     public List<ArticleSiege> getArticleByFamily(String familyName) throws Exception {
 
         Database database = new Database(DATABASE_NAME);
-        String sql = "SELECT Article.Reference, Price, Description " +
-                "FROM Article, Family " +
-                "WHERE Family.Family = ? " +
-                "GROUP BY Article.Reference";
+        String sql = "SELECT Article.Reference, Price, Description, Family \n" +
+                "FROM Article JOIN  Family \n" +
+                "ON Article.Reference = Family.Reference \n" +
+                "WHERE Family.Family = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, familyName);
 
@@ -76,6 +76,24 @@ public class QuerySiege implements QuerySiegeInterface {
         ResultSet resultQuery = query.executeQuery();
 
         return convertResultQueryIntoListArticleSiege(resultQuery);
+    }
+
+    @Override
+    public List<String> getAllFamily() throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT DISTINCT Family FROM Family";
+
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        ResultSet resultQuery = query.executeQuery();
+
+        List<String> families = new ArrayList<>();
+        while (resultQuery.next()) {
+            families.add(resultQuery.getString("Family"));
+            System.out.println(resultQuery.getString("Family"));
+        }
+
+        return families;
     }
 
     @Override
@@ -152,12 +170,12 @@ public class QuerySiege implements QuerySiegeInterface {
 
         Database databaseSiege = new Database(DATABASE_NAME);
 
-        CSVManager csvManager = new CSVManager();
+        BillManager billManager = new BillManager();
         List<String[]> CSVBill;
         if (isBillPaid)
-            CSVBill = csvManager.readLineByLine(csvManager.getBillPaidPath());
+            CSVBill = billManager.readLineByLine(billManager.getBillPaidPath());
         else
-            CSVBill = csvManager.readLineByLine(csvManager.getBillPath());
+            CSVBill = billManager.readLineByLine(billManager.getBillPath());
         int cpt = 0;
 
         String sqlInsertIntoBill = "INSERT INTO Bill(IDBill, Shop, Date, Total, Payment, Paid) VALUES (?,?,?,?,?,?)";
@@ -170,7 +188,7 @@ public class QuerySiege implements QuerySiegeInterface {
                 cpt++;
                 continue;
             }
-            Bill bill = csvManager.convertLineInBill(line);
+            Bill bill = billManager.convertLineInBill(line);
             queryInsertIntoBill.setString(1, bill.getId());
             queryInsertIntoBill.setString(2, bill.getShop());
             queryInsertIntoBill.setString(3, bill.getDate());

@@ -1,6 +1,6 @@
 package ui_package.admin_package;
 
-import client_package.MainClientShop;
+import client_package.ClientShop;
 import ui_package.GeneralFrameSettings;
 
 import javax.swing.*;
@@ -30,7 +30,7 @@ public class InsertNewArticleShop {
 
         buttonValidate.addActionListener(e -> {
             try {
-                MainClientShop clientShop = new MainClientShop();
+                ClientShop clientShop = new ClientShop();
                 clientShop.getQueryShopInterface().insertNewArticle(
                         textFieldReference.getText(),
                         Double.parseDouble(textFieldPrice.getText()),

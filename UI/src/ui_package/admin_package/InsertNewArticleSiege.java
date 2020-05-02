@@ -1,6 +1,6 @@
 package ui_package.admin_package;
 
-import client_package.MainClientSiege;
+import client_package.ClientSiege;
 import ui_package.GeneralFrameSettings;
 
 import javax.swing.*;
@@ -25,7 +25,7 @@ public class InsertNewArticleSiege {
 
         buttonValidate.addActionListener(e -> {
             try {
-                MainClientSiege clientSiege = new MainClientSiege();
+                ClientSiege clientSiege = new ClientSiege();
                 clientSiege.getQuerySiegeInterface().insertNewArticle(
                         textFieldReference.getText(),
                         Double.parseDouble(textFieldPrice.getText()),

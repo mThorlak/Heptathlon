@@ -1,6 +1,6 @@
 package ui_package.admin_package;
 
-import client_package.MainClientSiege;
+import client_package.ClientSiege;
 import ui_package.GeneralFrameSettings;
 
 import javax.swing.*;
@@ -24,7 +24,7 @@ public class ImportBill {
 
         buttonYes.addActionListener(e -> {
             try {
-                MainClientSiege clientSiege = new MainClientSiege();
+                ClientSiege clientSiege = new ClientSiege();
                 if (checkBoxBillNonPaid.isSelected())
                     clientSiege.getQuerySiegeInterface().importCSVIntoDBSiege(false);
                 if (checkBoxBillPaid.isSelected())

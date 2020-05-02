@@ -52,4 +52,14 @@ public class Article implements java.io.Serializable {
     public void setDescription(String description) {
         Description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "Reference='" + Reference + '\'' +
+                ", Description='" + Description + '\'' +
+                ", Price=" + Price +
+                ", Stock=" + Stock +
+                '}';
+    }
 }

@@ -5,8 +5,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import client_package.MainClientShop;
-import client_package.MainClientSiege;
+import client_package.ClientShop;
+import client_package.ClientSiege;
 import model_table.TableArticleShop;
 import model_table.TableArticleSiege;
 import rmi_shop.tables.Article;
@@ -26,9 +26,9 @@ public class Getterpage extends Container {
     private JButton buttonGetAllArticleSiege;
     private JTextField fieldGetArticleByReferenceShop;
     private JButton buttonGetArticleByReferenceShop;
-    private JTextField fieldGetArticleByFamilyShop;
     private JButton buttonGetArticleByFamilyShop;
-    private JTextField fieldGetArticleByFamilySiege;
+    private JComboBox<String> comboBoxFamilyShop;
+    private JComboBox<String> comboBoxFamilySiege;
     private JTextField fieldGetArticleByShopSiege;
     private JButton buttonGetArticleByFamilySiege;
     private JButton buttonGetArticleByShopSiege;
@@ -49,8 +49,8 @@ public class Getterpage extends Container {
         // Navigation bar
         new NavigationBar(controlFrame, buttonGetterPage, buttonBillPage, buttonAdminPage);
 
-        MainClientShop clientShop = new MainClientShop();
-        MainClientSiege clientSiege = new MainClientSiege();
+        ClientShop clientShop = new ClientShop();
+        ClientSiege clientSiege = new ClientSiege();
 
         buttonGetAllArticleShop.addActionListener(e -> {
             try {
@@ -68,7 +68,7 @@ public class Getterpage extends Container {
             TableArticleShop modelTable;
             List<Article> listArticles = new ArrayList<>();
             try {
-                listArticles.add(clientShop.getQueryShopInterface().findArticleByReference(fieldGetArticleByReferenceShop.getText()));
+                listArticles.add(clientShop.getQueryShopInterface().getArticleByReference(fieldGetArticleByReferenceShop.getText()));
                 modelTable = new TableArticleShop(listArticles);
                 tableDisplay = new JTable(modelTable);
                 JScrollContentPane.setViewportView(tableDisplay);
@@ -82,7 +82,7 @@ public class Getterpage extends Container {
         buttonGetArticleByFamilyShop.addActionListener(e -> {
             try {
                 TableArticleShop tableArticleShop = new TableArticleShop(
-                        clientShop.getQueryShopInterface().getArticleByFamily(fieldGetArticleByFamilyShop.getText()));
+                        clientShop.getQueryShopInterface().getArticleByFamily((String) comboBoxFamilyShop.getSelectedItem()));
                 tableDisplay = new JTable(tableArticleShop);
                 JScrollContentPane.setViewportView(tableDisplay);
                 JScrollContentPane.setSize(tableDisplay.getSize());
@@ -108,7 +108,7 @@ public class Getterpage extends Container {
             TableArticleSiege tableArticleSiege;
             try {
                 tableArticleSiege = new TableArticleSiege(
-                        clientSiege.getQuerySiegeInterface().getArticleByFamily(fieldGetArticleByFamilySiege.getText()));
+                        clientSiege.getQuerySiegeInterface().getArticleByFamily((String) comboBoxFamilySiege.getSelectedItem()));
                 tableDisplay = new JTable(tableArticleSiege);
                 JScrollContentPane.setViewportView(tableDisplay);
                 JScrollContentPane.setSize(tableDisplay.getSize());
@@ -137,6 +137,19 @@ public class Getterpage extends Container {
     }
 
     // place custom component creation code here
-    private void createUIComponents() {
+    private void createUIComponents() throws Exception {
+
+        ClientShop clientShop = new ClientShop();
+        List<String> familyShopList = clientShop.getQueryShopInterface().getAllFamily();
+        String[] familyShopArray = new String[familyShopList.size()];
+        familyShopList.toArray(familyShopArray);
+        comboBoxFamilyShop = new JComboBox<>(familyShopArray);
+
+
+        ClientSiege clientSiege = new ClientSiege();
+        List<String> familySiegeList = clientSiege.getQuerySiegeInterface().getAllFamily();
+        String[] familySiegeArray = new String[familySiegeList.size()];
+        familySiegeList.toArray(familySiegeArray);
+        comboBoxFamilySiege = new JComboBox<>(familySiegeArray);
     }
 }
