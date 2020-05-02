@@ -20,9 +20,9 @@ public class QuerySiege implements QuerySiegeInterface {
     public List<ArticleSiege> convertResultQueryIntoListArticleSiege(ResultSet resultQuery) throws SQLException {
 
         List<ArticleSiege> list = new ArrayList<>();
-        while(resultQuery.next()) {
+        while (resultQuery.next()) {
             // Retrieve by column name
-            String reference  = resultQuery.getString("Reference");
+            String reference = resultQuery.getString("Reference");
             float price = resultQuery.getFloat("Price");
             String description = resultQuery.getString("Description");
 
@@ -76,6 +76,26 @@ public class QuerySiege implements QuerySiegeInterface {
         ResultSet resultQuery = query.executeQuery();
 
         return convertResultQueryIntoListArticleSiege(resultQuery);
+    }
+
+    @Override
+    public String findArticleByReferenceSiege(String reference) throws Exception {
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT * FROM Article WHERE Reference = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        query.setString(1, reference);
+
+        ResultSet resultQuery = query.executeQuery();
+
+        ArticleSiege articleSiege = new ArticleSiege();
+
+        while (resultQuery.next()) {
+            articleSiege.setReference(resultQuery.getString("Reference"));
+            articleSiege.setPrice(resultQuery.getFloat("Price"));
+            articleSiege.setDescription(resultQuery.getString("Description"));
+        }
+
+        return articleSiege.getReference();
     }
 
     @Override
