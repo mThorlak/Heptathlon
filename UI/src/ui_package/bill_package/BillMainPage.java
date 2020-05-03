@@ -27,7 +27,11 @@ public class BillMainPage {
         new NavigationBar(controlFrame, buttonGetterPage, buttonBillPage, buttonAdminPage);
 
         buttonBuyArticle.addActionListener(e -> {
-            new BuyArticle();
+            try {
+                new BuyArticle();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         });
 
         buttonSeeBill.addActionListener(e -> {
