@@ -2,14 +2,20 @@ package ui_package.bill_package;
 
 import client_package.ClientShop;
 import model_table.TableArticleShop;
+import rmi_general.BillManager;
 import rmi_shop.tables.Article;
+import rmi_siege.tables.Bill;
 import ui_package.GeneralFrameSettings;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class BuyArticle {
     private JPanel panelMain;
@@ -25,13 +31,13 @@ public class BuyArticle {
     private JButton buttonGetArticleByReference;
     private JLabel labelTotal;
     private JComboBox<String> comboBoxPayBill;
-    private JButton buttonConfirm;
     private JButton buttonCancel;
     private JTextField textboxQuantityToBuyArticle;
     private JTextField textFieldQuantityToRemoveArticle;
     private JLabel labelAddArticle;
     private JLabel labelRemoveArticle;
     private JScrollPane scrollPaneArticleSelected;
+    private JButton buttonConfirm;
     private final String shopName = "shop1";
     private List<Article> shopCartArticleList;
     private boolean alreadyInShopCartArticleList;
@@ -173,8 +179,36 @@ public class BuyArticle {
             }
         });
 
+        buttonConfirm.addActionListener(e -> {
+
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String strDate = formatter.format(date);
+            String shopName = "shop1";
+            String paymentMethod;
+
+            if (Objects.equals(comboBoxPayBill.getSelectedItem(), "No"))
+                paymentMethod = "No payment";
+            else
+                paymentMethod = "paid";
+
+            Bill bill = new Bill(strDate, shopName, Float.parseFloat(labelTotal.getText()), paymentMethod, this.shopCartArticleList);
+            BillManager billManager = new BillManager();
+            try {
+                billManager.writeNewBill(bill, false);
+                buyArticleFrame.dispose();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+
+        buttonCancel.addActionListener(e -> {
+            buyArticleFrame.dispose();
+        });
+
         buyArticleFrame.pack();
         buyArticleFrame.setVisible(true);
+
     }
 
     private void createUIComponents() throws Exception {
