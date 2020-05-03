@@ -6,11 +6,8 @@ import rmi_shop.tables.Article;
 import ui_package.GeneralFrameSettings;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +27,8 @@ public class BuyArticle {
     private JComboBox<String> comboBoxPayBill;
     private JButton buttonConfirm;
     private JButton buttonCancel;
-    private JTextField textboxHowManyAddArticle;
-    private JComboBox comboBox2;
+    private JTextField textboxQuantityToBuyArticle;
+    private JTextField textFieldQuantityToRemoveArticle;
     private JLabel labelAddArticle;
     private JLabel labelRemoveArticle;
     private JScrollPane scrollPaneArticleSelected;
@@ -49,13 +46,11 @@ public class BuyArticle {
         buyArticleFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
 
         ClientShop clientShop = new ClientShop();
+
         TableArticleShop modelTable = new TableArticleShop(clientShop.getQueryShopInterface().getAllArticle());
         tableDisplayArticle = new JTable(modelTable);
         scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
         scrollPaneTableDisplay.setSize(tableDisplayArticle.getSize());
-
-        buyArticleFrame.pack();
-        buyArticleFrame.setVisible(true);
 
         shopCartArticleList = new ArrayList<>();
 
@@ -92,52 +87,94 @@ public class BuyArticle {
 
         buttonAddArticleSelected.addActionListener(e -> {
             try {
-                if (textboxHowManyAddArticle.getText().isEmpty()) {
-                    textboxHowManyAddArticle.setText("1");
-                }
-
-                Article articleBeforeBuying = clientShop.getQueryShopInterface().getArticleByReference(
-                        (String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0));
-
-                if (articleBeforeBuying.getStock() < Integer.parseInt(textboxHowManyAddArticle.getText())) {
-                    System.out.println("Too much article selected");
-                }
-                else {
-                    Article articleBought = new Article();
-                    articleBought.setReference(articleBeforeBuying.getReference());
-                    articleBought.setStock(Integer.parseInt(textboxHowManyAddArticle.getText()));
-                    articleBought.setPrice(articleBeforeBuying.getPrice());
-                    articleBought.setDescription(articleBeforeBuying.getDescription());
-
-                    for (Article article : this.shopCartArticleList) {
-                        if (article.getReference().equals(articleBought.getReference())) {
-                            this.alreadyInShopCartArticleList = true;
-                            if (articleBeforeBuying.getStock() < article.getStock() + articleBought.getStock())
-                                System.out.println("nop");
-                            else
-                                article.setStock(article.getStock() + articleBought.getStock());
-                        }
+                if (!labelAddArticle.getText().isEmpty()) {
+                    if (textboxQuantityToBuyArticle.getText().isEmpty()) {
+                        textboxQuantityToBuyArticle.setText("1");
                     }
-                    if (!alreadyInShopCartArticleList)
-                        this.shopCartArticleList.add(articleBought);
 
-                    TableArticleShop tableArticleBought = new TableArticleShop(this.shopCartArticleList);
-                    tableSelectedArticle = new JTable(tableArticleBought);
-                    scrollPaneArticleSelected.setViewportView(tableSelectedArticle);
-                    scrollPaneArticleSelected.setSize(tableSelectedArticle.getSize());
-                    buyArticleFrame.pack();
-                    this.alreadyInShopCartArticleList = false;
+                    Article articleBeforeBuying = clientShop.getQueryShopInterface().getArticleByReference(
+                            (String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0));
 
-                    double total = 0;
-                    for (Article article : this.shopCartArticleList)
-                        total = total + (article.getStock() * article.getPrice());
-                    labelTotal.setText(String.valueOf(total));
+                    if (articleBeforeBuying.getStock() < Integer.parseInt(textboxQuantityToBuyArticle.getText())) {
+                        System.out.println("Too much article selected");
+                    } else {
+                        Article articleBought = new Article();
+                        articleBought.setReference(articleBeforeBuying.getReference());
+                        articleBought.setStock(Integer.parseInt(textboxQuantityToBuyArticle.getText()));
+                        articleBought.setPrice(articleBeforeBuying.getPrice());
+                        articleBought.setDescription(articleBeforeBuying.getDescription());
+
+                        for (Article article : this.shopCartArticleList) {
+                            if (article.getReference().equals(articleBought.getReference())) {
+                                this.alreadyInShopCartArticleList = true;
+                                if (articleBeforeBuying.getStock() < article.getStock() + articleBought.getStock())
+                                    System.out.println("nop");
+                                else
+                                    article.setStock(article.getStock() + articleBought.getStock());
+                            }
+                        }
+                        if (!alreadyInShopCartArticleList)
+                            this.shopCartArticleList.add(articleBought);
+
+                        TableArticleShop tableArticleBought = new TableArticleShop(this.shopCartArticleList);
+                        tableSelectedArticle = new JTable(tableArticleBought);
+                        scrollPaneArticleSelected.setViewportView(tableSelectedArticle);
+                        scrollPaneArticleSelected.setSize(tableSelectedArticle.getSize());
+                        buyArticleFrame.pack();
+                        this.alreadyInShopCartArticleList = false;
+
+                        double total = 0;
+                        for (Article article : this.shopCartArticleList)
+                            total = total + (article.getStock() * article.getPrice());
+                        labelTotal.setText(String.valueOf(total));
+
+                        tableSelectedArticle.getSelectionModel().addListSelectionListener(ef ->
+                                labelRemoveArticle.setText((String) tableSelectedArticle.getValueAt(tableSelectedArticle.getSelectedRow(), 0)));
+                    }
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
         });
 
+        buttonRemoveArticleSelected.addActionListener(e -> {
+            if (!labelRemoveArticle.getText().isEmpty()) {
+                if (textFieldQuantityToRemoveArticle.getText().isEmpty()) {
+                    textFieldQuantityToRemoveArticle.setText("1");
+                }
+
+                if (shopCartArticleList.get(tableSelectedArticle.getSelectedRow())
+                        .getStock() <= Integer.parseInt(textFieldQuantityToRemoveArticle.getText()))
+                    this.shopCartArticleList.remove(tableSelectedArticle.getSelectedRow());
+                else
+                    shopCartArticleList.get(tableSelectedArticle.getSelectedRow())
+                            .setStock(shopCartArticleList.get(tableSelectedArticle.getSelectedRow()).getStock() -
+                                    Integer.parseInt(textFieldQuantityToRemoveArticle.getText()));
+
+                TableArticleShop tableArticleBought = new TableArticleShop(this.shopCartArticleList);
+                tableSelectedArticle = new JTable(tableArticleBought);
+                scrollPaneArticleSelected.setViewportView(tableSelectedArticle);
+                scrollPaneArticleSelected.setSize(tableSelectedArticle.getSize());
+                buyArticleFrame.pack();
+
+                double total = 0;
+                for (Article article : this.shopCartArticleList)
+                    total = total + (article.getStock() * article.getPrice());
+                labelTotal.setText(String.valueOf(total));
+
+                tableSelectedArticle.getSelectionModel().addListSelectionListener(ef ->
+                        labelAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
+
+                labelRemoveArticle.setText("");
+
+                tableSelectedArticle.getSelectionModel().addListSelectionListener(ef ->
+                        labelRemoveArticle.setText((String) tableSelectedArticle.getValueAt(tableSelectedArticle.getSelectedRow(), 0)));
+
+            }
+        });
+
+        buyArticleFrame.pack();
+        buyArticleFrame.setVisible(true);
     }
 
     private void createUIComponents() throws Exception {
