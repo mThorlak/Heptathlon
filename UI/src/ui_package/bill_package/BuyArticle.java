@@ -38,9 +38,11 @@ public class BuyArticle {
     private JLabel labelRemoveArticle;
     private JScrollPane scrollPaneArticleSelected;
     private JButton buttonConfirm;
+    private JComboBox comboBoxPaymentMethod;
     private final String shopName = "shop1";
     private List<Article> shopCartArticleList;
     private boolean alreadyInShopCartArticleList;
+    private final String[] paymentMethod = {"Cash", "Blue card", "Bitcoin", "Kidney"};
 
     public BuyArticle() throws Exception {
 
@@ -179,32 +181,39 @@ public class BuyArticle {
             }
         });
 
+        comboBoxPayBill.addItemListener(e -> {
+            if (Objects.equals(comboBoxPayBill.getSelectedItem(), "Yes")) {
+                comboBoxPaymentMethod.removeAllItems();
+                for (String payment : paymentMethod)
+                    comboBoxPaymentMethod.addItem(payment);
+            }
+            else {
+                String[] paymentMethod = {"No payment method"};
+                comboBoxPaymentMethod.removeAllItems();
+                comboBoxPaymentMethod.addItem("No payment method");
+            }
+        });
+
         buttonConfirm.addActionListener(e -> {
 
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             String strDate = formatter.format(date);
             String shopName = "shop1";
-            String paymentMethod;
-
-            if (Objects.equals(comboBoxPayBill.getSelectedItem(), "No"))
-                paymentMethod = "No payment";
-            else
-                paymentMethod = "paid";
+            String paymentMethod = String.valueOf(comboBoxPaymentMethod.getSelectedItem());
 
             Bill bill = new Bill(strDate, shopName, Float.parseFloat(labelTotal.getText()), paymentMethod, this.shopCartArticleList);
             BillManager billManager = new BillManager();
             try {
                 billManager.writeNewBill(bill, false);
                 buyArticleFrame.dispose();
+
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
         });
 
-        buttonCancel.addActionListener(e -> {
-            buyArticleFrame.dispose();
-        });
+        buttonCancel.addActionListener(e -> buyArticleFrame.dispose());
 
         buyArticleFrame.pack();
         buyArticleFrame.setVisible(true);
@@ -222,5 +231,7 @@ public class BuyArticle {
 
         String[] yesOrNo = {"Yes", "No"};
         comboBoxPayBill = new JComboBox<>(yesOrNo);
+
+        comboBoxPaymentMethod = new JComboBox<>(paymentMethod);
     }
 }
