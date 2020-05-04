@@ -38,7 +38,7 @@ public class BuyArticle {
     private JLabel labelRemoveArticle;
     private JScrollPane scrollPaneArticleSelected;
     private JButton buttonConfirm;
-    private JComboBox comboBoxPaymentMethod;
+    private JComboBox<String> comboBoxPaymentMethod;
     private final String shopName = "shop1";
     private List<Article> shopCartArticleList;
     private boolean alreadyInShopCartArticleList;
@@ -204,11 +204,18 @@ public class BuyArticle {
 
             Bill bill = new Bill(strDate, shopName, Float.parseFloat(labelTotal.getText()), paymentMethod, this.shopCartArticleList);
             BillManager billManager = new BillManager();
+
             try {
+                for (Article article : shopCartArticleList) {
+                    Article articleBeforeBought = clientShop.getQueryShopInterface().getArticleByReference(article.getReference());
+                    clientShop.getQueryShopInterface().updateStock(shopName, article.getReference(),
+                            articleBeforeBought.getStock() - article.getStock());
+                }
+
                 billManager.writeNewBill(bill, false);
                 buyArticleFrame.dispose();
 
-            } catch (IOException ioException) {
+            } catch (Exception ioException) {
                 ioException.printStackTrace();
             }
         });
