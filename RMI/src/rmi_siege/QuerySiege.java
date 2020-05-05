@@ -1,7 +1,7 @@
 package rmi_siege;
 
 import rmi_siege.tables.Bill;
-import rmi_general.BillManager;
+import rmi_general.BillCSVManager;
 import rmi_general.Database;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.ArticleSiege;
@@ -70,7 +70,8 @@ public class QuerySiege implements QuerySiegeInterface {
     public List<ArticleSiege> getArticleByShop(String shop) throws Exception {
 
         Database database = new Database(DATABASE_NAME);
-        String sql = "SELECT Article.Reference, Article.Price, Article.Description FROM Shop, Article WHERE Shop.name = ? AND Shop.Reference = Article.Reference";
+        String sql = "SELECT Article.Reference, Article.Price, Article.Description FROM Shop, Article " +
+                "WHERE Shop.name = ? AND Shop.Reference = Article.Reference";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, shop);
         ResultSet resultQuery = query.executeQuery();
@@ -114,6 +115,7 @@ public class QuerySiege implements QuerySiegeInterface {
 
     @Override
     public String findArticleByReferenceSiege(String reference) throws Exception {
+
         Database database = new Database(DATABASE_NAME);
         String sql = "SELECT * FROM Article WHERE Reference = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
@@ -182,16 +184,113 @@ public class QuerySiege implements QuerySiegeInterface {
     }
 
     @Override
+    public Bill getBillByID(String ID) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill " +
+                "WHERE Bill.IDBill = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        query.setString(1, ID);
+
+        ResultSet resultQuery = query.executeQuery();
+        List<Article> articles = new ArrayList<>();
+        while (resultQuery.next()) {
+            Article article = new Article();
+            article.setReference(resultQuery.getString("Reference"));
+            article.setPrice(resultQuery.getFloat("Quantity"));
+            article.setDescription(resultQuery.getString("Price"));
+            articles.add(article);
+        }
+        resultQuery.first();
+
+        return new Bill(
+                resultQuery.getString("Date"),
+                resultQuery.getString("IDBill"),
+                resultQuery.getString("Shop"),
+                resultQuery.getFloat("Total"),
+                resultQuery.getString("Payment"),
+                articles);
+    }
+
+    @Override
+    public List<Bill> getBillByDateAndShop(String date, String shop) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill " +
+                "WHERE Shop = ? AND Date = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+
+        query.setString(1, shop);
+        query.setString(2, date);
+
+        ResultSet resultQuery = query.executeQuery();
+        List<Bill> bills = new ArrayList<>();
+
+        while (resultQuery.next()) {
+
+            Article article = new Article();
+            article.setReference(resultQuery.getString("Reference"));
+            article.setPrice(resultQuery.getFloat("Quantity"));
+            article.setDescription(resultQuery.getString("Price"));
+
+            ArrayList<Article> articles = new ArrayList<>();
+            articles.add(article);
+
+            Bill bill = new Bill(resultQuery.getString("Date"),
+                    resultQuery.getString("IDBill"),
+                    resultQuery.getString("Shop"),
+                    resultQuery.getFloat("Total"),
+                    resultQuery.getString("Payment"),
+                    articles);
+
+            if (bills.isEmpty())
+                bills.add(bill);
+
+            else if (bills.get(bills.size()-1).getId().equals(bill.getId())) {
+                List<Article> tmpArticles = bills.get(bills.size()-1).getArticles();
+                tmpArticles.addAll(bill.getArticles());
+                bills.get(bills.size()-1).setArticles(tmpArticles);
+            }
+
+            else
+                bills.add(bill);
+        }
+
+        return bills;
+    }
+
+    @Override
+    public double calculateCAShopDayBillPaid(String date, String shop) throws Exception {
+        return 0;
+    }
+
+    @Override
+    public double calculateCAShopDayBillNonPaid(String date, String shop) throws Exception {
+        return 0;
+    }
+
+    @Override
+    public double calculateCAShopDayAllBill(String date, String shop) throws Exception {
+        return 0;
+    }
+
+    @Override
     public void importCSVIntoDBSiege(boolean isBillPaid) throws SQLException, ClassNotFoundException, FileNotFoundException {
 
         Database databaseSiege = new Database(DATABASE_NAME);
 
-        BillManager billManager = new BillManager();
+        BillCSVManager billCSVManager = new BillCSVManager();
         List<String[]> CSVBill;
         if (isBillPaid)
-            CSVBill = billManager.readLineByLine(billManager.getBillPaidPath());
+            CSVBill = billCSVManager.readLineByLine(billCSVManager.getBillPaidPath());
         else
-            CSVBill = billManager.readLineByLine(billManager.getBillPath());
+            CSVBill = billCSVManager.readLineByLine(billCSVManager.getBillPath());
         int cpt = 0;
 
         String sqlInsertIntoBill = "INSERT INTO Bill(IDBill, Shop, Date, Total, Payment, Paid) VALUES (?,?,?,?,?,?)";
@@ -204,7 +303,7 @@ public class QuerySiege implements QuerySiegeInterface {
                 cpt++;
                 continue;
             }
-            Bill bill = billManager.convertLineInBill(line);
+            Bill bill = billCSVManager.convertLineInBill(line);
             queryInsertIntoBill.setString(1, bill.getId());
             queryInsertIntoBill.setString(2, bill.getShop());
             queryInsertIntoBill.setString(3, bill.getDate());

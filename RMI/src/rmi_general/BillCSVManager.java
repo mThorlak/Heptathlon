@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillManager {
+public class BillCSVManager {
 
     private final String BILL_PATH = "Server/resources/bill.csv";
     private final String BILL_PAID_PATH = "Server/resources/bill_paid.csv";

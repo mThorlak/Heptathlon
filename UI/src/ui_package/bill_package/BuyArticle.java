@@ -2,15 +2,12 @@ package ui_package.bill_package;
 
 import client_package.ClientShop;
 import model_table.TableArticleShop;
-import rmi_general.BillManager;
+import rmi_general.BillCSVManager;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.Bill;
 import ui_package.GeneralFrameSettings;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -203,7 +200,7 @@ public class BuyArticle {
             String paymentMethod = String.valueOf(comboBoxPaymentMethod.getSelectedItem());
 
             Bill bill = new Bill(strDate, shopName, Float.parseFloat(labelTotal.getText()), paymentMethod, this.shopCartArticleList);
-            BillManager billManager = new BillManager();
+            BillCSVManager billCSVManager = new BillCSVManager();
 
             try {
                 for (Article article : shopCartArticleList) {
@@ -212,7 +209,7 @@ public class BuyArticle {
                             articleBeforeBought.getStock() - article.getStock());
                 }
 
-                billManager.writeNewBill(bill, false);
+                billCSVManager.writeNewBill(bill, false);
                 buyArticleFrame.dispose();
 
             } catch (Exception ioException) {

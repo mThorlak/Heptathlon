@@ -1,6 +1,7 @@
 package rmi_siege;
 
 import rmi_siege.tables.ArticleSiege;
+import rmi_siege.tables.Bill;
 
 import java.rmi.Remote;
 import java.util.List;
@@ -17,4 +18,9 @@ public interface QuerySiegeInterface extends Remote {
     void updatePrice(String reference, double price) throws Exception;
     void importCSVIntoDBSiege(boolean isBillPaid) throws Exception;
     void updateBillIsPaid(String IDBill) throws Exception;
+    Bill getBillByID(String ID) throws Exception;
+    List<Bill> getBillByDateAndShop(String date, String shop) throws Exception;
+    double calculateCAShopDayBillPaid(String date, String shop) throws Exception;
+    double calculateCAShopDayBillNonPaid (String date, String shop) throws Exception;
+    double calculateCAShopDayAllBill (String date, String shop) throws Exception;
 }
