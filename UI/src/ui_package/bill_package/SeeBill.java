@@ -36,22 +36,37 @@ public class SeeBill {
         ClientSiege clientSiege = new ClientSiege();
 
         buttonGetBillByID.addActionListener(e -> {
-            try {
-                List<Bill> bills = new ArrayList<>();
-                Bill bill = clientSiege.getQuerySiegeInterface().getBillByID(textFieldGetButtonByID.getText());
-                bills.add(bill);
-                TableBillSiege modelTable = new TableBillSiege(bills);
-                tableBill = new JTable(modelTable);
-                scrollPaneTableDisplay.setViewportView(tableBill);
-                scrollPaneTableDisplay.setSize(tableBill.getSize());
+            if (!textFieldGetButtonByID.getText().isEmpty()) {
+                try {
+                    List<Bill> bills = new ArrayList<>();
+                    Bill bill = clientSiege.getQuerySiegeInterface().getBillByID(textFieldGetButtonByID.getText());
+                    bills.add(bill);
+                    TableBillSiege modelTable = new TableBillSiege(bills);
+                    tableBill = new JTable(modelTable);
+                    scrollPaneTableDisplay.setViewportView(tableBill);
+                    scrollPaneTableDisplay.setSize(tableBill.getSize());
 
-                seeBillFrame.pack();
-            } catch (Exception exception) {
-                exception.printStackTrace();
+                    seeBillFrame.pack();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
         });
         buttonBillByDateAndShop.addActionListener(e -> {
+            if (!textFieldDate.getText().isEmpty() && !textFieldShop.getText().isEmpty()) {
+                try {
+                    List<Bill> bills = clientSiege.getQuerySiegeInterface().getBillByDateAndShop(
+                            textFieldDate.getText(), textFieldShop.getText());
+                    TableBillSiege modelTable = new TableBillSiege(bills);
+                    tableBill = new JTable(modelTable);
+                    scrollPaneTableDisplay.setViewportView(tableBill);
+                    scrollPaneTableDisplay.setSize(tableBill.getSize());
 
+                    seeBillFrame.pack();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         });
 
         seeBillFrame.pack();

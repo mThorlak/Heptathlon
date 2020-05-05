@@ -195,8 +195,6 @@ public class QuerySiege implements QuerySiegeInterface {
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, ID);
 
-        System.out.println("ok");
-
         ResultSet resultQuery = query.executeQuery();
         List<Article> articles = new ArrayList<>();
         while (resultQuery.next()) {
