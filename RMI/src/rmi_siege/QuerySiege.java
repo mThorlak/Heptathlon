@@ -197,6 +197,7 @@ public class QuerySiege implements QuerySiegeInterface {
 
         ResultSet resultQuery = query.executeQuery();
         List<Article> articles = new ArrayList<>();
+
         while (resultQuery.next()) {
             Article article = new Article();
             article.setReference(resultQuery.getString("Reference"));
@@ -220,31 +221,7 @@ public class QuerySiege implements QuerySiegeInterface {
         return bill;
     }
 
-    @Override
-    public List<Bill> getBillByDate(String date) throws Exception {
-        return null;
-    }
-
-    @Override
-    public List<Bill> getBillByShop(String shop) throws Exception {
-        return null;
-    }
-
-    @Override
-    public List<Bill> getBillByDateAndShop(String date, String shop) throws Exception {
-
-        Database database = new Database(DATABASE_NAME);
-        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
-                "FROM Bill " +
-                "JOIN Bill_Details " +
-                "ON Bill.IDBill = Bill_Details.IDBill " +
-                "WHERE Shop = ? AND Date = ?";
-        PreparedStatement query = database.getConnection().prepareStatement(sql);
-
-        query.setString(1, shop);
-        query.setString(2, date);
-
-        ResultSet resultQuery = query.executeQuery();
+    private List<Bill> convertResultQueryIntoBillList(ResultSet resultQuery) throws SQLException {
         List<Bill> bills = new ArrayList<>();
 
         while (resultQuery.next()) {
@@ -277,10 +254,62 @@ public class QuerySiege implements QuerySiegeInterface {
             else
                 bills.add(bill);
         }
-
-        System.out.println(bills.toString());
-
         return bills;
+    }
+
+    @Override
+    public List<Bill> getBillByDate(String date) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill " +
+                "WHERE Date = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+
+        query.setString(1, date);
+
+        ResultSet resultQuery = query.executeQuery();
+
+        return convertResultQueryIntoBillList(resultQuery);
+    }
+
+    @Override
+    public List<Bill> getBillByShop(String shop) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill " +
+                "WHERE Shop = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+
+        query.setString(1, shop);
+
+        ResultSet resultQuery = query.executeQuery();
+
+        return convertResultQueryIntoBillList(resultQuery);
+    }
+
+    @Override
+    public List<Bill> getBillByDateAndShop(String date, String shop) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill " +
+                "WHERE Shop = ? AND Date = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+
+        query.setString(1, shop);
+        query.setString(2, date);
+
+        ResultSet resultQuery = query.executeQuery();
+
+        return convertResultQueryIntoBillList(resultQuery);
     }
 
     @Override

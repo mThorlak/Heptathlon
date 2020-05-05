@@ -53,7 +53,35 @@ public class SeeBill {
             }
         });
         buttonBillByDateAndShop.addActionListener(e -> {
-            if (!textFieldDate.getText().isEmpty() && !textFieldShop.getText().isEmpty()) {
+            if (!textFieldDate.getText().isEmpty() && textFieldShop.getText().isEmpty()) {
+                try {
+                    List<Bill> bills = clientSiege.getQuerySiegeInterface().getBillByDate(textFieldDate.getText());
+                    TableBillSiege modelTable = new TableBillSiege(bills);
+                    tableBill = new JTable(modelTable);
+                    scrollPaneTableDisplay.setViewportView(tableBill);
+                    scrollPaneTableDisplay.setSize(tableBill.getSize());
+
+                    seeBillFrame.pack();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+
+            else if (textFieldDate.getText().isEmpty() && !textFieldShop.getText().isEmpty()) {
+                try {
+                    List<Bill> bills = clientSiege.getQuerySiegeInterface().getBillByShop(textFieldShop.getText());
+                    TableBillSiege modelTable = new TableBillSiege(bills);
+                    tableBill = new JTable(modelTable);
+                    scrollPaneTableDisplay.setViewportView(tableBill);
+                    scrollPaneTableDisplay.setSize(tableBill.getSize());
+
+                    seeBillFrame.pack();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+
+            else if (!textFieldDate.getText().isEmpty() && !textFieldShop.getText().isEmpty()) {
                 try {
                     List<Bill> bills = clientSiege.getQuerySiegeInterface().getBillByDateAndShop(
                             textFieldDate.getText(), textFieldShop.getText());
