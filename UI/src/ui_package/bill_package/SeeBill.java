@@ -6,9 +6,6 @@ import rmi_siege.tables.Bill;
 import ui_package.GeneralFrameSettings;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -18,12 +15,19 @@ public class SeeBill {
     private JPanel panelMain;
     private JScrollPane scrollPaneTableDisplay;
     private JTable tableBill;
-    private JPanel panelSort;
     private JTextField textFieldGetButtonByID;
     private JButton buttonGetBillByID;
     private JButton buttonBillByDateAndShop;
     private JTextField textFieldDate;
     private JTextField textFieldShop;
+    private JTextField textFieldDateCA;
+    private JTextField textFieldShopCA;
+    private JButton buttonCalculateCA;
+    private JPanel panelCalculateCA;
+    private JPanel panelSort;
+    private JTextArea textAreaCABillNonPaid;
+    private JTextArea textAreaCABillPaid;
+    private JTextArea textAreaCATotalBill;
 
     public SeeBill() throws RemoteException, NotBoundException {
         // Frame settings
@@ -52,6 +56,7 @@ public class SeeBill {
                 }
             }
         });
+
         buttonBillByDateAndShop.addActionListener(e -> {
             if (!textFieldDate.getText().isEmpty() && textFieldShop.getText().isEmpty()) {
                 try {
@@ -97,7 +102,23 @@ public class SeeBill {
             }
         });
 
+        buttonCalculateCA.addActionListener(e -> {
+            if (!textFieldDateCA.getText().isEmpty() && !textFieldShopCA.getText().isEmpty()) {
+                try {
+                    textAreaCABillNonPaid.setText(String.valueOf(clientSiege.getQuerySiegeInterface().calculateCAShopDayBillNonPaid(
+                            textFieldDateCA.getText(), textFieldShopCA.getText())));
+                    textAreaCABillPaid.setText(String.valueOf(clientSiege.getQuerySiegeInterface().calculateCAShopDayBillPaid(
+                            textFieldDateCA.getText(), textFieldShopCA.getText())));
+                    textAreaCATotalBill.setText(String.valueOf(clientSiege.getQuerySiegeInterface().calculateCAShopDayAllBill(
+                            textFieldDateCA.getText(), textFieldShopCA.getText())));
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
+
         seeBillFrame.pack();
         seeBillFrame.setVisible(true);
+
     }
 }

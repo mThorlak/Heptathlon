@@ -314,17 +314,43 @@ public class QuerySiege implements QuerySiegeInterface {
 
     @Override
     public double calculateCAShopDayBillPaid(String date, String shop) throws Exception {
-        return 0;
+
+        List<Bill> bills = getBillByDateAndShop(date, shop);
+        float total = 0;
+
+        for (Bill bill : bills) {
+            if (bill.isPaid())
+                total = total + bill.getTotal();
+        }
+
+        return total;
     }
 
     @Override
     public double calculateCAShopDayBillNonPaid(String date, String shop) throws Exception {
-        return 0;
+
+        List<Bill> bills = getBillByDateAndShop(date, shop);
+        float total = 0;
+
+        for (Bill bill : bills) {
+            if (!bill.isPaid())
+                total = total + bill.getTotal();
+        }
+
+        return total;
     }
 
     @Override
     public double calculateCAShopDayAllBill(String date, String shop) throws Exception {
-        return 0;
+
+        List<Bill> bills = getBillByDateAndShop(date, shop);
+        float total = 0;
+
+        for (Bill bill : bills) {
+            total = total + bill.getTotal();
+        }
+
+        return total;
     }
 
     @Override
