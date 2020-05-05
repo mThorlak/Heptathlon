@@ -44,7 +44,11 @@ public class BillMainPage {
             }
         });
         buttonPayBill.addActionListener(e -> {
-            new PayBill();
+            try {
+                new PayBill();
+            } catch (RemoteException | NotBoundException remoteException) {
+                remoteException.printStackTrace();
+            }
         });
 
         controlFrame.pack();

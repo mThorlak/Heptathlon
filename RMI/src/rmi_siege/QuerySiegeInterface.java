@@ -17,7 +17,7 @@ public interface QuerySiegeInterface extends Remote {
     void insertNewArticle(String reference, double price, String description) throws Exception;
     void updatePrice(String reference, double price) throws Exception;
     void importCSVIntoDBSiege(boolean isBillPaid) throws Exception;
-    void updateBillIsPaid(String IDBill) throws Exception;
+    void updateBillIsPaid(String IDBill, String paymentMethod) throws Exception;
     Bill getBillByID(String ID) throws Exception;
     List<Bill> getBillByDate(String date) throws Exception;
     List<Bill> getBillByShop(String shop) throws Exception;

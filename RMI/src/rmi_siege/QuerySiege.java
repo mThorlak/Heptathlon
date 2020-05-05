@@ -172,14 +172,15 @@ public class QuerySiege implements QuerySiegeInterface {
     }
 
     @Override
-    public void updateBillIsPaid(String IDBill) throws SQLException, ClassNotFoundException {
+    public void updateBillIsPaid(String IDBill, String paymentMethod) throws SQLException, ClassNotFoundException {
 
         Database database = new Database(DATABASE_NAME);
 
-        String sql = "UPDATE Bill SET Paid=? WHERE IDBill = ?";
+        String sql = "UPDATE Bill SET Payment = ?, Paid=? WHERE IDBill = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
-        query.setBoolean(1, true);
-        query.setString(2, IDBill);
+        query.setString(1, paymentMethod);
+        query.setBoolean(2, true);
+        query.setString(3, IDBill);
         query.executeUpdate();
     }
 
