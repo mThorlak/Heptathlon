@@ -14,6 +14,13 @@ public class Article implements java.io.Serializable {
         this.Stock = quantity;
     }
 
+    public Article(String reference, float price, int quantity, String description) {
+        this.Reference = reference;
+        this.Price = price;
+        this.Stock = quantity;
+        this.Description = description;
+    }
+
     public String getReference() {
         return Reference;
     }
@@ -44,5 +51,15 @@ public class Article implements java.io.Serializable {
 
     public void setDescription(String description) {
         Description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "Reference='" + Reference + '\'' +
+                ", Description='" + Description + '\'' +
+                ", Price=" + Price +
+                ", Stock=" + Stock +
+                '}';
     }
 }

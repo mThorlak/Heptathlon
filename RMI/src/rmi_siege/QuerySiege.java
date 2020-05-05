@@ -1,7 +1,7 @@
 package rmi_siege;
 
-import rmi_general.Bill;
-import rmi_general.CSVManager;
+import rmi_siege.tables.Bill;
+import rmi_general.BillCSVManager;
 import rmi_general.Database;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.ArticleSiege;
@@ -17,10 +17,12 @@ public class QuerySiege implements QuerySiegeInterface {
 
     private final static String DATABASE_NAME = "Siege";
 
-    private List<ArticleSiege> getArticles(List<ArticleSiege> list, ResultSet resultQuery) throws SQLException {
-        while(resultQuery.next()) {
+    public List<ArticleSiege> convertResultQueryIntoListArticleSiege(ResultSet resultQuery) throws SQLException {
+
+        List<ArticleSiege> list = new ArrayList<>();
+        while (resultQuery.next()) {
             // Retrieve by column name
-            String reference  = resultQuery.getString("Reference");
+            String reference = resultQuery.getString("Reference");
             float price = resultQuery.getFloat("Price");
             String description = resultQuery.getString("Description");
 
@@ -40,56 +42,96 @@ public class QuerySiege implements QuerySiegeInterface {
     @Override
     public List<ArticleSiege> getAllArticle() throws Exception {
 
-        List<ArticleSiege> list = new ArrayList<>();
-
         Database database = new Database(DATABASE_NAME);
-        String query = "SELECT Article.Reference, Family, Price, Stock, Description FROM `Article`, `Family` WHERE Article.Reference = Family.Reference";
+        String query = "SELECT * FROM Article";
         ResultSet resultQuery = database.CreateAndExecuteStatement(query);
 
-        //Extract data from result set
-        return getArticles(list, resultQuery);
+        return convertResultQueryIntoListArticleSiege(resultQuery);
     }
 
     @Override
     public List<ArticleSiege> getArticleByFamily(String familyName) throws Exception {
 
-        List<ArticleSiege> list = new ArrayList<>();
         Database database = new Database(DATABASE_NAME);
-        String sql = "SELECT Article.Reference, Price, Description " +
-                "FROM Article, Family " +
-                "WHERE Family.Family = ? " +
-                "GROUP BY Article.Reference";
+        String sql = "SELECT Article.Reference, Price, Description, Family \n" +
+                "FROM Article JOIN  Family \n" +
+                "ON Article.Reference = Family.Reference \n" +
+                "WHERE Family.Family = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, familyName);
 
         ResultSet resultQuery = query.executeQuery();
 
         //Extract data from result set
-        return getArticles(list, resultQuery);
+        return convertResultQueryIntoListArticleSiege(resultQuery);
     }
 
     @Override
-    public List<Article> getArticleByShop(String shop) throws Exception {
+    public List<ArticleSiege> getArticleByShop(String shop) throws Exception {
 
         Database database = new Database(DATABASE_NAME);
-        String sql = "SELECT Article.Reference, Article.Price FROM Shop, Article WHERE Shop.name = ? AND Shop.Reference = Article.Reference";
+        String sql = "SELECT Article.Reference, Article.Price, Article.Description FROM Shop, Article " +
+                "WHERE Shop.name = ? AND Shop.Reference = Article.Reference";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, shop);
         ResultSet resultQuery = query.executeQuery();
 
-        List<Article> articleList = new ArrayList<>();
+        return convertResultQueryIntoListArticleSiege(resultQuery);
+    }
 
-        while(resultQuery.next()) {
-            // Retrieve by column name
-            String reference  = resultQuery.getString("Reference");
-            float price = resultQuery.getFloat("Price");
-            int stock = resultQuery.getInt("Stock");
-            Article article = new Article(reference, price, stock);
-            articleList.add(article);
+    @Override
+    public List<String> getAllFamily() throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT DISTINCT Family FROM Family";
+
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        ResultSet resultQuery = query.executeQuery();
+
+        List<String> families = new ArrayList<>();
+        while (resultQuery.next()) {
+            families.add(resultQuery.getString("Family"));
         }
 
-        resultQuery.close();
-        return articleList;
+        return families;
+    }
+
+    @Override
+    public List<String> getAllShop() throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT DISTINCT Name FROM Shop";
+
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        ResultSet resultQuery = query.executeQuery();
+
+        List<String> shops = new ArrayList<>();
+        while (resultQuery.next()) {
+            shops.add(resultQuery.getString("Name"));
+        }
+
+        return shops;
+    }
+
+    @Override
+    public String findArticleByReferenceSiege(String reference) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT * FROM Article WHERE Reference = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        query.setString(1, reference);
+
+        ResultSet resultQuery = query.executeQuery();
+
+        ArticleSiege articleSiege = new ArticleSiege();
+
+        while (resultQuery.next()) {
+            articleSiege.setReference(resultQuery.getString("Reference"));
+            articleSiege.setPrice(resultQuery.getFloat("Price"));
+            articleSiege.setDescription(resultQuery.getString("Description"));
+        }
+
+        return articleSiege.getReference();
     }
 
     @Override
@@ -130,15 +172,186 @@ public class QuerySiege implements QuerySiegeInterface {
     }
 
     @Override
-    public void updateBillIsPaid(String IDBill) throws SQLException, ClassNotFoundException {
+    public void updateBillIsPaid(String IDBill, String paymentMethod) throws SQLException, ClassNotFoundException {
 
         Database database = new Database(DATABASE_NAME);
 
-        String sql = "UPDATE Bill SET Paid=? WHERE IDBill = ?";
+        String sql = "UPDATE Bill SET Payment = ?, Paid=? WHERE IDBill = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
-        query.setBoolean(1, true);
-        query.setString(2, IDBill);
+        query.setString(1, paymentMethod);
+        query.setBoolean(2, true);
+        query.setString(3, IDBill);
         query.executeUpdate();
+    }
+
+    @Override
+    public Bill getBillByID(String ID) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill " +
+                "WHERE Bill.IDBill = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        query.setString(1, ID);
+
+        ResultSet resultQuery = query.executeQuery();
+        List<Article> articles = new ArrayList<>();
+
+        while (resultQuery.next()) {
+            Article article = new Article();
+            article.setReference(resultQuery.getString("Reference"));
+            article.setPrice(resultQuery.getFloat("Price"));
+            article.setStock(resultQuery.getInt("Quantity"));
+            articles.add(article);
+        }
+        resultQuery.first();
+
+        Bill bill = new Bill(
+                resultQuery.getString("Date"),
+                resultQuery.getString("IDBill"),
+                resultQuery.getString("Shop"),
+                resultQuery.getFloat("Total"),
+                resultQuery.getString("Payment"),
+                articles,
+                resultQuery.getBoolean("Paid"));
+
+        System.out.println(bill.toString());
+
+        return bill;
+    }
+
+    private List<Bill> convertResultQueryIntoBillList(ResultSet resultQuery) throws SQLException {
+        List<Bill> bills = new ArrayList<>();
+
+        while (resultQuery.next()) {
+
+            Article article = new Article();
+            article.setReference(resultQuery.getString("Reference"));
+            article.setPrice(resultQuery.getFloat("Price"));
+            article.setStock(resultQuery.getInt("Quantity"));
+
+            ArrayList<Article> articles = new ArrayList<>();
+            articles.add(article);
+
+            Bill bill = new Bill(resultQuery.getString("Date"),
+                    resultQuery.getString("IDBill"),
+                    resultQuery.getString("Shop"),
+                    resultQuery.getFloat("Total"),
+                    resultQuery.getString("Payment"),
+                    articles,
+                    resultQuery.getBoolean("Paid"));
+
+            if (bills.isEmpty())
+                bills.add(bill);
+
+            else if (bills.get(bills.size()-1).getId().equals(bill.getId())) {
+                List<Article> tmpArticles = bills.get(bills.size()-1).getArticles();
+                tmpArticles.addAll(bill.getArticles());
+                bills.get(bills.size()-1).setArticles(tmpArticles);
+            }
+
+            else
+                bills.add(bill);
+        }
+        return bills;
+    }
+
+    @Override
+    public List<Bill> getBillByDate(String date) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill " +
+                "WHERE Date = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+
+        query.setString(1, date);
+
+        ResultSet resultQuery = query.executeQuery();
+
+        return convertResultQueryIntoBillList(resultQuery);
+    }
+
+    @Override
+    public List<Bill> getBillByShop(String shop) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill " +
+                "WHERE Shop = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+
+        query.setString(1, shop);
+
+        ResultSet resultQuery = query.executeQuery();
+
+        return convertResultQueryIntoBillList(resultQuery);
+    }
+
+    @Override
+    public List<Bill> getBillByDateAndShop(String date, String shop) throws Exception {
+
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill " +
+                "WHERE Shop = ? AND Date = ?";
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+
+        query.setString(1, shop);
+        query.setString(2, date);
+
+        ResultSet resultQuery = query.executeQuery();
+
+        return convertResultQueryIntoBillList(resultQuery);
+    }
+
+    @Override
+    public double calculateCAShopDayBillPaid(String date, String shop) throws Exception {
+
+        List<Bill> bills = getBillByDateAndShop(date, shop);
+        float total = 0;
+
+        for (Bill bill : bills) {
+            if (bill.isPaid())
+                total = total + bill.getTotal();
+        }
+
+        return total;
+    }
+
+    @Override
+    public double calculateCAShopDayBillNonPaid(String date, String shop) throws Exception {
+
+        List<Bill> bills = getBillByDateAndShop(date, shop);
+        float total = 0;
+
+        for (Bill bill : bills) {
+            if (!bill.isPaid())
+                total = total + bill.getTotal();
+        }
+
+        return total;
+    }
+
+    @Override
+    public double calculateCAShopDayAllBill(String date, String shop) throws Exception {
+
+        List<Bill> bills = getBillByDateAndShop(date, shop);
+        float total = 0;
+
+        for (Bill bill : bills) {
+            total = total + bill.getTotal();
+        }
+
+        return total;
     }
 
     @Override
@@ -146,12 +359,12 @@ public class QuerySiege implements QuerySiegeInterface {
 
         Database databaseSiege = new Database(DATABASE_NAME);
 
-        CSVManager csvManager = new CSVManager();
+        BillCSVManager billCSVManager = new BillCSVManager();
         List<String[]> CSVBill;
         if (isBillPaid)
-            CSVBill = csvManager.readLineByLine(csvManager.getBillPaidPath());
+            CSVBill = billCSVManager.readLineByLine(billCSVManager.getBillPaidPath());
         else
-            CSVBill = csvManager.readLineByLine(csvManager.getBillPath());
+            CSVBill = billCSVManager.readLineByLine(billCSVManager.getBillPath());
         int cpt = 0;
 
         String sqlInsertIntoBill = "INSERT INTO Bill(IDBill, Shop, Date, Total, Payment, Paid) VALUES (?,?,?,?,?,?)";
@@ -164,7 +377,7 @@ public class QuerySiege implements QuerySiegeInterface {
                 cpt++;
                 continue;
             }
-            Bill bill = csvManager.convertLineInBill(line);
+            Bill bill = billCSVManager.convertLineInBill(line);
             queryInsertIntoBill.setString(1, bill.getId());
             queryInsertIntoBill.setString(2, bill.getShop());
             queryInsertIntoBill.setString(3, bill.getDate());

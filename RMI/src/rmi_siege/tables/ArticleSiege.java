@@ -28,4 +28,13 @@ public class ArticleSiege implements java.io.Serializable {
     public void setDescription(String description) {
         Description = description;
     }
+
+    @Override
+    public String toString() {
+        return "ArticleSiege{" +
+                "Reference='" + Reference + '\'' +
+                ", Description='" + Description + '\'' +
+                ", Price=" + Price +
+                '}';
+    }
 }

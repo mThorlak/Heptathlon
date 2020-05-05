@@ -17,7 +17,9 @@ public class QueryShop implements QueryShopInterface {
     private final static String DATABASE_SHOP = "Shop";
     private final static String DATABASE_SIEGE = "Siege";
 
-    private List<Article> getArticles(List<Article> list, ResultSet resultQuery) throws SQLException {
+    public List<Article> convertResultQueryIntoListArticleShop(ResultSet resultQuery) throws SQLException {
+
+        List<Article> list = new ArrayList<>();
         while (resultQuery.next()) {
             // Retrieve by column name
             String reference = resultQuery.getString("Reference");
@@ -40,60 +42,74 @@ public class QueryShop implements QueryShopInterface {
     }
 
     @Override
-    public Article findArticleByReference(String reference) throws Exception {
+    public Article getArticleByReference(String reference) throws Exception {
 
-        Database database = new Database(DATABASE_SIEGE);
+        Database database = new Database(DATABASE_SHOP);
         String sql = "SELECT * FROM Article WHERE Reference = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, reference);
 
-        ResultSet resultQuery = query.getResultSet();
-        System.out.println("resultquery");
-        System.out.println(resultQuery);
+        ResultSet resultQuery = query.executeQuery();
 
         Article article = new Article();
 
-        if (isEmpty(resultQuery))
+        if (isEmpty(resultQuery)) {
             return null;
+        }
 
         else {
-            article.setReference(resultQuery.getString("Reference"));
-            article.setPrice(resultQuery.getFloat("Price"));
+            while (resultQuery.next()) {
+                article.setReference(resultQuery.getString("Reference"));
+                article.setPrice(resultQuery.getFloat("Price"));
+                article.setStock(resultQuery.getInt("Stock"));
+                article.setDescription(resultQuery.getString("Description"));
+            }
         }
         query.close();
         return article;
-
     }
 
     @Override
     public List<Article> getAllArticle() throws Exception {
 
-        List<Article> list = new ArrayList<>();
-
         Database database = new Database(DATABASE_SHOP);
-        String query = "SELECT Article.Reference, Family, Price, Stock, Description FROM `Article`, `Family` WHERE Article.Reference = Family.Reference";
+        String query = "SELECT * FROM Article";
         ResultSet resultQuery = database.CreateAndExecuteStatement(query);
 
-        //Extract data from result set
-        return getArticles(list, resultQuery);
+        return convertResultQueryIntoListArticleShop(resultQuery);
     }
 
     @Override
     public List<Article> getArticleByFamily(String familyName) throws Exception {
 
-        List<Article> list = new ArrayList<>();
         Database database = new Database(DATABASE_SHOP);
-        String sql = "SELECT Article.Reference, Price, Stock, Description " +
-                "FROM Article, Family " +
-                "WHERE Family.Family = ? " +
-                "GROUP BY Article.Reference";
+        String sql = "SELECT Article.Reference, Price, Stock, Description, Family \n" +
+                "FROM Article JOIN  Family \n" +
+                "ON Article.Reference = Family.Reference \n" +
+                "WHERE Family.Family = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, familyName);
 
         ResultSet resultQuery = query.executeQuery();
 
-        //Extract data from result set
-        return getArticles(list, resultQuery);
+        return convertResultQueryIntoListArticleShop(resultQuery);
+    }
+
+    @Override
+    public List<String> getAllFamily() throws Exception {
+
+        Database database = new Database(DATABASE_SHOP);
+        String sql = "SELECT DISTINCT Family FROM Family";
+
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        ResultSet resultQuery = query.executeQuery();
+
+        List<String> families = new ArrayList<>();
+        while (resultQuery.next()) {
+            families.add(resultQuery.getString("Family"));
+        }
+
+        return families;
     }
 
     @Override
@@ -136,16 +152,24 @@ public class QueryShop implements QueryShopInterface {
         Database databaseSiege = new Database(DATABASE_SIEGE);
 
         boolean articleAlreadyExistInDBSiege = false;
-        Article article1 = findArticleByReference(reference);
+        QuerySiege querySiege = new QuerySiege();
+        String referenceSiege = querySiege.findArticleByReferenceSiege(reference);
 
-        if (!isNull(article1)) {
+        if (!isNull(referenceSiege)) {
             articleAlreadyExistInDBSiege = true;
         }
 
         if (!articleAlreadyExistInDBSiege) {
-            QuerySiege querySiege = new QuerySiege();
             querySiege.insertNewArticle(reference, price, description);
 
+            String sqlInsertShopSiegeDB = "INSERT INTO Shop(Name, Reference, Stock) VALUES (?,?,?)";
+            PreparedStatement queryShopSiegeDB = databaseSiege.getConnection().prepareStatement(sqlInsertShopSiegeDB);
+            queryShopSiegeDB.setString(1, shop);
+            queryShopSiegeDB.setString(2, reference);
+            queryShopSiegeDB.setInt(3, stock);
+            queryShopSiegeDB.executeUpdate();
+        }
+        else {
             String sqlInsertShopSiegeDB = "INSERT INTO Shop(Name, Reference, Stock) VALUES (?,?,?)";
             PreparedStatement queryShopSiegeDB = databaseSiege.getConnection().prepareStatement(sqlInsertShopSiegeDB);
             queryShopSiegeDB.setString(1, shop);
@@ -185,28 +209,16 @@ public class QueryShop implements QueryShopInterface {
     }
 
     @Override
-    public void updatePrice(String reference, double price) throws Exception {
-
-        Database database = new Database(DATABASE_SHOP);
-
-        String sql = "UPDATE Article SET Price = ? WHERE Reference = ?";
-        PreparedStatement query = database.getConnection().prepareStatement(sql);
-        query.setDouble(1, price);
-        query.setString(2, reference);
-        query.executeUpdate();
-    }
-
-    @Override
     public void importPriceFromSiegeDB(String shop) throws Exception {
 
         Database database = new Database(DATABASE_SHOP);
         QuerySiege querySiege = new QuerySiege();
-        List<Article> articleList = querySiege.getArticleByShop(shop);
+        List<ArticleSiege> articleList = querySiege.getArticleByShop(shop);
 
         String sql = "UPDATE Article SET Price = ? WHERE Reference = ?";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
 
-        for (Article article : articleList) {
+        for (ArticleSiege article : articleList) {
             query.setDouble(1, article.getPrice());
             query.setString(2, article.getReference());
             query.executeUpdate();

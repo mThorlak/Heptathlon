@@ -19,4 +19,12 @@ public class Family implements java.io.Serializable {
     public void setReference(String reference) {
         Reference = reference;
     }
+
+    @Override
+    public String toString() {
+        return "Family{" +
+                "Family='" + Family + '\'' +
+                ", Reference='" + Reference + '\'' +
+                '}';
+    }
 }

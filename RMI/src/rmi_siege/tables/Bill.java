@@ -1,11 +1,11 @@
-package rmi_general;
+package rmi_siege.tables;
 
 import rmi_shop.tables.Article;
 
 import java.sql.Timestamp;
 import java.util.List;
 
-public class Bill {
+public class Bill implements java.io.Serializable {
 
     private String date;
     private String id;
@@ -13,6 +13,7 @@ public class Bill {
     private float total;
     private String payment;
     List<Article> articles;
+    private boolean paid;
 
     public Bill(String date, String shop, float total, String payment, List<Article> articles) {
         this.date = date;
@@ -31,6 +32,16 @@ public class Bill {
         this.total = total;
         this.payment = payment;
         this.articles = articles;
+    }
+
+    public Bill(String date, String id, String shop, float total, String payment, List<Article> articles, boolean paid) {
+        this.date = date;
+        this.id = id;
+        this.shop = shop;
+        this.total = total;
+        this.payment = payment;
+        this.articles = articles;
+        this.paid = paid;
     }
 
     public String getDate() {
@@ -81,4 +92,24 @@ public class Bill {
         this.articles = articles;
     }
 
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "date='" + date + '\'' +
+                ", id='" + id + '\'' +
+                ", shop='" + shop + '\'' +
+                ", total=" + total +
+                ", payment='" + payment + '\'' +
+                ", articles=" + articles +
+                ", paid=" + paid +
+                '}';
+    }
 }
