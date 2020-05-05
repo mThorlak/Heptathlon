@@ -200,8 +200,8 @@ public class QuerySiege implements QuerySiegeInterface {
         while (resultQuery.next()) {
             Article article = new Article();
             article.setReference(resultQuery.getString("Reference"));
-            article.setPrice(resultQuery.getFloat("Quantity"));
-            article.setDescription(resultQuery.getString("Price"));
+            article.setPrice(resultQuery.getFloat("Price"));
+            article.setStock(resultQuery.getInt("Quantity"));
             articles.add(article);
         }
         resultQuery.first();
@@ -218,6 +218,16 @@ public class QuerySiege implements QuerySiegeInterface {
         System.out.println(bill.toString());
 
         return bill;
+    }
+
+    @Override
+    public List<Bill> getBillByDate(String date) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<Bill> getBillByShop(String shop) throws Exception {
+        return null;
     }
 
     @Override
@@ -241,8 +251,8 @@ public class QuerySiege implements QuerySiegeInterface {
 
             Article article = new Article();
             article.setReference(resultQuery.getString("Reference"));
-            article.setPrice(resultQuery.getFloat("Quantity"));
-            article.setDescription(resultQuery.getString("Price"));
+            article.setPrice(resultQuery.getFloat("Price"));
+            article.setStock(resultQuery.getInt("Quantity"));
 
             ArrayList<Article> articles = new ArrayList<>();
             articles.add(article);
@@ -267,6 +277,8 @@ public class QuerySiege implements QuerySiegeInterface {
             else
                 bills.add(bill);
         }
+
+        System.out.println(bills.toString());
 
         return bills;
     }
