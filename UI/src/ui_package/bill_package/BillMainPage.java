@@ -4,6 +4,8 @@ import ui_package.GeneralFrameSettings;
 import ui_package.NavigationBar;
 
 import javax.swing.*;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class BillMainPage {
     private JButton buttonBillPage;
@@ -35,7 +37,11 @@ public class BillMainPage {
         });
 
         buttonSeeBill.addActionListener(e -> {
-            new SeeBill();
+            try {
+                new SeeBill();
+            } catch (RemoteException | NotBoundException remoteException) {
+                remoteException.printStackTrace();
+            }
         });
         buttonPayBill.addActionListener(e -> {
             new PayBill();

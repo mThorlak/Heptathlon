@@ -195,6 +195,8 @@ public class QuerySiege implements QuerySiegeInterface {
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, ID);
 
+        System.out.println("ok");
+
         ResultSet resultQuery = query.executeQuery();
         List<Article> articles = new ArrayList<>();
         while (resultQuery.next()) {
@@ -206,13 +208,18 @@ public class QuerySiege implements QuerySiegeInterface {
         }
         resultQuery.first();
 
-        return new Bill(
+        Bill bill = new Bill(
                 resultQuery.getString("Date"),
                 resultQuery.getString("IDBill"),
                 resultQuery.getString("Shop"),
                 resultQuery.getFloat("Total"),
                 resultQuery.getString("Payment"),
-                articles);
+                articles,
+                resultQuery.getBoolean("Paid"));
+
+        System.out.println(bill.toString());
+
+        return bill;
     }
 
     @Override
@@ -247,7 +254,8 @@ public class QuerySiege implements QuerySiegeInterface {
                     resultQuery.getString("Shop"),
                     resultQuery.getFloat("Total"),
                     resultQuery.getString("Payment"),
-                    articles);
+                    articles,
+                    resultQuery.getBoolean("Paid"));
 
             if (bills.isEmpty())
                 bills.add(bill);
