@@ -1,5 +1,7 @@
 package ui_package;
 
+import ui_package.ui_general.GeneralFrameSettings;
+
 import javax.swing.*;
 
 public class Homepage {

@@ -1,7 +1,7 @@
 package ui_package.bill_package;
 
-import ui_package.GeneralFrameSettings;
-import ui_package.NavigationBar;
+import ui_package.ui_general.GeneralFrameSettings;
+import ui_package.ui_general.NavigationBar;
 
 import javax.swing.*;
 import java.rmi.NotBoundException;

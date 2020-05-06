@@ -57,7 +57,7 @@
                       <text value="Shop"/>
                     </properties>
                   </component>
-                  <component id="bfd13" class="javax.swing.JTextField" binding="fieldGetArticleByReferenceShop">
+                  <component id="bfd13" class="javax.swing.JTextField" binding="fieldGetArticleByReferenceShop" custom-create="true">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -70,7 +70,7 @@
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Get article by reference"/>
+                      <text value="Article by reference"/>
                     </properties>
                   </component>
                   <vspacer id="4b3ee">
@@ -83,7 +83,7 @@
                       <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Get article by family"/>
+                      <text value="Article by family"/>
                     </properties>
                   </component>
                   <component id="fe40c" class="javax.swing.JComboBox" binding="comboBoxFamilyShop" custom-create="true">
@@ -131,7 +131,7 @@
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Get article by family"/>
+                      <text value="Article by family"/>
                     </properties>
                   </component>
                   <vspacer id="d9485">
@@ -144,7 +144,7 @@
                       <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Get article by shop"/>
+                      <text value="Article by shop"/>
                     </properties>
                   </component>
                   <component id="ad840" class="javax.swing.JComboBox" binding="comboBoxFamilySiege" custom-create="true">

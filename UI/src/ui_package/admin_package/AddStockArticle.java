@@ -2,13 +2,9 @@ package ui_package.admin_package;
 
 import client_package.ClientShop;
 import rmi_shop.tables.Article;
-import ui_package.GeneralFrameSettings;
+import ui_package.ui_general.GeneralFrameSettings;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 
 public class AddStockArticle {
     private JPanel panelMain;

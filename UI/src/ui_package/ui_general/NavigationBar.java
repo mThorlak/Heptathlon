@@ -1,5 +1,6 @@
-package ui_package;
+package ui_package.ui_general;
 
+import ui_package.ArticleManager;
 import ui_package.admin_package.Adminpage;
 import ui_package.bill_package.BillMainPage;
 

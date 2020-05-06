@@ -1,11 +1,9 @@
 package ui_package.admin_package;
 
-import ui_package.GeneralFrameSettings;
-import ui_package.NavigationBar;
+import ui_package.ui_general.GeneralFrameSettings;
+import ui_package.ui_general.NavigationBar;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 

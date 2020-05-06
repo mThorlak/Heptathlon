@@ -2,7 +2,7 @@ package ui_package.bill_package;
 
 import client_package.ClientSiege;
 import rmi_siege.tables.Bill;
-import ui_package.GeneralFrameSettings;
+import ui_package.ui_general.GeneralFrameSettings;
 
 import javax.swing.*;
 import java.rmi.NotBoundException;

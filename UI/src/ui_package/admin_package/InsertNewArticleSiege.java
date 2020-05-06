@@ -1,7 +1,7 @@
 package ui_package.admin_package;
 
 import client_package.ClientSiege;
-import ui_package.GeneralFrameSettings;
+import ui_package.ui_general.GeneralFrameSettings;
 
 import javax.swing.*;
 

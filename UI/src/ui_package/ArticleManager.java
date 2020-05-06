@@ -10,6 +10,9 @@ import client_package.ClientSiege;
 import model_table.TableArticleShop;
 import model_table.TableArticleSiege;
 import rmi_shop.tables.Article;
+import ui_package.ui_general.GeneralFrameSettings;
+import ui_package.ui_general.HintTextField;
+import ui_package.ui_general.NavigationBar;
 
 public class ArticleManager extends Container {
 
@@ -109,10 +112,13 @@ public class ArticleManager extends Container {
 
         articleManagerFrame.pack();
         articleManagerFrame.setVisible(true);
+
     }
 
     // place custom component creation code here
     private void createUIComponents() throws Exception {
+
+        fieldGetArticleByReferenceShop = new HintTextField("Reference");
 
         ClientShop clientShop = new ClientShop();
         List<String> familyShopList = clientShop.getQueryShopInterface().getAllFamily();
@@ -147,4 +153,5 @@ public class ArticleManager extends Container {
         JScrollContentPane.setSize(tableDisplay.getSize());
         jFrame.pack();
     }
+
 }
