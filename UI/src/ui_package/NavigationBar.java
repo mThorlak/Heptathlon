@@ -12,7 +12,7 @@ public class NavigationBar {
         buttonGetterPage.addActionListener(e -> {
             jFrame.dispose();
             try {
-                new Getterpage();
+                new ArticleManager();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

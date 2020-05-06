@@ -22,7 +22,7 @@ public class Homepage {
         EnterButton.addActionListener(e -> {
             try {
                 homepage.dispose();
-                new Getterpage();
+                new ArticleManager();
             } catch (Exception remoteException) {
                 remoteException.printStackTrace();
             }

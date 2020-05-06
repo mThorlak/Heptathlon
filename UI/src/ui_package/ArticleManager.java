@@ -11,18 +11,12 @@ import model_table.TableArticleShop;
 import model_table.TableArticleSiege;
 import rmi_shop.tables.Article;
 
-public class Getterpage extends Container {
+public class ArticleManager extends Container {
 
     private JPanel panelMain;
-    private JLabel labelHeader;
-    private JPanel panelControl;
-    private JPanel panelShop;
-    private JPanel PanelSiege;
     private JButton buttonGetAllArticleShop;
     private JScrollPane JScrollContentPane;
     private JTable tableDisplay;
-    private JLabel labelShop;
-    private JLabel labelSiege;
     private JButton buttonGetAllArticleSiege;
     private JTextField fieldGetArticleByReferenceShop;
     private JButton buttonGetArticleByReferenceShop;
@@ -37,43 +31,36 @@ public class Getterpage extends Container {
     private JButton buttonAdminPage;
 
 
-    public Getterpage() throws Exception {
+    public ArticleManager() throws Exception {
 
         // Frame settings
-        JFrame controlFrame = new JFrame("Control page");
-        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(controlFrame);
-        controlFrame.setContentPane(panelMain);
-        controlFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        controlFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
+        JFrame articleManagerFrame = new JFrame("Control page");
+        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(articleManagerFrame);
+        articleManagerFrame.setContentPane(panelMain);
+        articleManagerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        articleManagerFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
 
         // Navigation bar
-        new NavigationBar(controlFrame, buttonGetterPage, buttonBillPage, buttonAdminPage);
+        new NavigationBar(articleManagerFrame, buttonGetterPage, buttonBillPage, buttonAdminPage);
 
         ClientShop clientShop = new ClientShop();
         ClientSiege clientSiege = new ClientSiege();
 
         buttonGetAllArticleShop.addActionListener(e -> {
             try {
-                TableArticleShop modelTable = new TableArticleShop(clientShop.getQueryShopInterface().getAllArticle());
-                tableDisplay = new JTable(modelTable);
-                JScrollContentPane.setViewportView(tableDisplay);
-                JScrollContentPane.setSize(tableDisplay.getSize());
-                controlFrame.pack();
+                TableArticleShop tableArticleShop = new TableArticleShop(clientShop.getQueryShopInterface().getAllArticle());
+                createTableShopAndDisplayIt(tableArticleShop, articleManagerFrame);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
         });
 
         buttonGetArticleByReferenceShop.addActionListener(e -> {
-            TableArticleShop modelTable;
             List<Article> listArticles = new ArrayList<>();
             try {
                 listArticles.add(clientShop.getQueryShopInterface().getArticleByReference(fieldGetArticleByReferenceShop.getText()));
-                modelTable = new TableArticleShop(listArticles);
-                tableDisplay = new JTable(modelTable);
-                JScrollContentPane.setViewportView(tableDisplay);
-                JScrollContentPane.setSize(tableDisplay.getSize());
-                controlFrame.pack();
+                TableArticleShop tableArticleShop = new TableArticleShop(listArticles);
+                createTableShopAndDisplayIt(tableArticleShop, articleManagerFrame);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -83,10 +70,7 @@ public class Getterpage extends Container {
             try {
                 TableArticleShop tableArticleShop = new TableArticleShop(
                         clientShop.getQueryShopInterface().getArticleByFamily((String) comboBoxFamilyShop.getSelectedItem()));
-                tableDisplay = new JTable(tableArticleShop);
-                JScrollContentPane.setViewportView(tableDisplay);
-                JScrollContentPane.setSize(tableDisplay.getSize());
-                controlFrame.pack();
+                createTableShopAndDisplayIt(tableArticleShop, articleManagerFrame);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -95,10 +79,7 @@ public class Getterpage extends Container {
         buttonGetAllArticleSiege.addActionListener(e -> {
             try {
                 TableArticleSiege tableArticleSiege = new TableArticleSiege(clientSiege.getQuerySiegeInterface().getAllArticle());
-                tableDisplay = new JTable(tableArticleSiege);
-                JScrollContentPane.setViewportView(tableDisplay);
-                JScrollContentPane.setSize(tableDisplay.getSize());
-                controlFrame.pack();
+                createTableSiegeAndDisplayIt(tableArticleSiege, articleManagerFrame);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -109,31 +90,25 @@ public class Getterpage extends Container {
             try {
                 tableArticleSiege = new TableArticleSiege(
                         clientSiege.getQuerySiegeInterface().getArticleByFamily((String) comboBoxFamilySiege.getSelectedItem()));
-                tableDisplay = new JTable(tableArticleSiege);
-                JScrollContentPane.setViewportView(tableDisplay);
-                JScrollContentPane.setSize(tableDisplay.getSize());
-                controlFrame.pack();
+                createTableSiegeAndDisplayIt(tableArticleSiege, articleManagerFrame);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
         });
 
         buttonGetArticleByShopSiege.addActionListener(e -> {
-            TableArticleSiege tableArticleSiege;
+
             try {
-                tableArticleSiege = new TableArticleSiege(
+                TableArticleSiege tableArticleSiege = new TableArticleSiege(
                         clientSiege.getQuerySiegeInterface().getArticleByShop((String) comboBoxShopSiege.getSelectedItem()));
-                tableDisplay = new JTable(tableArticleSiege);
-                JScrollContentPane.setViewportView(tableDisplay);
-                JScrollContentPane.setSize(tableDisplay.getSize());
-                controlFrame.pack();
+                createTableSiegeAndDisplayIt(tableArticleSiege, articleManagerFrame);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
         });
 
-        controlFrame.pack();
-        controlFrame.setVisible(true);
+        articleManagerFrame.pack();
+        articleManagerFrame.setVisible(true);
     }
 
     // place custom component creation code here
@@ -155,5 +130,21 @@ public class Getterpage extends Container {
         String[] shopSiegeArray = new String[shopSiegeList.size()];
         shopSiegeList.toArray(shopSiegeArray);
         comboBoxShopSiege = new JComboBox<>(shopSiegeArray);
+    }
+
+    private void createTableSiegeAndDisplayIt(TableArticleSiege tableArticleSiege, JFrame jFrame) {
+        tableDisplay = new JTable(tableArticleSiege);
+        tableDisplay.setAutoCreateRowSorter(true);
+        JScrollContentPane.setViewportView(tableDisplay);
+        JScrollContentPane.setSize(tableDisplay.getSize());
+        jFrame.pack();
+    }
+
+    private void createTableShopAndDisplayIt(TableArticleShop tableArticleShop, JFrame jFrame) {
+        tableDisplay = new JTable(tableArticleShop);
+        tableDisplay.setAutoCreateRowSorter(true);
+        JScrollContentPane.setViewportView(tableDisplay);
+        JScrollContentPane.setSize(tableDisplay.getSize());
+        jFrame.pack();
     }
 }
