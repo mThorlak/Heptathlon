@@ -6,6 +6,12 @@ public class Database {
 
     private final Connection connection;
 
+    /**
+     * Manage connexion with DB MySQL (siege DB or Shop DB)
+     * @param DBName String
+     * @throws ClassNotFoundException exception
+     * @throws SQLException exception
+     */
     public Database (String DBName) throws ClassNotFoundException, SQLException {
 
         String jdbc_drive = "com.mysql.cj.jdbc.Driver";

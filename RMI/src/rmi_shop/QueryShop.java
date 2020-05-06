@@ -17,7 +17,13 @@ public class QueryShop implements QueryShopInterface {
     private final static String DATABASE_SHOP = "Shop";
     private final static String DATABASE_SIEGE = "Siege";
 
-    public List<Article> convertResultQueryIntoListArticleShop(ResultSet resultQuery) throws SQLException {
+    /**
+     * Take result set given by a request to DB shop and convert it to a list of object Article
+     * @param resultQuery sql response
+     * @return list of article
+     * @throws SQLException exception
+     */
+    private List<Article> convertResultQueryIntoListArticleShop(ResultSet resultQuery) throws SQLException {
 
         List<Article> list = new ArrayList<>();
         while (resultQuery.next()) {
@@ -41,6 +47,12 @@ public class QueryShop implements QueryShopInterface {
         return list;
     }
 
+    /**
+     * Request to DB shop to get all article with reference given
+     * @param reference string
+     * @return null if request to db return nothing, return article if it founds with reference given
+     * @throws Exception exception
+     */
     @Override
     public Article getArticleByReference(String reference) throws Exception {
 
@@ -69,6 +81,11 @@ public class QueryShop implements QueryShopInterface {
         return article;
     }
 
+    /**
+     * Request to DB shop to get all article, article with  0 stock are skipped
+     * @return list of article object
+     * @throws Exception exception
+     */
     @Override
     public List<Article> getAllArticle() throws Exception {
 
@@ -79,6 +96,12 @@ public class QueryShop implements QueryShopInterface {
         return convertResultQueryIntoListArticleShop(resultQuery);
     }
 
+    /**
+     * Request to DB shop to get all article with family name given in param, article with 0 stock are skipped
+     * @param familyName String
+     * @return list of object article
+     * @throws Exception exception
+     */
     @Override
     public List<Article> getArticleByFamily(String familyName) throws Exception {
 
@@ -95,6 +118,11 @@ public class QueryShop implements QueryShopInterface {
         return convertResultQueryIntoListArticleShop(resultQuery);
     }
 
+    /**
+     * Request to DB shop to get all unique family name
+     * @return list of String containing family name
+     * @throws Exception exception
+     */
     @Override
     public List<String> getAllFamily() throws Exception {
 
@@ -112,6 +140,12 @@ public class QueryShop implements QueryShopInterface {
         return families;
     }
 
+    /**
+     * Request to DB shop to insert a new reference with params given
+     * @param familyName String
+     * @param reference String
+     * @throws Exception exception
+     */
     @Override
     public void insertNewReference(String familyName, String reference) throws Exception {
 
@@ -144,6 +178,18 @@ public class QueryShop implements QueryShopInterface {
         queryShop.executeUpdate();
     }
 
+    /**
+     * Request to DB shop to insert new article, the reference must already existing
+     * The article is also added to DB Siege to keep link between two DB and to find out from the
+     * DB siege which article each shop have
+     * @see #insertNewReference(String, String)
+     * @param reference String
+     * @param price double
+     * @param stock int
+     * @param description String
+     * @param shop String
+     * @throws Exception exception
+     */
     @Override
     public void insertNewArticle(String reference, double price, int stock, String description, String shop)
             throws Exception {
@@ -187,6 +233,13 @@ public class QueryShop implements QueryShopInterface {
         queryShop.executeUpdate();
     }
 
+    /**
+     * Request to DB shop to update stock of an article
+     * @param shop String
+     * @param reference String
+     * @param stock int
+     * @throws Exception exception
+     */
     @Override
     public void updateStock(String shop, String reference, int stock) throws Exception {
 
@@ -208,6 +261,11 @@ public class QueryShop implements QueryShopInterface {
 
     }
 
+    /**
+     * Update the price of article in DB shop with the price of the same article in DB siege
+     * @param shop String
+     * @throws Exception exception
+     */
     @Override
     public void importPriceFromSiegeDB(String shop) throws Exception {
 

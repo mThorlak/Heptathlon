@@ -1,5 +1,6 @@
 package rmi_shop.tables;
 
+
 public class Article implements java.io.Serializable {
 
     private String Reference, Description;

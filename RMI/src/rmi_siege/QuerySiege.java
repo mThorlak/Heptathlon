@@ -6,7 +6,6 @@ import rmi_general.Database;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.ArticleSiege;
 
-import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +16,13 @@ public class QuerySiege implements QuerySiegeInterface {
 
     private final static String DATABASE_NAME = "Siege";
 
-    public List<ArticleSiege> convertResultQueryIntoListArticleSiege(ResultSet resultQuery) throws SQLException {
+    /**
+     * Take result set given by a request to DB siege and convert it to a list of object ArticleSiege
+     * @param resultQuery sql response
+     * @return list of object ArticleSiege
+     * @throws SQLException exception
+     */
+    private List<ArticleSiege> convertResultQueryIntoListArticleSiege(ResultSet resultQuery) throws SQLException {
 
         List<ArticleSiege> list = new ArrayList<>();
         while (resultQuery.next()) {
@@ -39,6 +44,11 @@ public class QuerySiege implements QuerySiegeInterface {
         return list;
     }
 
+    /**
+     * Request to DB siege to get all article
+     * @return list of object ArticleSiege
+     * @throws Exception exception
+     */
     @Override
     public List<ArticleSiege> getAllArticle() throws Exception {
 
@@ -49,6 +59,12 @@ public class QuerySiege implements QuerySiegeInterface {
         return convertResultQueryIntoListArticleSiege(resultQuery);
     }
 
+    /**
+     * Request to DB siege to get all article with family name given in param
+     * @param familyName String
+     * @return @return list of object ArticleSiege
+     * @throws Exception exception
+     */
     @Override
     public List<ArticleSiege> getArticleByFamily(String familyName) throws Exception {
 
@@ -66,6 +82,12 @@ public class QuerySiege implements QuerySiegeInterface {
         return convertResultQueryIntoListArticleSiege(resultQuery);
     }
 
+    /**
+     * Request to DB siege to get all article with shop name given in param
+     * @param shop String
+     * @return list of object ArticleSiege
+     * @throws Exception exception
+     */
     @Override
     public List<ArticleSiege> getArticleByShop(String shop) throws Exception {
 
@@ -79,6 +101,11 @@ public class QuerySiege implements QuerySiegeInterface {
         return convertResultQueryIntoListArticleSiege(resultQuery);
     }
 
+    /**
+     * Request to DB siege to get all unique family name
+     * @return list of String containing family name
+     * @throws Exception exception
+     */
     @Override
     public List<String> getAllFamily() throws Exception {
 
@@ -96,6 +123,11 @@ public class QuerySiege implements QuerySiegeInterface {
         return families;
     }
 
+    /**
+     * Request to DB siege to get all unique shop name
+     * @return list of String containing shop name
+     * @throws Exception exception
+     */
     @Override
     public List<String> getAllShop() throws Exception {
 
@@ -113,6 +145,12 @@ public class QuerySiege implements QuerySiegeInterface {
         return shops;
     }
 
+    /**
+     * Check if the reference given in param match with an article existing in DB siege
+     * @param reference String
+     * @return String empty if no match, String containing article reference if match
+     * @throws Exception exception
+     */
     @Override
     public String findArticleByReferenceSiege(String reference) throws Exception {
 
@@ -134,6 +172,12 @@ public class QuerySiege implements QuerySiegeInterface {
         return articleSiege.getReference();
     }
 
+    /**
+     * Request to DB siege to insert a new reference with params given
+     * @param familyName String
+     * @param reference String
+     * @throws Exception exception
+     */
     @Override
     public void insertNewReference(String familyName, String reference) throws Exception {
 
@@ -146,6 +190,14 @@ public class QuerySiege implements QuerySiegeInterface {
         query.executeUpdate();
     }
 
+    /**
+     * Request to DB siege to insert new article, the reference must already existing
+     * @see #insertNewReference(String, String)
+     * @param reference String
+     * @param price double
+     * @param description String
+     * @throws Exception exception
+     */
     @Override
     public void insertNewArticle(String reference, double price, String description) throws Exception {
 
@@ -159,6 +211,12 @@ public class QuerySiege implements QuerySiegeInterface {
         queryArticleSiegeDB.executeUpdate();
     }
 
+    /**
+     * Request to DB siege to update price of an article
+     * @param reference String
+     * @param price double
+     * @throws Exception exception
+     */
     @Override
     public void updatePrice(String reference, double price) throws Exception {
 
@@ -171,6 +229,13 @@ public class QuerySiege implements QuerySiegeInterface {
         query.executeUpdate();
     }
 
+    /**
+     * Request to DB siege to update isPaid boolean to true for a bill with reference given in parameter
+     * @param IDBill String
+     * @param paymentMethod String
+     * @throws SQLException exception
+     * @throws ClassNotFoundException exception
+     */
     @Override
     public void updateBillIsPaid(String IDBill, String paymentMethod) throws SQLException, ClassNotFoundException {
 
@@ -184,6 +249,12 @@ public class QuerySiege implements QuerySiegeInterface {
         query.executeUpdate();
     }
 
+    /**
+     * Request to DB siege to get a bill with ID given in param
+     * @param ID String
+     * @return object Bill
+     * @throws Exception exception
+     */
     @Override
     public Bill getBillByID(String ID) throws Exception {
 
@@ -222,6 +293,12 @@ public class QuerySiege implements QuerySiegeInterface {
         return bill;
     }
 
+    /**
+     * Take result set given by a request to DB siege and convert it to a list of object Bill
+     * @param resultQuery sql response
+     * @return list of object Bill
+     * @throws SQLException exception
+     */
     private List<Bill> convertResultQueryIntoBillList(ResultSet resultQuery) throws SQLException {
         List<Bill> bills = new ArrayList<>();
 
@@ -258,6 +335,12 @@ public class QuerySiege implements QuerySiegeInterface {
         return bills;
     }
 
+    /**
+     * Request to DB siege to get all bill with date given in param
+     * @param date String
+     * @return list of object Bill
+     * @throws Exception exception
+     */
     @Override
     public List<Bill> getBillByDate(String date) throws Exception {
 
@@ -276,6 +359,12 @@ public class QuerySiege implements QuerySiegeInterface {
         return convertResultQueryIntoBillList(resultQuery);
     }
 
+    /**
+     * Request to DB siege to get all bill with shop given in param
+     * @param shop String
+     * @return list of object Bill
+     * @throws Exception exception
+     */
     @Override
     public List<Bill> getBillByShop(String shop) throws Exception {
 
@@ -294,6 +383,13 @@ public class QuerySiege implements QuerySiegeInterface {
         return convertResultQueryIntoBillList(resultQuery);
     }
 
+    /**
+     * Request to DB siege to get all bill with date and shop given in param
+     * @param date String
+     * @param shop String
+     * @return list of object Bill
+     * @throws Exception exception
+     */
     @Override
     public List<Bill> getBillByDateAndShop(String date, String shop) throws Exception {
 
@@ -313,6 +409,13 @@ public class QuerySiege implements QuerySiegeInterface {
         return convertResultQueryIntoBillList(resultQuery);
     }
 
+    /**
+     * Calculate the CA of a shop with all it bill paid for date given in param
+     * @param date String
+     * @param shop String
+     * @return CA double
+     * @throws Exception exception
+     */
     @Override
     public double calculateCAShopDayBillPaid(String date, String shop) throws Exception {
 
@@ -327,6 +430,13 @@ public class QuerySiege implements QuerySiegeInterface {
         return total;
     }
 
+    /**
+     * Calculate the CA of a shop with all it bill non paid for date given in param
+     * @param date String
+     * @param shop String
+     * @return CA double
+     * @throws Exception exception
+     */
     @Override
     public double calculateCAShopDayBillNonPaid(String date, String shop) throws Exception {
 
@@ -341,6 +451,13 @@ public class QuerySiege implements QuerySiegeInterface {
         return total;
     }
 
+    /**
+     * Calculate the CA of a shop with all it bill for date given in param
+     * @param date String
+     * @param shop String
+     * @return CA double
+     * @throws Exception exception
+     */
     @Override
     public double calculateCAShopDayAllBill(String date, String shop) throws Exception {
 
@@ -354,8 +471,14 @@ public class QuerySiege implements QuerySiegeInterface {
         return total;
     }
 
+    /**
+     * Import the bill csv of a shop chosen (bill paid or non paid) into DB siege
+     * @param isBillPaid Boolean
+     * @throws SQLException exception
+     * @throws ClassNotFoundException exception
+     */
     @Override
-    public void importCSVIntoDBSiege(boolean isBillPaid) throws SQLException, ClassNotFoundException, FileNotFoundException {
+    public void importCSVIntoDBSiege(boolean isBillPaid) throws SQLException, ClassNotFoundException {
 
         Database databaseSiege = new Database(DATABASE_NAME);
 

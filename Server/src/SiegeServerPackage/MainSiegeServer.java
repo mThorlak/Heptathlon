@@ -11,6 +11,10 @@ public class MainSiegeServer extends QuerySiege {
 
     private static final int PORT_SIEGE = 1100;
 
+    /**
+     * Run siege server
+     * @param args no args needed
+     */
     public static void main(String[] args) {
         try {
             // Instantiating the implementation class

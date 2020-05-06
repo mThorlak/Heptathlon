@@ -19,7 +19,6 @@ public class BuyArticle {
     private JPanel panelMain;
     private JScrollPane scrollPaneTableDisplay;
     private JTable tableDisplayArticle;
-    private JPanel panelSelectedArticle;
     private JTable tableSelectedArticle;
     private JButton buttonAddArticleSelected;
     private JButton buttonRemoveArticleSelected;
@@ -37,8 +36,7 @@ public class BuyArticle {
     private JScrollPane scrollPaneArticleSelected;
     private JButton buttonConfirm;
     private JComboBox<String> comboBoxPaymentMethod;
-    private final String shopName = "shop1";
-    private List<Article> shopCartArticleList;
+    private final List<Article> shopCartArticleList;
     private boolean alreadyInShopCartArticleList;
     private final String[] paymentMethod = {"Cash", "Blue card", "Bitcoin", "Kidney"};
 
@@ -178,7 +176,6 @@ public class BuyArticle {
                     comboBoxPaymentMethod.addItem(payment);
             }
             else {
-                String[] paymentMethod = {"No payment method"};
                 comboBoxPaymentMethod.removeAllItems();
                 comboBoxPaymentMethod.addItem("No payment method");
             }

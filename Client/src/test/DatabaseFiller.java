@@ -10,6 +10,9 @@ public class DatabaseFiller {
         FillShop();
     }
 
+    /**
+     * Fill DB Siege with some references and articles
+     */
     public static void FillSiege() throws Exception {
 
         // Fill reference
@@ -43,6 +46,9 @@ public class DatabaseFiller {
 
     }
 
+    /**
+     * Fill DB Shop with some references and articles
+     */
     public static void FillShop() throws Exception {
 
         ClientShop clientShop = new ClientShop();

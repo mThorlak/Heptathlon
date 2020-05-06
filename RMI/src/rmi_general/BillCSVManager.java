@@ -1,12 +1,10 @@
 package rmi_general;
 
-
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.Bill;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,6 +26,11 @@ public class BillCSVManager {
         return BILL_PAID_PATH;
     }
 
+    /**
+     * Read a csv file line by line
+     * @param filePath -> relative path of the file
+     * @return csv line by line in List of String[] where each index of String[] represent a column
+     */
     public List<String[]> readLineByLine(String filePath) {
         try {
             FileReader reader = new FileReader(filePath);
@@ -56,7 +59,12 @@ public class BillCSVManager {
         return null;
     }
 
-    public void writeNewBill(Bill bill, boolean inPaidBill) throws IOException {
+    /**
+     * Write bill object in csv, if inPaidBill true, right in csv "Paid bill", else in "non paid bill" csv
+     * @param bill object
+     * @param inPaidBill boolean
+     */
+    public void writeNewBill(Bill bill, boolean inPaidBill) {
         String path;
         if (inPaidBill)
             path = BILL_PAID_PATH;
@@ -68,7 +76,7 @@ public class BillCSVManager {
                         SEPARATOR,
                         CSVWriter.NO_QUOTE_CHARACTER,
                         CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                        CSVWriter.DEFAULT_LINE_END);
+                        CSVWriter.DEFAULT_LINE_END)
         ) {
             List<Article> articleBought = bill.getArticles();
             List<String[]> allBills = readLineByLine(path);
@@ -113,6 +121,11 @@ public class BillCSVManager {
         }
     }
 
+    /**
+     * Remove bill in "non paid bill" csv and add it into "paid bill" csv
+     * @param idBill String
+     * @throws IOException exception
+     */
     public void payBill(String idBill) throws IOException {
 
         List<String[]> allBills = readLineByLine(BILL_PATH);
@@ -145,7 +158,12 @@ public class BillCSVManager {
         csvWriter.close();
     }
 
-    public Bill convertLineInBill(String[] lineCSV) throws FileNotFoundException {
+    /**
+     * Convert line from csv int bill object
+     * @param lineCSV line of the csv concerned
+     * @return Bill object representing the csv line given in parameter
+     */
+    public Bill convertLineInBill(String[] lineCSV) {
 
         String date = lineCSV[0];
         String id = lineCSV[1];
