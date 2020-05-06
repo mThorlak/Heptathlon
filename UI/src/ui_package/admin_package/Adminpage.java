@@ -4,6 +4,8 @@ import ui_package.GeneralFrameSettings;
 import ui_package.NavigationBar;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
@@ -17,13 +19,12 @@ public class Adminpage {
     private JButton buttonAddArticleSiege;
     private JButton buttonUpdatePriceShop;
     private JButton buttonImportBillSiege;
-    private JButton buttonCalculateCAShop;
-    private JButton buttonAddShopSiege;
     private JButton buttonAddReferenceShop;
     private JButton buttonAddReferenceSiege;
+    private JButton buttonAddStockArticle;
 
     public Adminpage() throws RemoteException, NotBoundException {
-        JFrame adminPage = new JFrame("Admin page");
+        JFrame adminPage = new JFrame("Heptathlon");
         GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(adminPage);
         adminPage.setContentPane(panelMain);
         adminPage.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -44,10 +45,6 @@ public class Adminpage {
             new ImportPriceShop();
         });
 
-        buttonCalculateCAShop.addActionListener(e -> {
-
-        });
-
         buttonAddReferenceSiege.addActionListener(e -> {
             new AddReference(false);
         });
@@ -60,7 +57,12 @@ public class Adminpage {
             new ImportBill();
         });
 
+        buttonAddStockArticle.addActionListener(e -> {
+            new AddStockArticle();
+        });
+
         adminPage.pack();
         adminPage.setVisible(true);
+
     }
 }
