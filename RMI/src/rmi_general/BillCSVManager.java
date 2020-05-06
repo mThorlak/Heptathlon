@@ -219,5 +219,18 @@ public class BillCSVManager {
         return new Bill(date, id, shop, total, payment, articles);
     }
 
+    public Double getTotal (String path) {
+
+        double total = 0;
+        List<String[]> allBills = readLineByLine(path);
+        for (String[] bill : allBills) {
+            if (bill[0].equals(allBills.get(0)[0]))
+                continue;
+            total = total + Double.parseDouble(bill[3]);
+        }
+
+        return total;
+    }
+
 }
 
