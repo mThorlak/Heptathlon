@@ -73,7 +73,7 @@ public class QueryShop implements QueryShopInterface {
     public List<Article> getAllArticle() throws Exception {
 
         Database database = new Database(DATABASE_SHOP);
-        String query = "SELECT * FROM Article";
+        String query = "SELECT * FROM Article WHERE Stock > 0";
         ResultSet resultQuery = database.CreateAndExecuteStatement(query);
 
         return convertResultQueryIntoListArticleShop(resultQuery);
@@ -86,7 +86,7 @@ public class QueryShop implements QueryShopInterface {
         String sql = "SELECT Article.Reference, Price, Stock, Description, Family \n" +
                 "FROM Article JOIN  Family \n" +
                 "ON Article.Reference = Family.Reference \n" +
-                "WHERE Family.Family = ?";
+                "WHERE Family.Family = ? AND Stock > 0";
         PreparedStatement query = database.getConnection().prepareStatement(sql);
         query.setString(1, familyName);
 
