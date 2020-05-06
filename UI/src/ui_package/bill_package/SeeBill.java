@@ -28,6 +28,8 @@ public class SeeBill {
     private JTextArea textAreaCABillNonPaid;
     private JTextArea textAreaCABillPaid;
     private JTextArea textAreaCATotalBill;
+    private JButton detailBillsDisplayedButton;
+    private JTextArea textAreaDetailBills;
 
     public SeeBill() throws RemoteException, NotBoundException {
         // Frame settings
@@ -36,6 +38,8 @@ public class SeeBill {
         seeBillFrame.setContentPane(panelMain);
         seeBillFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         seeBillFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
+
+        textAreaDetailBills.setVisible(false);
 
         ClientSiege clientSiege = new ClientSiege();
 
@@ -114,6 +118,21 @@ public class SeeBill {
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
+            }
+        });
+
+        detailBillsDisplayedButton.addActionListener(e -> {
+            List<Bill> bills = new ArrayList<>();
+            try {
+            for (int i = 0; i < tableBill.getRowCount(); i++) {
+                Bill bill = clientSiege.getQuerySiegeInterface().getBillByID((String) tableBill.getValueAt(i, 0));
+                bills.add(bill);
+            }
+            textAreaDetailBills.setText(bills.toString());
+            textAreaDetailBills.setVisible(true);
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         });
 

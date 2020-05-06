@@ -5,8 +5,6 @@ import rmi_siege.tables.Bill;
 import ui_package.GeneralFrameSettings;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
@@ -38,6 +36,9 @@ public class PayBill {
             try {
                 Bill bill = clientSiege.getQuerySiegeInterface().getBillByID(textFieldFindBill.getText());
                 textAreaBillDisplay.setText(bill.toString());
+                textAreaBillDisplay.setLineWrap(true);
+                textAreaBillDisplay.setWrapStyleWord(true);
+                payBillFrame.pack();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
