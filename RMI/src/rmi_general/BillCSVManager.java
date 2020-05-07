@@ -14,8 +14,8 @@ import java.util.List;
 
 public class BillCSVManager {
 
-    private final String BILL_PATH = "Server/resources/bill.csv";
-    private final String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
+    public final String BILL_PATH = "Server/resources/bill.csv";
+    public final String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
     private final char SEPARATOR = ';';
 
     public String getBillPath() {

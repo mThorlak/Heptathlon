@@ -11,6 +11,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SeeBill {
     private JPanel panelMain;
@@ -153,6 +154,7 @@ public class SeeBill {
                 panelFunctionBillDB.setVisible(true);
                 panelCASection.setVisible(true);
             }
+            seeBillFrame.pack();
         });
 
         buttonBillByIDCSV.addActionListener(e -> {
@@ -177,7 +179,12 @@ public class SeeBill {
 
         buttonGetAllBill.addActionListener(e -> {
             BillCSVManager csvManager = new BillCSVManager();
-            List<String[]> billsCSV = csvManager.readLineByLine("Server/resources/bill.csv");
+            String filePath;
+            if (Objects.equals(comboBoxCSVFile.getSelectedItem(), "Bill non paid"))
+                filePath = csvManager.BILL_PATH;
+            else
+                filePath = csvManager.BILL_PAID_PATH;
+            List<String[]> billsCSV = csvManager.readLineByLine(filePath);
             List<Bill> bills = new ArrayList<>();
             for (String[] billCSV : billsCSV) {
                 if (billCSV[0].equals(billsCSV.get(0)[0]))
@@ -186,7 +193,7 @@ public class SeeBill {
                 bills.add(bill);
             }
 
-            textAreaCACSV.setText(String.valueOf(csvManager.getTotal("Server/resources/bill.csv")));
+            textAreaCACSV.setText(String.valueOf(csvManager.getTotal(filePath)));
 
             TableBillSiege modelTable = new TableBillSiege(bills);
             tableBill = new JTable(modelTable);
@@ -195,13 +202,41 @@ public class SeeBill {
             seeBillFrame.pack();
         });
 
+        buttonBillByIDCSV.addActionListener(e -> {
+            BillCSVManager csvManager = new BillCSVManager();
+            String filePath;
+            if (Objects.equals(comboBoxCSVFile.getSelectedItem(), "Bill non paid"))
+                filePath = csvManager.BILL_PATH;
+            else
+                filePath = csvManager.BILL_PAID_PATH;
+
+            List<String[]> billsCSV = csvManager.readLineByLine(filePath);
+            List<Bill> bills = new ArrayList<>();
+            for (String[] billCSV : billsCSV) {
+                if (billCSV[0].equals(billsCSV.get(0)[0]))
+                    continue;
+                else if (billCSV[1].equals(textFieldBillByIDCVS.getText())) {
+                    Bill bill = csvManager.convertLineInBill(billCSV);
+                    bills.add(bill);
+                    break;
+                }
+            }
+
+            TableBillSiege modelTable = new TableBillSiege(bills);
+            tableBill = new JTable(modelTable);
+            scrollPaneTableDisplay.setViewportView(tableBill);
+            scrollPaneTableDisplay.setSize(tableBill.getSize());
+            seeBillFrame.pack();
+
+        });
+
         seeBillFrame.pack();
         seeBillFrame.setVisible(true);
 
     }
 
     private void createUIComponents() {
-        String [] csvName = {"bill paid", "bill non paid"};
+        String [] csvName = {"Bill paid", "Bill non paid"};
         comboBoxCSVFile = new JComboBox<>(csvName);
     }
 }
