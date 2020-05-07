@@ -1,12 +1,15 @@
 package ui_package.bill_package;
 
 import client_package.ClientSiege;
+import rmi_general.BillCSVManager;
 import rmi_siege.tables.Bill;
 import ui_package.ui_general.GeneralFrameSettings;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public class PayBill {
     private JPanel panelMain;
@@ -15,6 +18,7 @@ public class PayBill {
     private JTextField textFieldFindBill;
     private JButton buttonPayBill;
     private JComboBox<String> comboBoxPayment;
+    private JRadioButton radioButtonBillFromToday;
 
 
     public PayBill() throws RemoteException, NotBoundException {
@@ -33,22 +37,49 @@ public class PayBill {
             comboBoxPayment.addItem(payment);
 
         buttonFindBill.addActionListener(e -> {
-            try {
-                Bill bill = clientSiege.getQuerySiegeInterface().getBillByID(textFieldFindBill.getText());
+            Bill bill = null;
+            if (radioButtonBillFromToday.isSelected()) {
+                BillCSVManager csvManager = new BillCSVManager();
+                List<String[]> billsCSV = csvManager.readLineByLine(csvManager.BILL_PATH);
+                for (String[] billCSV : billsCSV) {
+                    if (billCSV[0].equals(billsCSV.get(0)[0]))
+                        continue;
+                    else if (billCSV[1].equals(textFieldFindBill.getText())) {
+                        bill = csvManager.convertLineInBill(billCSV);
+                        break;
+                    }
+                }
+            }
+            else {
+                try {
+                    bill = clientSiege.getQuerySiegeInterface().getBillByID(textFieldFindBill.getText());
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+            if (bill != null) {
                 textAreaBillDisplay.setText(bill.toString());
                 textAreaBillDisplay.setLineWrap(true);
                 textAreaBillDisplay.setWrapStyleWord(true);
                 payBillFrame.pack();
-            } catch (Exception exception) {
-                exception.printStackTrace();
             }
         });
 
         buttonPayBill.addActionListener(e -> {
-            try {
-                clientSiege.getQuerySiegeInterface().updateBillIsPaid(textFieldFindBill.getText(), (String)comboBoxPayment.getSelectedItem());
-            } catch (Exception exception) {
-                exception.printStackTrace();
+            if (radioButtonBillFromToday.isSelected()) {
+                BillCSVManager csvManager = new BillCSVManager();
+                try {
+                    csvManager.payBill(textFieldFindBill.getText());
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    clientSiege.getQuerySiegeInterface().updateBillIsPaid(textFieldFindBill.getText(), (String) comboBoxPayment.getSelectedItem());
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
         });
 
