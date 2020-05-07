@@ -1,9 +1,11 @@
 package ui_package.admin_package;
 
 import client_package.ClientSiege;
+import rmi_general.BillCSVManager;
 import ui_package.ui_general.GeneralFrameSettings;
 
 import javax.swing.*;
+import java.io.File;
 
 public class ImportBill {
     private JPanel panelMain;
@@ -25,10 +27,24 @@ public class ImportBill {
         buttonYes.addActionListener(e -> {
             try {
                 ClientSiege clientSiege = new ClientSiege();
-                if (checkBoxBillNonPaid.isSelected())
+                if (checkBoxBillNonPaid.isSelected()) {
                     clientSiege.getQuerySiegeInterface().importCSVIntoDBSiege(false);
-                if (checkBoxBillPaid.isSelected())
+                    BillCSVManager csvManager = new BillCSVManager();
+                    File file = new File(csvManager.BILL_PATH);
+                    if (file.delete())
+                        System.out.println("File bill.csv deleted");
+                    else
+                        System.out.println("File bill.csv not found");
+                }
+                if (checkBoxBillPaid.isSelected()) {
                     clientSiege.getQuerySiegeInterface().importCSVIntoDBSiege(true);
+                    BillCSVManager csvManager = new BillCSVManager();
+                    File file = new File(csvManager.BILL_PAID_PATH);
+                    if (file.delete())
+                        System.out.println("File bill_paid.csv deleted");
+                    else
+                        System.out.println("File bill_paid.csv not found");
+                }
                 if (!checkBoxBillPaid.isSelected() && !checkBoxBillNonPaid.isSelected())
                     labelState.setText("You have selected nothing");
             } catch (Exception remoteException) {

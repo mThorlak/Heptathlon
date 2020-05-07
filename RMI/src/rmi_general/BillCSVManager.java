@@ -124,12 +124,12 @@ public class BillCSVManager {
     /**
      * Remove bill in "non paid bill" csv and add it into "paid bill" csv
      * @param idBill String
+     * @param paymentMethod String
      * @throws IOException exception
      */
-    public void payBill(String idBill) throws IOException {
+    public void payBill(String idBill, String paymentMethod) throws IOException {
 
         List<String[]> allBills = readLineByLine(BILL_PATH);
-        String[] billPaid;
         int cpt = 0;
         for (String[] billString : allBills) {
             // Not compare header
@@ -138,9 +138,9 @@ public class BillCSVManager {
                 continue;
             }
             if (billString[1].equals(idBill)) {
-                billPaid = billString;
                 allBills.remove(cpt);
                 Bill bill = convertLineInBill(billString);
+                bill.setPayment(paymentMethod);
                 writeNewBill(bill, true);
                 break;
             }

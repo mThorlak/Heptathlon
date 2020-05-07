@@ -19,6 +19,7 @@ public class PayBill {
     private JButton buttonPayBill;
     private JComboBox<String> comboBoxPayment;
     private JRadioButton radioButtonBillFromToday;
+    private final String[] paymentMethod = {"Cash", "Blue card", "Bitcoin", "Kidney"};
 
 
     public PayBill() throws RemoteException, NotBoundException {
@@ -69,7 +70,7 @@ public class PayBill {
             if (radioButtonBillFromToday.isSelected()) {
                 BillCSVManager csvManager = new BillCSVManager();
                 try {
-                    csvManager.payBill(textFieldFindBill.getText());
+                    csvManager.payBill(textFieldFindBill.getText(), (String) comboBoxPayment.getSelectedItem());
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }

@@ -108,7 +108,7 @@ public class BuyArticle {
                             if (article.getReference().equals(articleBought.getReference())) {
                                 this.alreadyInShopCartArticleList = true;
                                 if (articleBeforeBuying.getStock() < article.getStock() + articleBought.getStock())
-                                    System.out.println("nop");
+                                    System.out.println("Too much for the actual stock");
                                 else
                                     article.setStock(article.getStock() + articleBought.getStock());
                             }
@@ -188,6 +188,8 @@ public class BuyArticle {
             String strDate = formatter.format(date);
             String shopName = "shop1";
             String paymentMethod = String.valueOf(comboBoxPaymentMethod.getSelectedItem());
+            boolean inPaidBill;
+            inPaidBill = Objects.equals(comboBoxPayBill.getSelectedItem(), "Yes");
 
             Bill bill = new Bill(strDate, shopName, Float.parseFloat(textAreaTotal.getText()), paymentMethod, this.shopCartArticleList);
             BillCSVManager billCSVManager = new BillCSVManager();
@@ -199,7 +201,7 @@ public class BuyArticle {
                             articleBeforeBought.getStock() - article.getStock());
                 }
 
-                billCSVManager.writeNewBill(bill, false);
+                billCSVManager.writeNewBill(bill, inPaidBill);
                 buyArticleFrame.dispose();
 
             } catch (Exception ioException) {
