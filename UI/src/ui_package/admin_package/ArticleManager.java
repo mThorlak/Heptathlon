@@ -133,7 +133,13 @@ public class ArticleManager extends Container {
 
         buttonImportBillSiege.addActionListener(e -> new ImportBill());
 
-        buttonAddStockArticle.addActionListener(e -> new AddStockArticle());
+        buttonAddStockArticle.addActionListener(e -> {
+            try {
+                new AddStockArticle();
+            } catch (RemoteException | NotBoundException remoteException) {
+                remoteException.printStackTrace();
+            }
+        });
 
         articleManagerFrame.pack();
         articleManagerFrame.setVisible(true);
