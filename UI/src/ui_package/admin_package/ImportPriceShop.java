@@ -24,11 +24,9 @@ public class ImportPriceShop {
     private JButton buttonExit;
 
     public ImportPriceShop() throws RemoteException, NotBoundException {
-        JFrame importPriceFrame = new JFrame("Admin page");
-        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(importPriceFrame);
+        JFrame importPriceFrame = new JFrame("Heptathlon");
         importPriceFrame.setContentPane(panelMain);
         importPriceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        importPriceFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
         labelState.setVisible(false);
 
         ClientSiege clientSiege = new ClientSiege();
