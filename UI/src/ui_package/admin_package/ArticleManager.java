@@ -1,7 +1,10 @@
 package ui_package.admin_package;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +13,7 @@ import client_package.ClientSiege;
 import model_table.TableArticleShop;
 import model_table.TableArticleSiege;
 import rmi_shop.tables.Article;
-import ui_package.ui_general.GeneralFrameSettings;
 import ui_package.ui_general.HintTextField;
-import ui_package.ui_general.NavigationBar;
 
 public class ArticleManager extends Container {
 
@@ -29,22 +30,22 @@ public class ArticleManager extends Container {
     private JComboBox<String> comboBoxShopSiege;
     private JButton buttonGetArticleByFamilySiege;
     private JButton buttonGetArticleByShopSiege;
-    private JButton buttonBillPage;
-    private JButton buttonGetterPage;
-    private JButton buttonAdminPage;
+    private JLabel jLabelHeader;
+    private JButton buttonAddReferenceShop;
+    private JButton buttonAddArticleShop;
+    private JButton buttonUpdatePriceShop;
+    private JButton buttonAddReferenceSiege;
+    private JButton buttonAddArticleSiege;
+    private JButton buttonImportBillSiege;
+    private JButton buttonAddStockArticle;
 
 
     public ArticleManager() throws Exception {
 
         // Frame settings
-        JFrame articleManagerFrame = new JFrame("Control page");
-        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(articleManagerFrame);
+        JFrame articleManagerFrame = new JFrame("Heptathlon");
         articleManagerFrame.setContentPane(panelMain);
         articleManagerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        articleManagerFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
-
-        // Navigation bar
-        new NavigationBar(articleManagerFrame, buttonGetterPage, buttonBillPage, buttonAdminPage);
 
         ClientShop clientShop = new ClientShop();
         ClientSiege clientSiege = new ClientSiege();
@@ -110,6 +111,20 @@ public class ArticleManager extends Container {
             }
         });
 
+        buttonAddReferenceShop.addActionListener(e -> new AddReference(true));
+
+        buttonAddArticleShop.addActionListener(e -> new InsertNewArticleShop());
+
+        buttonUpdatePriceShop.addActionListener(e -> new ImportPriceShop());
+
+        buttonAddReferenceSiege.addActionListener(e -> new AddReference(false));
+
+        buttonAddArticleSiege.addActionListener(e -> new InsertNewArticleSiege());
+
+        buttonImportBillSiege.addActionListener(e -> new ImportBill());
+
+        buttonAddStockArticle.addActionListener(e -> new AddStockArticle());
+
         articleManagerFrame.pack();
         articleManagerFrame.setVisible(true);
 
@@ -117,6 +132,9 @@ public class ArticleManager extends Container {
 
     // place custom component creation code here
     private void createUIComponents() throws Exception {
+
+        BufferedImage myPicture = ImageIO.read(new File("UI/resources/adminPageHeader.png"));
+        jLabelHeader = new JLabel(new ImageIcon(myPicture));
 
         fieldGetArticleByReferenceShop = new HintTextField("Reference");
 

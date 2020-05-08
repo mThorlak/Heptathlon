@@ -24,7 +24,7 @@ public class AdminPage {
 
         buttonArticleManager.addActionListener(e -> {
             try {
-                new BuyArticle();
+                new ArticleManager();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ui_package.admin_package.ArticleManager">
-  <grid id="27dc6" binding="panelMain" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="panelMain" layout-manager="GridLayoutManager" row-count="8" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="908" height="504"/>
+      <xy x="20" y="20" width="1163" height="621"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="139a6" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Article manager"/>
-        </properties>
-      </component>
-      <grid id="ccd96" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="ccd96" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
@@ -30,10 +22,12 @@
                 <preferred-size width="200" height="200"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <continuousLayout value="false"/>
+            </properties>
             <border type="none"/>
             <children>
-              <grid id="e77a" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="e77a" layout-manager="GridLayoutManager" row-count="6" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <splitpane position="left"/>
@@ -43,58 +37,103 @@
                 <children>
                   <component id="3a6d5" class="javax.swing.JButton" binding="buttonGetAllArticleShop">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
                       <text value="Get all article"/>
-                    </properties>
-                  </component>
-                  <component id="871e3" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Shop"/>
                     </properties>
                   </component>
                   <component id="bfd13" class="javax.swing.JTextField" binding="fieldGetArticleByReferenceShop" custom-create="true">
                     <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="ec417" class="javax.swing.JButton" binding="buttonGetArticleByReferenceShop">
-                    <constraints>
-                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Article by reference"/>
-                    </properties>
-                  </component>
-                  <vspacer id="4b3ee">
-                    <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
-                  <component id="a040c" class="javax.swing.JButton" binding="buttonGetArticleByFamilyShop">
-                    <constraints>
-                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Article by family"/>
-                    </properties>
-                  </component>
                   <component id="fe40c" class="javax.swing.JComboBox" binding="comboBoxFamilyShop" custom-create="true">
                     <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
                   </component>
+                  <component id="6b5ee" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <enabled value="true"/>
+                      <font name="Monospaced" size="25" style="1"/>
+                      <foreground color="-16777216"/>
+                      <text value="Shop"/>
+                    </properties>
+                  </component>
+                  <component id="971fa" class="javax.swing.JButton" binding="buttonAddReferenceShop">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
+                      <text value="Add reference"/>
+                    </properties>
+                  </component>
+                  <component id="26d09" class="javax.swing.JButton" binding="buttonAddArticleShop">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
+                      <text value="Add article"/>
+                    </properties>
+                  </component>
+                  <component id="bfa4d" class="javax.swing.JButton" binding="buttonUpdatePriceShop">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
+                      <text value="Update price shop"/>
+                    </properties>
+                  </component>
+                  <component id="ec417" class="javax.swing.JButton" binding="buttonGetArticleByReferenceShop">
+                    <constraints>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
+                      <text value="Article by reference"/>
+                    </properties>
+                  </component>
+                  <component id="a040c" class="javax.swing.JButton" binding="buttonGetArticleByFamilyShop">
+                    <constraints>
+                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
+                      <text value="Article by family"/>
+                    </properties>
+                  </component>
+                  <component id="f3455" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font style="1"/>
+                      <foreground color="-16777216"/>
+                      <orientation value="0"/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
-              <grid id="6637d" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="6637d" layout-manager="GridLayoutManager" row-count="6" column-count="3" same-size-horizontally="true" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <splitpane position="right"/>
@@ -102,66 +141,121 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="d87f9" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Siege"/>
-                    </properties>
-                  </component>
-                  <component id="14f74" class="javax.swing.JButton" binding="buttonGetAllArticleSiege">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Get all article"/>
-                    </properties>
-                  </component>
                   <component id="edf75" class="javax.swing.JComboBox" binding="comboBoxShopSiege" custom-create="true">
                     <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="1bca3" class="javax.swing.JButton" binding="buttonGetArticleByFamilySiege">
+                  <component id="ad840" class="javax.swing.JComboBox" binding="comboBoxFamilySiege" custom-create="true">
                     <constraints>
-                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="ae2a" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
+                      <background color="-1"/>
+                      <enabled value="true"/>
+                      <font name="Monospaced" size="25" style="1"/>
+                      <foreground color="-16777216"/>
+                      <text value="Siege"/>
+                    </properties>
+                  </component>
+                  <component id="c4a41" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font style="1"/>
+                      <foreground color="-16777216"/>
+                      <orientation value="0"/>
+                    </properties>
+                  </component>
+                  <component id="2a72a" class="javax.swing.JButton" binding="buttonAddReferenceSiege">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
+                      <text value="Add reference"/>
+                    </properties>
+                  </component>
+                  <component id="6794d" class="javax.swing.JButton" binding="buttonAddArticleSiege">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
+                      <text value="Add article"/>
+                    </properties>
+                  </component>
+                  <component id="bd9b5" class="javax.swing.JButton" binding="buttonImportBillSiege">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
+                      <text value="Import bill"/>
+                    </properties>
+                  </component>
+                  <component id="14f74" class="javax.swing.JButton" binding="buttonGetAllArticleSiege">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
+                      <text value="Get all article"/>
+                    </properties>
+                  </component>
+                  <component id="1bca3" class="javax.swing.JButton" binding="buttonGetArticleByFamilySiege">
+                    <constraints>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
                       <text value="Article by family"/>
                     </properties>
                   </component>
-                  <vspacer id="d9485">
-                    <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
                   <component id="918dd" class="javax.swing.JButton" binding="buttonGetArticleByShopSiege">
                     <constraints>
-                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
+                      <background color="-6411183"/>
+                      <foreground color="-1"/>
                       <text value="Article by shop"/>
                     </properties>
-                  </component>
-                  <component id="ad840" class="javax.swing.JComboBox" binding="comboBoxFamilySiege" custom-create="true">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
                   </component>
                 </children>
               </grid>
             </children>
           </splitpane>
+          <component id="a9e68" class="javax.swing.JButton" binding="buttonAddStockArticle">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-6411183"/>
+              <foreground color="-1"/>
+              <text value="Add stock article"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <scrollpane id="5fdff" binding="JScrollContentPane">
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
@@ -172,40 +266,78 @@
           </component>
         </children>
       </scrollpane>
-      <grid id="7567d" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="4bfbc" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="be84e" class="javax.swing.JButton" binding="buttonBillPage">
+          <component id="452a1" class="javax.swing.JLabel" binding="jLabelHeader" custom-create="true">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Bill page"/>
-            </properties>
-          </component>
-          <component id="a933a" class="javax.swing.JButton" binding="buttonGetterPage">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Getter page"/>
-            </properties>
-          </component>
-          <component id="ff366" class="javax.swing.JButton" binding="buttonAdminPage">
-            <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Admin page"/>
+              <text value=""/>
             </properties>
           </component>
         </children>
       </grid>
+      <component id="2bcd0" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+          <enabled value="true"/>
+          <font name="Monospaced" size="25" style="1"/>
+          <foreground color="-6411183"/>
+          <text value="Article manager"/>
+        </properties>
+      </component>
+      <component id="f0651" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font style="1"/>
+          <foreground color="-6411183"/>
+          <orientation value="0"/>
+        </properties>
+      </component>
+      <component id="f962d" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+          <enabled value="true"/>
+          <font name="Monospaced" size="25" style="1"/>
+          <foreground color="-6411183"/>
+          <text value="Control section"/>
+        </properties>
+      </component>
+      <component id="93c63" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font style="1"/>
+          <foreground color="-6411183"/>
+          <orientation value="0"/>
+        </properties>
+      </component>
+      <component id="2fcda" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font style="1"/>
+          <foreground color="-6411183"/>
+          <orientation value="0"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>
