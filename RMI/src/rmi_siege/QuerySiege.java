@@ -279,7 +279,7 @@ public class QuerySiege implements QuerySiegeInterface {
         }
         resultQuery.first();
 
-        Bill bill = new Bill(
+        return new Bill(
                 resultQuery.getString("Date"),
                 resultQuery.getString("IDBill"),
                 resultQuery.getString("Shop"),
@@ -287,10 +287,26 @@ public class QuerySiege implements QuerySiegeInterface {
                 resultQuery.getString("Payment"),
                 articles,
                 resultQuery.getBoolean("Paid"));
+    }
 
-        System.out.println(bill.toString());
+    /**
+     * Request to DB siege to get all bill
+     * @return list object Bill
+     * @throws Exception exception
+     */
+    @Override
+    public List<Bill> getAllBill() throws Exception {
 
-        return bill;
+        Database database = new Database(DATABASE_NAME);
+        String sql = "SELECT Bill.IDBill, Shop, Date, Total, Payment, Paid, Reference, Quantity, Price " +
+                "FROM Bill " +
+                "JOIN Bill_Details " +
+                "ON Bill.IDBill = Bill_Details.IDBill ";
+
+        PreparedStatement query = database.getConnection().prepareStatement(sql);
+        ResultSet resultQuery = query.executeQuery();
+
+        return convertResultQueryIntoBillList(resultQuery);
     }
 
     /**

@@ -1,5 +1,6 @@
 package ui_package;
 
+import ui_package.admin_package.AdminPage;
 import ui_package.client_package.ClientPage;
 
 import javax.imageio.ImageIO;
@@ -41,7 +42,8 @@ public class Homepage {
         });
 
         buttonAdminPage.addActionListener(e -> {
-
+            new AdminPage();
+            homepage.dispose();
         });
 
         homepage.pack();

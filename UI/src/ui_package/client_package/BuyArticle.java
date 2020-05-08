@@ -55,6 +55,7 @@ public class BuyArticle {
 
         TableArticleShop modelTable = new TableArticleShop(clientShop.getQueryShopInterface().getAllArticle());
         tableDisplayArticle = new JTable(modelTable);
+        tableDisplayArticle.setAutoCreateRowSorter(true);
         scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
         scrollPaneTableDisplay.setSize(tableDisplayArticle.getSize());
 
@@ -85,6 +86,7 @@ public class BuyArticle {
                 TableArticleShop tableArticle = new TableArticleShop(
                         clientShop.getQueryShopInterface().getAllArticle());
                 tableDisplayArticle = new JTable(tableArticle);
+                tableDisplayArticle.setAutoCreateRowSorter(true);
                 tableDisplayArticle.getSelectionModel().addListSelectionListener(ef ->
                         textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
                 scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
@@ -100,6 +102,7 @@ public class BuyArticle {
                 TableArticleShop tableArticle = new TableArticleShop(
                         clientShop.getQueryShopInterface().getArticleByFamily((String) comboBoxFamily.getSelectedItem()));
                 tableDisplayArticle = new JTable(tableArticle);
+                tableDisplayArticle.setAutoCreateRowSorter(true);
                 tableDisplayArticle.getSelectionModel().addListSelectionListener(ef ->
                         textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
                 scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
@@ -139,6 +142,7 @@ public class BuyArticle {
 
                         TableArticleShop tableArticleBought = new TableArticleShop(this.shopCartArticleList);
                         tableSelectedArticle = new JTable(tableArticleBought);
+                        tableSelectedArticle.setAutoCreateRowSorter(true);
                         scrollPaneArticleSelected.setViewportView(tableSelectedArticle);
                         scrollPaneArticleSelected.setSize(tableSelectedArticle.getSize());
                         buyArticleFrame.pack();
@@ -170,6 +174,7 @@ public class BuyArticle {
 
                 TableArticleShop tableArticleBought = new TableArticleShop(this.shopCartArticleList);
                 tableSelectedArticle = new JTable(tableArticleBought);
+                tableSelectedArticle.setAutoCreateRowSorter(true);
                 scrollPaneArticleSelected.setViewportView(tableSelectedArticle);
                 scrollPaneArticleSelected.setSize(tableSelectedArticle.getSize());
                 buyArticleFrame.pack();

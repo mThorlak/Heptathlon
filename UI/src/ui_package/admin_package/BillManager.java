@@ -4,16 +4,22 @@ import client_package.ClientSiege;
 import model_table.TableBillSiege;
 import rmi_general.BillCSVManager;
 import rmi_siege.tables.Bill;
-import ui_package.ui_general.GeneralFrameSettings;
+import ui_package.ui_general.HintTextField;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SeeBill {
+public class BillManager {
     private JPanel panelMain;
     private JScrollPane scrollPaneTableDisplay;
     private JTable tableBill;
@@ -25,33 +31,55 @@ public class SeeBill {
     private JTextField textFieldDateCA;
     private JTextField textFieldShopCA;
     private JButton buttonCalculateCA;
-    private JTextArea textAreaCABillNonPaid;
-    private JTextArea textAreaCABillPaid;
-    private JTextArea textAreaCATotalBill;
-    private JButton detailBillsDisplayedButton;
-    private JTextArea textAreaDetailBills;
+    private JTextPane textAreaCABillNonPaid;
+    private JTextPane textAreaCABillPaid;
+    private JTextPane textAreaCATotalBill;
+    private JButton buttonDetailBillsDisplayed;
+    private JTextPane textAreaDetailBills;
     private JRadioButton radioButtonBillFromToday;
     private JPanel panelFunctionBillDB;
     private JTextField textFieldBillByIDCVS;
     private JButton buttonBillByIDCSV;
     private JPanel panelBillCSV;
-    private JButton buttonGetAllBill;
+    private JButton buttonGetAllBillCSV;
     private JComboBox<String> comboBoxCSVFile;
     private JPanel panelCASection;
-    private JTextArea textAreaCACSV;
+    private JTextPane textAreaCACSV;
+    private JLabel jLabelHeader;
+    private JButton buttonGetAllBill;
+    private JPanel panelCASectionCSV;
+    private JButton buttonClearFieldDetailBills;
+    private JButton buttonDetailBillDisplayedCSV;
+    private JButton buttonClearFieldDetailBillsCSV;
+    private final List<Bill> billBufferCSV;
 
-    public SeeBill() throws RemoteException, NotBoundException {
+    public BillManager() throws RemoteException, NotBoundException {
         // Frame settings
-        JFrame seeBillFrame = new JFrame("Control page");
-        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(seeBillFrame);
-        seeBillFrame.setContentPane(panelMain);
-        seeBillFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        seeBillFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
+        JFrame billManagerFrame = new JFrame("Heptathlon");
+        billManagerFrame.setContentPane(panelMain);
+        billManagerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         textAreaDetailBills.setVisible(false);
         panelBillCSV.setVisible(false);
+        panelCASectionCSV.setVisible(false);
 
         ClientSiege clientSiege = new ClientSiege();
+        billBufferCSV = new ArrayList<>();
+
+        buttonGetAllBill.addActionListener(e -> {
+            try {
+                List<Bill> bills = clientSiege.getQuerySiegeInterface().getAllBill();
+                TableBillSiege modelTable = new TableBillSiege(bills);
+                tableBill = new JTable(modelTable);
+                tableBill.setAutoCreateRowSorter(true);
+                scrollPaneTableDisplay.setViewportView(tableBill);
+                scrollPaneTableDisplay.setSize(tableBill.getSize());
+
+                billManagerFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
 
         buttonGetBillByID.addActionListener(e -> {
             if (!textFieldGetButtonByID.getText().isEmpty()) {
@@ -64,7 +92,7 @@ public class SeeBill {
                     scrollPaneTableDisplay.setViewportView(tableBill);
                     scrollPaneTableDisplay.setSize(tableBill.getSize());
 
-                    seeBillFrame.pack();
+                    billManagerFrame.pack();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -73,40 +101,42 @@ public class SeeBill {
         });
 
         buttonBillByDateAndShop.addActionListener(e -> {
-            if (!textFieldDate.getText().isEmpty() && textFieldShop.getText().isEmpty()) {
+            if (!textFieldDate.getText().equals("Date") && textFieldShop.getText().equals("Shop")) {
                 try {
                     List<Bill> bills = clientSiege.getQuerySiegeInterface().getBillByDate(textFieldDate.getText());
                     TableBillSiege modelTable = new TableBillSiege(bills);
                     tableBill = new JTable(modelTable);
+                    tableBill.setAutoCreateRowSorter(true);
                     scrollPaneTableDisplay.setViewportView(tableBill);
                     scrollPaneTableDisplay.setSize(tableBill.getSize());
 
-                    seeBillFrame.pack();
+                    billManagerFrame.pack();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
-            } else if (textFieldDate.getText().isEmpty() && !textFieldShop.getText().isEmpty()) {
+            } else if (textFieldDate.getText().equals("Date") && !textFieldShop.getText().equals("Shop")) {
                 try {
                     List<Bill> bills = clientSiege.getQuerySiegeInterface().getBillByShop(textFieldShop.getText());
                     TableBillSiege modelTable = new TableBillSiege(bills);
                     tableBill = new JTable(modelTable);
+                    tableBill.setAutoCreateRowSorter(true);
                     scrollPaneTableDisplay.setViewportView(tableBill);
                     scrollPaneTableDisplay.setSize(tableBill.getSize());
-
-                    seeBillFrame.pack();
+                    billManagerFrame.pack();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
-            } else if (!textFieldDate.getText().isEmpty() && !textFieldShop.getText().isEmpty()) {
+            } else if (!textFieldDate.getText().equals("Date") && !textFieldShop.getText().equals("Shop")) {
                 try {
                     List<Bill> bills = clientSiege.getQuerySiegeInterface().getBillByDateAndShop(
                             textFieldDate.getText(), textFieldShop.getText());
                     TableBillSiege modelTable = new TableBillSiege(bills);
                     tableBill = new JTable(modelTable);
+                    tableBill.setAutoCreateRowSorter(true);
                     scrollPaneTableDisplay.setViewportView(tableBill);
                     scrollPaneTableDisplay.setSize(tableBill.getSize());
 
-                    seeBillFrame.pack();
+                    billManagerFrame.pack();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -114,7 +144,7 @@ public class SeeBill {
         });
 
         buttonCalculateCA.addActionListener(e -> {
-            if (!textFieldDateCA.getText().isEmpty() && !textFieldShopCA.getText().isEmpty()) {
+            if (!textFieldDateCA.getText().equals("Date") && !textFieldShopCA.getText().equals("Shop")) {
                 try {
                     textAreaCABillNonPaid.setText(String.valueOf(clientSiege.getQuerySiegeInterface().calculateCAShopDayBillNonPaid(
                             textFieldDateCA.getText(), textFieldShopCA.getText())));
@@ -128,7 +158,7 @@ public class SeeBill {
             }
         });
 
-        detailBillsDisplayedButton.addActionListener(e -> {
+        buttonDetailBillsDisplayed.addActionListener(e -> {
             List<Bill> bills = new ArrayList<>();
             try {
                 for (int i = 0; i < tableBill.getRowCount(); i++) {
@@ -138,9 +168,16 @@ public class SeeBill {
                 textAreaDetailBills.setText(bills.toString());
                 textAreaDetailBills.setVisible(true);
 
+                billManagerFrame.pack();
+
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
+        });
+
+        buttonClearFieldDetailBills.addActionListener(e -> {
+            textAreaDetailBills.setText("");
+            textAreaDetailBills.setVisible(false);
         });
 
         radioButtonBillFromToday.addActionListener(e -> {
@@ -148,13 +185,15 @@ public class SeeBill {
                 panelBillCSV.setVisible(true);
                 panelFunctionBillDB.setVisible(false);
                 panelCASection.setVisible(false);
+                panelCASectionCSV.setVisible(true);
             }
             else {
                 panelBillCSV.setVisible(false);
                 panelFunctionBillDB.setVisible(true);
                 panelCASection.setVisible(true);
+                panelCASectionCSV.setVisible(false);
             }
-            seeBillFrame.pack();
+            billManagerFrame.pack();
         });
 
         buttonBillByIDCSV.addActionListener(e -> {
@@ -168,16 +207,18 @@ public class SeeBill {
                         bills.add(bill);
                         TableBillSiege modelTable = new TableBillSiege(bills);
                         tableBill = new JTable(modelTable);
+                        tableBill.setAutoCreateRowSorter(true);
                         scrollPaneTableDisplay.setViewportView(tableBill);
                         scrollPaneTableDisplay.setSize(tableBill.getSize());
-                        seeBillFrame.pack();
+                        billManagerFrame.pack();
                         break;
                     }
                 }
             }
         });
 
-        buttonGetAllBill.addActionListener(e -> {
+        buttonGetAllBillCSV.addActionListener(e -> {
+            billBufferCSV.clear();
             BillCSVManager csvManager = new BillCSVManager();
             String filePath;
             if (Objects.equals(comboBoxCSVFile.getSelectedItem(), "Bill non paid"))
@@ -185,24 +226,25 @@ public class SeeBill {
             else
                 filePath = csvManager.BILL_PAID_PATH;
             List<String[]> billsCSV = csvManager.readLineByLine(filePath);
-            List<Bill> bills = new ArrayList<>();
             for (String[] billCSV : billsCSV) {
                 if (billCSV[0].equals(billsCSV.get(0)[0]))
                     continue;
                 Bill bill = csvManager.convertLineInBill(billCSV);
-                bills.add(bill);
+                billBufferCSV.add(bill);
             }
 
             textAreaCACSV.setText(String.valueOf(csvManager.getTotal(filePath)));
 
-            TableBillSiege modelTable = new TableBillSiege(bills);
+            TableBillSiege modelTable = new TableBillSiege(billBufferCSV);
             tableBill = new JTable(modelTable);
+            tableBill.setAutoCreateRowSorter(true);
             scrollPaneTableDisplay.setViewportView(tableBill);
             scrollPaneTableDisplay.setSize(tableBill.getSize());
-            seeBillFrame.pack();
+            billManagerFrame.pack();
         });
 
         buttonBillByIDCSV.addActionListener(e -> {
+            billBufferCSV.clear();
             BillCSVManager csvManager = new BillCSVManager();
             String filePath;
             if (Objects.equals(comboBoxCSVFile.getSelectedItem(), "Bill non paid"))
@@ -211,32 +253,55 @@ public class SeeBill {
                 filePath = csvManager.BILL_PAID_PATH;
 
             List<String[]> billsCSV = csvManager.readLineByLine(filePath);
-            List<Bill> bills = new ArrayList<>();
             for (String[] billCSV : billsCSV) {
                 if (billCSV[0].equals(billsCSV.get(0)[0]))
                     continue;
                 else if (billCSV[1].equals(textFieldBillByIDCVS.getText())) {
                     Bill bill = csvManager.convertLineInBill(billCSV);
-                    bills.add(bill);
+                    billBufferCSV.add(bill);
                     break;
                 }
             }
 
-            TableBillSiege modelTable = new TableBillSiege(bills);
+            TableBillSiege modelTable = new TableBillSiege(billBufferCSV);
             tableBill = new JTable(modelTable);
             scrollPaneTableDisplay.setViewportView(tableBill);
             scrollPaneTableDisplay.setSize(tableBill.getSize());
-            seeBillFrame.pack();
+            billManagerFrame.pack();
 
         });
 
-        seeBillFrame.pack();
-        seeBillFrame.setVisible(true);
+        buttonDetailBillDisplayedCSV.addActionListener(e -> {
+            textAreaDetailBills.setText(billBufferCSV.toString());
+            textAreaDetailBills.setVisible(true);
+
+            billManagerFrame.pack();
+
+        });
+
+        buttonClearFieldDetailBillsCSV.addActionListener(e -> {
+            textAreaDetailBills.setText("");
+            textAreaDetailBills.setVisible(false);
+        });
+
+        billManagerFrame.pack();
+        billManagerFrame.setVisible(true);
 
     }
 
-    private void createUIComponents() {
+    private void createUIComponents() throws IOException {
+
+        BufferedImage myPicture = ImageIO.read(new File("UI/resources/adminPageHeader.png"));
+        jLabelHeader = new JLabel(new ImageIcon(myPicture));
+
         String [] csvName = {"Bill paid", "Bill non paid"};
         comboBoxCSVFile = new JComboBox<>(csvName);
+
+        textFieldBillByIDCVS = new HintTextField("ID bill");
+        textFieldDate = new HintTextField("Date");
+        textFieldDateCA = new HintTextField("Date");
+        textFieldGetButtonByID = new HintTextField("ID bill");
+        textFieldShop = new HintTextField("Shop");
+        textFieldShopCA = new HintTextField("Shop");
     }
 }
