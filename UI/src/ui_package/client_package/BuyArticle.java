@@ -36,6 +36,7 @@ public class BuyArticle {
     private JScrollPane scrollPaneArticleSelected;
     private JButton buttonConfirm;
     private JComboBox<String> comboBoxPaymentMethod;
+    private JButton buttonSeeAllArticle;
     private final List<Article> shopCartArticleList;
     private boolean alreadyInShopCartArticleList;
     private final String[] paymentMethod = {"Cash", "Blue card", "Bitcoin", "Kidney"};
@@ -43,7 +44,7 @@ public class BuyArticle {
     public BuyArticle() throws Exception {
 
         // Frame settings
-        JFrame buyArticleFrame = new JFrame("Buy article");
+        JFrame buyArticleFrame = new JFrame("Heptathlon");
         GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(buyArticleFrame);
         buyArticleFrame.setContentPane(panelMain);
         buyArticleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -68,6 +69,23 @@ public class BuyArticle {
                 listArticles.add(clientShop.getQueryShopInterface().getArticleByReference(textFieldGetArticleByReference.getText()));
                 modelTable1 = new TableArticleShop(listArticles);
                 tableDisplayArticle = new JTable(modelTable1);
+                tableDisplayArticle.getSelectionModel().addListSelectionListener(ef ->
+                        textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
+                scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
+                scrollPaneTableDisplay.setSize(tableDisplayArticle.getSize());
+                buyArticleFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        buttonSeeAllArticle.addActionListener(e -> {
+            try {
+                TableArticleShop tableArticle = new TableArticleShop(
+                        clientShop.getQueryShopInterface().getAllArticle());
+                tableDisplayArticle = new JTable(tableArticle);
+                tableDisplayArticle.getSelectionModel().addListSelectionListener(ef ->
+                        textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
                 scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
                 scrollPaneTableDisplay.setSize(tableDisplayArticle.getSize());
                 buyArticleFrame.pack();
@@ -81,6 +99,8 @@ public class BuyArticle {
                 TableArticleShop tableArticle = new TableArticleShop(
                         clientShop.getQueryShopInterface().getArticleByFamily((String) comboBoxFamily.getSelectedItem()));
                 tableDisplayArticle = new JTable(tableArticle);
+                tableDisplayArticle.getSelectionModel().addListSelectionListener(ef ->
+                        textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
                 scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
                 scrollPaneTableDisplay.setSize(tableDisplayArticle.getSize());
                 buyArticleFrame.pack();
@@ -213,7 +233,6 @@ public class BuyArticle {
 
         buyArticleFrame.pack();
         buyArticleFrame.setVisible(true);
-
     }
 
     private void createUIComponents() throws Exception {
