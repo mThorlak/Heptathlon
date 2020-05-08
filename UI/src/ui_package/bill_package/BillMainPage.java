@@ -1,5 +1,7 @@
 package ui_package.bill_package;
 
+import ui_package.client_package.BuyArticle;
+import ui_package.client_package.PayBill;
 import ui_package.ui_general.GeneralFrameSettings;
 import ui_package.ui_general.NavigationBar;
 

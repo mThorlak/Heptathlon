@@ -1,6 +1,6 @@
 package ui_package;
 
-import ui_package.ui_general.GeneralFrameSettings;
+import ui_package.client_package.ClientPage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,6 +12,10 @@ public class Homepage {
     private JPanel MainPanel;
     private JButton EnterButton;
     private JLabel jLabelLogo;
+    private JButton buttonClientPage;
+    private JButton buttonAdminPage;
+    private JPanel panelMenu;
+    private JPanel panelHomepage;
     private JPanel panelLogo;
     private BufferedImage image;
 
@@ -21,23 +25,27 @@ public class Homepage {
 
     public Homepage() {
         JFrame homepage = new JFrame("Heptathlon");
-        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(homepage);
         homepage.setContentPane(MainPanel);
         homepage.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        homepage.setSize(300, 200);
-        homepage.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
+        panelHomepage.setVisible(true);
+        panelMenu.setVisible(false);
+
+        EnterButton.addActionListener(e -> {
+                panelHomepage.setVisible(false);
+                panelMenu.setVisible(true);
+        });
+
+        buttonClientPage.addActionListener(e -> {
+            new ClientPage();
+            homepage.dispose();
+        });
+
+        buttonAdminPage.addActionListener(e -> {
+
+        });
 
         homepage.pack();
         homepage.setVisible(true);
-
-        EnterButton.addActionListener(e -> {
-            try {
-                new ArticleManager();
-                homepage.dispose();
-            } catch (Exception remoteException) {
-                remoteException.printStackTrace();
-            }
-        });
     }
 
     private void createUIComponents() throws IOException {

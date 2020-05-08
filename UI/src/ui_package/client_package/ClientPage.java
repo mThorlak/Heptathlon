@@ -1,7 +1,5 @@
-package ui_package;
+package ui_package.client_package;
 
-import ui_package.bill_package.BuyArticle;
-import ui_package.bill_package.PayBill;
 import ui_package.ui_general.GeneralFrameSettings;
 
 import javax.imageio.ImageIO;

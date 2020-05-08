@@ -1,4 +1,4 @@
-package ui_package.bill_package;
+package ui_package.client_package;
 
 import client_package.ClientShop;
 import model_table.TableArticleShop;
@@ -8,7 +8,10 @@ import rmi_siege.tables.Bill;
 import ui_package.ui_general.GeneralFrameSettings;
 import ui_package.ui_general.HintTextField;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +40,7 @@ public class BuyArticle {
     private JButton buttonConfirm;
     private JComboBox<String> comboBoxPaymentMethod;
     private JButton buttonSeeAllArticle;
+    private JLabel jLabelHeader;
     private final List<Article> shopCartArticleList;
     private boolean alreadyInShopCartArticleList;
     private final String[] paymentMethod = {"Cash", "Blue card", "Bitcoin", "Kidney"};
@@ -45,10 +49,8 @@ public class BuyArticle {
 
         // Frame settings
         JFrame buyArticleFrame = new JFrame("Heptathlon");
-        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(buyArticleFrame);
         buyArticleFrame.setContentPane(panelMain);
         buyArticleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        buyArticleFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
 
         ClientShop clientShop = new ClientShop();
 
@@ -222,6 +224,7 @@ public class BuyArticle {
                 }
 
                 billCSVManager.writeNewBill(bill, inPaidBill);
+                new ConfirmArticleBought(bill);
                 buyArticleFrame.dispose();
 
             } catch (Exception ioException) {
@@ -236,6 +239,9 @@ public class BuyArticle {
     }
 
     private void createUIComponents() throws Exception {
+
+        BufferedImage myPicture = ImageIO.read(new File("UI/resources/clientPageHeader.png"));
+        jLabelHeader = new JLabel(new ImageIcon(myPicture));
 
         ClientShop clientShop = new ClientShop();
 

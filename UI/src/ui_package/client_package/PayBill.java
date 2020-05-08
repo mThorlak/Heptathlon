@@ -1,11 +1,15 @@
-package ui_package.bill_package;
+package ui_package.client_package;
 
 import client_package.ClientSiege;
 import rmi_general.BillCSVManager;
 import rmi_siege.tables.Bill;
 import ui_package.ui_general.GeneralFrameSettings;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -13,12 +17,14 @@ import java.util.List;
 
 public class PayBill {
     private JPanel panelMain;
-    private JTextArea textAreaBillDisplay;
+    private JTextPane textPaneBillDisplay;
     private JButton buttonFindBill;
     private JTextField textFieldFindBill;
     private JButton buttonPayBill;
     private JComboBox<String> comboBoxPayment;
     private JRadioButton radioButtonBillFromToday;
+    private JTextPane textPaneStateBill;
+    private JLabel jLabelHeader;
     private final String[] paymentMethod = {"Cash", "Blue card", "Bitcoin", "Kidney"};
 
 
@@ -30,6 +36,7 @@ public class PayBill {
         payBillFrame.setContentPane(panelMain);
         payBillFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         payBillFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
+        textPaneStateBill.setVisible(false);
 
         ClientSiege clientSiege = new ClientSiege();
 
@@ -50,8 +57,7 @@ public class PayBill {
                         break;
                     }
                 }
-            }
-            else {
+            } else {
                 try {
                     bill = clientSiege.getQuerySiegeInterface().getBillByID(textFieldFindBill.getText());
                 } catch (Exception exception) {
@@ -59,9 +65,7 @@ public class PayBill {
                 }
             }
             if (bill != null) {
-                textAreaBillDisplay.setText(bill.toString());
-                textAreaBillDisplay.setLineWrap(true);
-                textAreaBillDisplay.setWrapStyleWord(true);
+                textPaneBillDisplay.setText(bill.toString());
                 payBillFrame.pack();
             }
         });
@@ -69,23 +73,58 @@ public class PayBill {
         buttonPayBill.addActionListener(e -> {
             if (radioButtonBillFromToday.isSelected()) {
                 BillCSVManager csvManager = new BillCSVManager();
+                Bill bill = null;
                 try {
-                    csvManager.payBill(textFieldFindBill.getText(), (String) comboBoxPayment.getSelectedItem());
+                    csvManager = new BillCSVManager();
+                    List<String[]> billsCSV = csvManager.readLineByLine(csvManager.BILL_PATH);
+                    for (String[] billCSV : billsCSV) {
+                        if (billCSV[0].equals(billsCSV.get(0)[0]))
+                            continue;
+                        else if (billCSV[1].equals(textFieldFindBill.getText())) {
+                            bill = csvManager.convertLineInBill(billCSV);
+                            break;
+                        }
+                    }
+
+                    if (bill != null) {
+                        csvManager.payBill(textFieldFindBill.getText(), (String) comboBoxPayment.getSelectedItem());
+                        textPaneStateBill.setText("Bill is paid, thanks !");
+                        textPaneStateBill.setForeground(Color.GREEN);
+                    }
+                    else {
+                        textPaneStateBill.setText("The bill is already paid or does not exist");
+                        textPaneStateBill.setForeground(Color.RED);
+                    }
+
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-            }
-            else {
+            } else {
                 try {
-                    clientSiege.getQuerySiegeInterface().updateBillIsPaid(textFieldFindBill.getText(), (String) comboBoxPayment.getSelectedItem());
+                    Bill bill = clientSiege.getQuerySiegeInterface().getBillByID(textFieldFindBill.getText());
+                    if (bill.isPaid()) {
+                        textPaneStateBill.setText("The bill is already paid or does not exist");
+                        textPaneStateBill.setForeground(Color.RED);
+                    } else {
+                        clientSiege.getQuerySiegeInterface().updateBillIsPaid(textFieldFindBill.getText(), (String) comboBoxPayment.getSelectedItem());
+                        textPaneStateBill.setText("Bill is paid, thanks !");
+                        textPaneStateBill.setForeground(Color.GREEN);
+                    }
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
             }
+            textPaneStateBill.setVisible(true);
+            payBillFrame.pack();
         });
 
         payBillFrame.pack();
         payBillFrame.setVisible(true);
 
+    }
+
+    private void createUIComponents() throws IOException {
+        BufferedImage myPicture = ImageIO.read(new File("UI/resources/clientPageHeader.png"));
+        jLabelHeader = new JLabel(new ImageIcon(myPicture));
     }
 }
