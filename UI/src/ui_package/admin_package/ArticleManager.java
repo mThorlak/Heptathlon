@@ -3,6 +3,10 @@ package ui_package.admin_package;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -128,6 +132,36 @@ public class ArticleManager extends Container {
         articleManagerFrame.pack();
         articleManagerFrame.setVisible(true);
 
+        comboBoxFamilyShop.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                List<String> familyShopList;
+                try {
+                    familyShopList = clientShop.getQueryShopInterface().getAllFamily();
+                    comboBoxFamilyShop.removeAllItems();
+                    for (String item : familyShopList)
+                        comboBoxFamilyShop.addItem(item);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
+
+        comboBoxFamilySiege.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                try {
+                    List<String> familySiegeList = clientSiege.getQuerySiegeInterface().getAllFamily();
+                    comboBoxFamilySiege.removeAllItems();
+                    for (String item : familySiegeList)
+                        comboBoxFamilySiege.addItem(item);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
     }
 
     // place custom component creation code here
