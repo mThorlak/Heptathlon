@@ -3,12 +3,12 @@ package ui_package.admin_package;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +119,13 @@ public class ArticleManager extends Container {
 
         buttonAddArticleShop.addActionListener(e -> new InsertNewArticleShop());
 
-        buttonUpdatePriceShop.addActionListener(e -> new ImportPriceShop());
+        buttonUpdatePriceShop.addActionListener(e -> {
+            try {
+                new ImportPriceShop();
+            } catch (RemoteException | NotBoundException remoteException) {
+                remoteException.printStackTrace();
+            }
+        });
 
         buttonAddReferenceSiege.addActionListener(e -> new AddReference(false));
 
@@ -157,6 +163,21 @@ public class ArticleManager extends Container {
                     comboBoxFamilySiege.removeAllItems();
                     for (String item : familySiegeList)
                         comboBoxFamilySiege.addItem(item);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
+
+        comboBoxShopSiege.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                try {
+                    List<String> shopSiegeList = clientSiege.getQuerySiegeInterface().getAllShop();
+                    comboBoxShopSiege.removeAllItems();
+                    for (String item : shopSiegeList)
+                        comboBoxShopSiege.addItem(item);
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
