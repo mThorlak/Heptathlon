@@ -1,8 +1,8 @@
 package ui_package.ui_general;
 
-import ui_package.ArticleManager;
+import ui_package.admin_package.ArticleManager;
 import ui_package.admin_package.Adminpage;
-import ui_package.bill_package.BillMainPage;
+import ui_package.admin_package.BillMainPage;
 
 import javax.swing.*;
 

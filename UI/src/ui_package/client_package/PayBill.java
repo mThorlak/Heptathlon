@@ -4,6 +4,7 @@ import client_package.ClientSiege;
 import rmi_general.BillCSVManager;
 import rmi_siege.tables.Bill;
 import ui_package.ui_general.GeneralFrameSettings;
+import ui_package.ui_general.HintTextField;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -105,16 +106,17 @@ public class PayBill {
                     if (bill.isPaid()) {
                         textPaneStateBill.setText("The bill is already paid or does not exist");
                         textPaneStateBill.setForeground(Color.RED);
+                        textPaneStateBill.setVisible(true);
                     } else {
                         clientSiege.getQuerySiegeInterface().updateBillIsPaid(textFieldFindBill.getText(), (String) comboBoxPayment.getSelectedItem());
                         textPaneStateBill.setText("Bill is paid, thanks !");
                         textPaneStateBill.setForeground(Color.GREEN);
+                        textPaneStateBill.setVisible(true);
                     }
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
             }
-            textPaneStateBill.setVisible(true);
             payBillFrame.pack();
         });
 
@@ -126,5 +128,7 @@ public class PayBill {
     private void createUIComponents() throws IOException {
         BufferedImage myPicture = ImageIO.read(new File("UI/resources/clientPageHeader.png"));
         jLabelHeader = new JLabel(new ImageIcon(myPicture));
+
+        textFieldFindBill = new HintTextField("Bill ID");
     }
 }

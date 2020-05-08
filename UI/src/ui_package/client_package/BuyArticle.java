@@ -5,7 +5,6 @@ import model_table.TableArticleShop;
 import rmi_general.BillCSVManager;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.Bill;
-import ui_package.ui_general.GeneralFrameSettings;
 import ui_package.ui_general.HintTextField;
 
 import javax.imageio.ImageIO;

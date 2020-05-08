@@ -1,4 +1,4 @@
-package ui_package.bill_package;
+package ui_package.admin_package;
 
 import client_package.ClientSiege;
 import model_table.TableBillSiege;

@@ -1,5 +1,6 @@
-package ui_package.bill_package;
+package ui_package.admin_package;
 
+import ui_package.admin_package.SeeBill;
 import ui_package.client_package.BuyArticle;
 import ui_package.client_package.PayBill;
 import ui_package.ui_general.GeneralFrameSettings;

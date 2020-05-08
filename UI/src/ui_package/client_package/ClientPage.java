@@ -1,7 +1,5 @@
 package ui_package.client_package;
 
-import ui_package.ui_general.GeneralFrameSettings;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -18,10 +16,8 @@ public class ClientPage {
 
     public ClientPage () {
         JFrame clientPage = new JFrame("Heptathlon");
-        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(clientPage);
         clientPage.setContentPane(mainPanel);
         clientPage.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        clientPage.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
 
         buttonBuyArticle.addActionListener(e -> {
             try {
