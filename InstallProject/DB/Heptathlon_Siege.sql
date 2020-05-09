@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  localhost:3306
--- Généré le :  Sam 09 Mai 2020 à 14:05
+-- Généré le :  Sam 09 Mai 2020 à 17:16
 -- Version du serveur :  5.7.30-0ubuntu0.18.04.1
 -- Version de PHP :  7.2.24-0ubuntu0.18.04.4
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `Heptathlon_Siege`
 --
+CREATE DATABASE IF NOT EXISTS `Heptathlon_Siege` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `Heptathlon_Siege`;
 
 -- --------------------------------------------------------
 
