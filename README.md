@@ -13,8 +13,7 @@ git clone https://github.com/mThorlak/Heptathlon.git
 
 * [Open the project](https://www.jetbrains.com/help/webstorm/opening-reopening-and-closing-projects.html) with Intellij
 
-* Import settings 
-![settings](https://github.com/mThorlak/Heptathlon/blob/master/InstallProject/Readme_resources/import_settings.png)
+* Import settings (available in Heptathlon/InstallProject/settings_Intellij.zip)
 
 * Reboot Intellij
 
