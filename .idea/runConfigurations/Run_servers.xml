@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run servers" type="CompoundRunConfigurationType">
+    <toRun name="MainShopServer" type="Application" />
+    <toRun name="MainSiegeServer" type="Application" />
+    <method v="2" />
+  </configuration>
+</component>

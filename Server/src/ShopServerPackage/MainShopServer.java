@@ -12,6 +12,7 @@ public class MainShopServer extends QueryShop {
     private static final int PORT_SHOP = 1101;
 
     /**
+     *
      * Run shop server
      * @param args no args needed
      */

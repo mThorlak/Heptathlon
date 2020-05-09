@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run project" type="CompoundRunConfigurationType">
+    <toRun name="Homepage" type="Application" />
+    <toRun name="MainShopServer" type="Application" />
+    <toRun name="MainSiegeServer" type="Application" />
+    <method v="2" />
+  </configuration>
+</component>
