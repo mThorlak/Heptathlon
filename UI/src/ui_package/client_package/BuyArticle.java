@@ -1,13 +1,16 @@
-package ui_package.bill_package;
+package ui_package.client_package;
 
 import client_package.ClientShop;
 import model_table.TableArticleShop;
 import rmi_general.BillCSVManager;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.Bill;
-import ui_package.GeneralFrameSettings;
+import ui_package.ui_general.HintTextField;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +21,6 @@ public class BuyArticle {
     private JPanel panelMain;
     private JScrollPane scrollPaneTableDisplay;
     private JTable tableDisplayArticle;
-    private JPanel panelSelectedArticle;
     private JTable tableSelectedArticle;
     private JButton buttonAddArticleSelected;
     private JButton buttonRemoveArticleSelected;
@@ -26,41 +28,41 @@ public class BuyArticle {
     private JButton buttonSortByFamily;
     private JTextField textFieldGetArticleByReference;
     private JButton buttonGetArticleByReference;
-    private JLabel labelTotal;
+    private JTextArea textAreaTotal;
     private JComboBox<String> comboBoxPayBill;
     private JButton buttonCancel;
-    private JTextField textboxQuantityToBuyArticle;
+    private JTextField textFieldQuantityToBuyArticle;
     private JTextField textFieldQuantityToRemoveArticle;
-    private JLabel labelAddArticle;
-    private JLabel labelRemoveArticle;
+    private JTextArea textAreaAddArticle;
+    private JTextArea textAreaRemoveArticle;
     private JScrollPane scrollPaneArticleSelected;
     private JButton buttonConfirm;
     private JComboBox<String> comboBoxPaymentMethod;
-    private final String shopName = "shop1";
-    private List<Article> shopCartArticleList;
+    private JButton buttonSeeAllArticle;
+    private JLabel jLabelHeader;
+    private final List<Article> shopCartArticleList;
     private boolean alreadyInShopCartArticleList;
     private final String[] paymentMethod = {"Cash", "Blue card", "Bitcoin", "Kidney"};
 
     public BuyArticle() throws Exception {
 
         // Frame settings
-        JFrame buyArticleFrame = new JFrame("Buy article");
-        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(buyArticleFrame);
+        JFrame buyArticleFrame = new JFrame("Heptathlon");
         buyArticleFrame.setContentPane(panelMain);
         buyArticleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        buyArticleFrame.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
 
         ClientShop clientShop = new ClientShop();
 
         TableArticleShop modelTable = new TableArticleShop(clientShop.getQueryShopInterface().getAllArticle());
         tableDisplayArticle = new JTable(modelTable);
+        tableDisplayArticle.setAutoCreateRowSorter(true);
         scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
         scrollPaneTableDisplay.setSize(tableDisplayArticle.getSize());
 
         shopCartArticleList = new ArrayList<>();
 
         tableDisplayArticle.getSelectionModel().addListSelectionListener(e ->
-                labelAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
+                textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
 
         buttonGetArticleByReference.addActionListener(e -> {
             List<Article> listArticles = new ArrayList<>();
@@ -69,6 +71,24 @@ public class BuyArticle {
                 listArticles.add(clientShop.getQueryShopInterface().getArticleByReference(textFieldGetArticleByReference.getText()));
                 modelTable1 = new TableArticleShop(listArticles);
                 tableDisplayArticle = new JTable(modelTable1);
+                tableDisplayArticle.getSelectionModel().addListSelectionListener(ef ->
+                        textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
+                scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
+                scrollPaneTableDisplay.setSize(tableDisplayArticle.getSize());
+                buyArticleFrame.pack();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        buttonSeeAllArticle.addActionListener(e -> {
+            try {
+                TableArticleShop tableArticle = new TableArticleShop(
+                        clientShop.getQueryShopInterface().getAllArticle());
+                tableDisplayArticle = new JTable(tableArticle);
+                tableDisplayArticle.setAutoCreateRowSorter(true);
+                tableDisplayArticle.getSelectionModel().addListSelectionListener(ef ->
+                        textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
                 scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
                 scrollPaneTableDisplay.setSize(tableDisplayArticle.getSize());
                 buyArticleFrame.pack();
@@ -82,6 +102,9 @@ public class BuyArticle {
                 TableArticleShop tableArticle = new TableArticleShop(
                         clientShop.getQueryShopInterface().getArticleByFamily((String) comboBoxFamily.getSelectedItem()));
                 tableDisplayArticle = new JTable(tableArticle);
+                tableDisplayArticle.setAutoCreateRowSorter(true);
+                tableDisplayArticle.getSelectionModel().addListSelectionListener(ef ->
+                        textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
                 scrollPaneTableDisplay.setViewportView(tableDisplayArticle);
                 scrollPaneTableDisplay.setSize(tableDisplayArticle.getSize());
                 buyArticleFrame.pack();
@@ -92,20 +115,16 @@ public class BuyArticle {
 
         buttonAddArticleSelected.addActionListener(e -> {
             try {
-                if (!labelAddArticle.getText().isEmpty()) {
-                    if (textboxQuantityToBuyArticle.getText().isEmpty()) {
-                        textboxQuantityToBuyArticle.setText("1");
-                    }
-
+                if (!textAreaAddArticle.getText().isEmpty()) {
                     Article articleBeforeBuying = clientShop.getQueryShopInterface().getArticleByReference(
                             (String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0));
 
-                    if (articleBeforeBuying.getStock() < Integer.parseInt(textboxQuantityToBuyArticle.getText())) {
+                    if (articleBeforeBuying.getStock() < Integer.parseInt(textFieldQuantityToBuyArticle.getText())) {
                         System.out.println("Too much article selected");
                     } else {
                         Article articleBought = new Article();
                         articleBought.setReference(articleBeforeBuying.getReference());
-                        articleBought.setStock(Integer.parseInt(textboxQuantityToBuyArticle.getText()));
+                        articleBought.setStock(Integer.parseInt(textFieldQuantityToBuyArticle.getText()));
                         articleBought.setPrice(articleBeforeBuying.getPrice());
                         articleBought.setDescription(articleBeforeBuying.getDescription());
 
@@ -113,7 +132,7 @@ public class BuyArticle {
                             if (article.getReference().equals(articleBought.getReference())) {
                                 this.alreadyInShopCartArticleList = true;
                                 if (articleBeforeBuying.getStock() < article.getStock() + articleBought.getStock())
-                                    System.out.println("nop");
+                                    System.out.println("Too much for the actual stock");
                                 else
                                     article.setStock(article.getStock() + articleBought.getStock());
                             }
@@ -123,6 +142,7 @@ public class BuyArticle {
 
                         TableArticleShop tableArticleBought = new TableArticleShop(this.shopCartArticleList);
                         tableSelectedArticle = new JTable(tableArticleBought);
+                        tableSelectedArticle.setAutoCreateRowSorter(true);
                         scrollPaneArticleSelected.setViewportView(tableSelectedArticle);
                         scrollPaneArticleSelected.setSize(tableSelectedArticle.getSize());
                         buyArticleFrame.pack();
@@ -131,10 +151,10 @@ public class BuyArticle {
                         double total = 0;
                         for (Article article : this.shopCartArticleList)
                             total = total + (article.getStock() * article.getPrice());
-                        labelTotal.setText(String.valueOf(total));
+                        textAreaTotal.setText(String.valueOf(total));
 
                         tableSelectedArticle.getSelectionModel().addListSelectionListener(ef ->
-                                labelRemoveArticle.setText((String) tableSelectedArticle.getValueAt(tableSelectedArticle.getSelectedRow(), 0)));
+                                textAreaRemoveArticle.setText((String) tableSelectedArticle.getValueAt(tableSelectedArticle.getSelectedRow(), 0)));
                     }
                 }
             } catch (Exception exception) {
@@ -143,11 +163,7 @@ public class BuyArticle {
         });
 
         buttonRemoveArticleSelected.addActionListener(e -> {
-            if (!labelRemoveArticle.getText().isEmpty()) {
-                if (textFieldQuantityToRemoveArticle.getText().isEmpty()) {
-                    textFieldQuantityToRemoveArticle.setText("1");
-                }
-
+            if (!textAreaRemoveArticle.getText().isEmpty()) {
                 if (shopCartArticleList.get(tableSelectedArticle.getSelectedRow())
                         .getStock() <= Integer.parseInt(textFieldQuantityToRemoveArticle.getText()))
                     this.shopCartArticleList.remove(tableSelectedArticle.getSelectedRow());
@@ -158,6 +174,7 @@ public class BuyArticle {
 
                 TableArticleShop tableArticleBought = new TableArticleShop(this.shopCartArticleList);
                 tableSelectedArticle = new JTable(tableArticleBought);
+                tableSelectedArticle.setAutoCreateRowSorter(true);
                 scrollPaneArticleSelected.setViewportView(tableSelectedArticle);
                 scrollPaneArticleSelected.setSize(tableSelectedArticle.getSize());
                 buyArticleFrame.pack();
@@ -165,15 +182,15 @@ public class BuyArticle {
                 double total = 0;
                 for (Article article : this.shopCartArticleList)
                     total = total + (article.getStock() * article.getPrice());
-                labelTotal.setText(String.valueOf(total));
+                textAreaTotal.setText(String.valueOf(total));
 
                 tableSelectedArticle.getSelectionModel().addListSelectionListener(ef ->
-                        labelAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
+                        textAreaAddArticle.setText((String) tableDisplayArticle.getValueAt(tableDisplayArticle.getSelectedRow(), 0)));
 
-                labelRemoveArticle.setText("");
+                textAreaRemoveArticle.setText("");
 
                 tableSelectedArticle.getSelectionModel().addListSelectionListener(ef ->
-                        labelRemoveArticle.setText((String) tableSelectedArticle.getValueAt(tableSelectedArticle.getSelectedRow(), 0)));
+                        textAreaRemoveArticle.setText((String) tableSelectedArticle.getValueAt(tableSelectedArticle.getSelectedRow(), 0)));
 
             }
         });
@@ -185,7 +202,6 @@ public class BuyArticle {
                     comboBoxPaymentMethod.addItem(payment);
             }
             else {
-                String[] paymentMethod = {"No payment method"};
                 comboBoxPaymentMethod.removeAllItems();
                 comboBoxPaymentMethod.addItem("No payment method");
             }
@@ -198,8 +214,10 @@ public class BuyArticle {
             String strDate = formatter.format(date);
             String shopName = "shop1";
             String paymentMethod = String.valueOf(comboBoxPaymentMethod.getSelectedItem());
+            boolean inPaidBill;
+            inPaidBill = Objects.equals(comboBoxPayBill.getSelectedItem(), "Yes");
 
-            Bill bill = new Bill(strDate, shopName, Float.parseFloat(labelTotal.getText()), paymentMethod, this.shopCartArticleList);
+            Bill bill = new Bill(strDate, shopName, Float.parseFloat(textAreaTotal.getText()), paymentMethod, this.shopCartArticleList);
             BillCSVManager billCSVManager = new BillCSVManager();
 
             try {
@@ -209,7 +227,8 @@ public class BuyArticle {
                             articleBeforeBought.getStock() - article.getStock());
                 }
 
-                billCSVManager.writeNewBill(bill, false);
+                billCSVManager.writeNewBill(bill, inPaidBill);
+                new ConfirmArticleBought(bill);
                 buyArticleFrame.dispose();
 
             } catch (Exception ioException) {
@@ -221,10 +240,12 @@ public class BuyArticle {
 
         buyArticleFrame.pack();
         buyArticleFrame.setVisible(true);
-
     }
 
     private void createUIComponents() throws Exception {
+
+        BufferedImage myPicture = ImageIO.read(new File("UI/resources/clientPageHeader.png"));
+        jLabelHeader = new JLabel(new ImageIcon(myPicture));
 
         ClientShop clientShop = new ClientShop();
 
@@ -237,5 +258,9 @@ public class BuyArticle {
         comboBoxPayBill = new JComboBox<>(yesOrNo);
 
         comboBoxPaymentMethod = new JComboBox<>(paymentMethod);
+
+        textFieldQuantityToBuyArticle = new HintTextField("Quantity");
+        textFieldGetArticleByReference = new HintTextField("Reference");
+        textFieldQuantityToRemoveArticle = new HintTextField("Quantity");
     }
 }

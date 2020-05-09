@@ -1,12 +1,10 @@
 package rmi_general;
 
-
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
 import rmi_shop.tables.Article;
 import rmi_siege.tables.Bill;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,8 +14,8 @@ import java.util.List;
 
 public class BillCSVManager {
 
-    private final String BILL_PATH = "Server/resources/bill.csv";
-    private final String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
+    public final String BILL_PATH = "Server/resources/bill.csv";
+    public final String BILL_PAID_PATH = "Server/resources/bill_paid.csv";
     private final char SEPARATOR = ';';
 
     public String getBillPath() {
@@ -28,6 +26,11 @@ public class BillCSVManager {
         return BILL_PAID_PATH;
     }
 
+    /**
+     * Read a csv file line by line
+     * @param filePath -> relative path of the file
+     * @return csv line by line in List of String[] where each index of String[] represent a column
+     */
     public List<String[]> readLineByLine(String filePath) {
         try {
             FileReader reader = new FileReader(filePath);
@@ -56,7 +59,12 @@ public class BillCSVManager {
         return null;
     }
 
-    public void writeNewBill(Bill bill, boolean inPaidBill) throws IOException {
+    /**
+     * Write bill object in csv, if inPaidBill true, right in csv "Paid bill", else in "non paid bill" csv
+     * @param bill object
+     * @param inPaidBill boolean
+     */
+    public void writeNewBill(Bill bill, boolean inPaidBill) {
         String path;
         if (inPaidBill)
             path = BILL_PAID_PATH;
@@ -68,7 +76,7 @@ public class BillCSVManager {
                         SEPARATOR,
                         CSVWriter.NO_QUOTE_CHARACTER,
                         CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                        CSVWriter.DEFAULT_LINE_END);
+                        CSVWriter.DEFAULT_LINE_END)
         ) {
             List<Article> articleBought = bill.getArticles();
             List<String[]> allBills = readLineByLine(path);
@@ -113,10 +121,15 @@ public class BillCSVManager {
         }
     }
 
-    public void payBill(String idBill) throws IOException {
+    /**
+     * Remove bill in "non paid bill" csv and add it into "paid bill" csv
+     * @param idBill String
+     * @param paymentMethod String
+     * @throws IOException exception
+     */
+    public void payBill(String idBill, String paymentMethod) throws IOException {
 
         List<String[]> allBills = readLineByLine(BILL_PATH);
-        String[] billPaid;
         int cpt = 0;
         for (String[] billString : allBills) {
             // Not compare header
@@ -125,9 +138,9 @@ public class BillCSVManager {
                 continue;
             }
             if (billString[1].equals(idBill)) {
-                billPaid = billString;
                 allBills.remove(cpt);
                 Bill bill = convertLineInBill(billString);
+                bill.setPayment(paymentMethod);
                 writeNewBill(bill, true);
                 break;
             }
@@ -145,7 +158,12 @@ public class BillCSVManager {
         csvWriter.close();
     }
 
-    public Bill convertLineInBill(String[] lineCSV) throws FileNotFoundException {
+    /**
+     * Convert line from csv int bill object
+     * @param lineCSV line of the csv concerned
+     * @return Bill object representing the csv line given in parameter
+     */
+    public Bill convertLineInBill(String[] lineCSV) {
 
         String date = lineCSV[0];
         String id = lineCSV[1];
@@ -199,6 +217,19 @@ public class BillCSVManager {
         }
 
         return new Bill(date, id, shop, total, payment, articles);
+    }
+
+    public Double getTotal (String path) {
+
+        double total = 0;
+        List<String[]> allBills = readLineByLine(path);
+        for (String[] bill : allBills) {
+            if (bill[0].equals(allBills.get(0)[0]))
+                continue;
+            total = total + Double.parseDouble(bill[3]);
+        }
+
+        return total;
     }
 
 }

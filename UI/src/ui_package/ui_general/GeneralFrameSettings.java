@@ -1,4 +1,4 @@
-package ui_package;
+package ui_package.ui_general;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,31 +1,57 @@
 package ui_package;
 
+import ui_package.admin_package.AdminPage;
+import ui_package.client_package.ClientPage;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Homepage {
     private JPanel MainPanel;
     private JButton EnterButton;
+    private JLabel jLabelLogo;
+    private JButton buttonClientPage;
+    private JButton buttonAdminPage;
+    private JPanel panelMenu;
+    private JPanel panelHomepage;
+    private JPanel panelLogo;
+    private BufferedImage image;
 
     public static void main(String[] args) {
         new Homepage();
     }
 
     public Homepage() {
-        JFrame homepage = new JFrame("Homepage");
-        GeneralFrameSettings generalFrameSettings = new GeneralFrameSettings(homepage);
+        JFrame homepage = new JFrame("Heptathlon");
         homepage.setContentPane(MainPanel);
         homepage.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        homepage.setSize(300, 200);
-        homepage.setLocation(generalFrameSettings.getLocationX(), generalFrameSettings.getLocationY());
-        homepage.setVisible(true);
+        panelHomepage.setVisible(true);
+        panelMenu.setVisible(false);
 
         EnterButton.addActionListener(e -> {
-            try {
-                homepage.dispose();
-                new Getterpage();
-            } catch (Exception remoteException) {
-                remoteException.printStackTrace();
-            }
+                panelHomepage.setVisible(false);
+                panelMenu.setVisible(true);
         });
+
+        buttonClientPage.addActionListener(e -> {
+            new ClientPage();
+            homepage.dispose();
+        });
+
+        buttonAdminPage.addActionListener(e -> {
+            new AdminPage();
+            homepage.dispose();
+        });
+
+        homepage.pack();
+        homepage.setVisible(true);
+    }
+
+    private void createUIComponents() throws IOException {
+        BufferedImage myPicture = ImageIO.read(new File("UI/resources/logo.png"));
+        jLabelLogo = new JLabel(new ImageIcon(myPicture));
     }
 }
