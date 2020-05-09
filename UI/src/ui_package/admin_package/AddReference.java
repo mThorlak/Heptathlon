@@ -57,6 +57,7 @@ public class AddReference {
                     );
                     labelState.setText("Reference added with success !");
                     labelState.setForeground(Color.GREEN);
+                    labelState.setVisible(true);
                 } catch (Exception remoteException) {
                     remoteException.printStackTrace();
                     labelState.setVisible(true);

@@ -16,6 +16,7 @@ import client_package.ClientShop;
 import client_package.ClientSiege;
 import model_table.TableArticleShop;
 import model_table.TableArticleSiege;
+import rmi_general.BillCSVManager;
 import rmi_shop.tables.Article;
 import ui_package.ui_general.HintTextField;
 
@@ -42,6 +43,7 @@ public class ArticleManager extends Container {
     private JButton buttonAddArticleSiege;
     private JButton buttonImportBillSiege;
     private JButton buttonAddStockArticle;
+    private JLabel labelState;
 
 
     public ArticleManager() throws Exception {
@@ -50,6 +52,8 @@ public class ArticleManager extends Container {
         JFrame articleManagerFrame = new JFrame("Heptathlon");
         articleManagerFrame.setContentPane(panelMain);
         articleManagerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        labelState.setVisible(false);
 
         ClientShop clientShop = new ClientShop();
         ClientSiege clientSiege = new ClientSiege();
@@ -131,7 +135,43 @@ public class ArticleManager extends Container {
 
         buttonAddArticleSiege.addActionListener(e -> new InsertNewArticleSiege());
 
-        buttonImportBillSiege.addActionListener(e -> new ImportBill());
+        buttonImportBillSiege.addActionListener(e -> {
+            try {
+                clientSiege.getQuerySiegeInterface().importCSVIntoDBSiege(false);
+                labelState.setText("bill.csv is imported into Siege Database with success !");
+                labelState.setForeground(Color.GREEN);
+                labelState.setVisible(true);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                labelState.setText("Error : cannot import bill.csv into Siege Database");
+                labelState.setForeground(Color.RED);
+                labelState.setVisible(true);
+            }
+            BillCSVManager csvManager = new BillCSVManager();
+            File file = new File(csvManager.BILL_PATH);
+            if (file.delete())
+                System.out.println("File bill.csv deleted");
+            else
+                System.out.println("File bill.csv not found");
+
+            try {
+                clientSiege.getQuerySiegeInterface().importCSVIntoDBSiege(true);
+                labelState.setText("bill_paid.csv is imported into Siege Database with success !");
+                labelState.setForeground(Color.GREEN);
+                labelState.setVisible(true);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                labelState.setText("Error : cannot import bill_paid.csv into Siege Database");
+                labelState.setForeground(Color.RED);
+                labelState.setVisible(true);
+            }
+            file = new File(csvManager.BILL_PAID_PATH);
+            if (file.delete())
+                System.out.println("File bill_paid.csv deleted");
+            else
+                System.out.println("File bill_paid.csv not found");
+
+        });
 
         buttonAddStockArticle.addActionListener(e -> {
             try {
