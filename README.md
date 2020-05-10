@@ -13,9 +13,11 @@ git clone https://github.com/mThorlak/Heptathlon.git
 
 * [Open the project](https://www.jetbrains.com/help/webstorm/opening-reopening-and-closing-projects.html) with Intellij
 
-* Import settings (available in Heptathlon/InstallProject/settings_Intellij.zip)
+* (Optional) Import settings (available in Heptathlon/InstallProject/settings_Intellij.zip) and then reboot Intellij
 
-* Reboot Intellij
+* [Download and add jdk](https://www.jetbrains.com/help/idea/sdk.html) open jdv 14.XX to run the project
+
+* In RMI/src/rmi_general/Database, change "user" and "password" (line 19 and 20) with your own ID to connect to your phpMyAdmin account
 
 ### Database configuration
 
