@@ -17,8 +17,6 @@ git clone https://github.com/mThorlak/Heptathlon.git
 
 * [Download and add jdk](https://www.jetbrains.com/help/idea/sdk.html) open jdv 14.XX to run the project
 
-* In RMI/src/rmi_general/Database, change "user" and "password" (line 19 and 20) with your own ID to connect to your phpMyAdmin account
-
 ### Database configuration
 
 * Install [phpMyAdmin](https://docs.phpmyadmin.net/fr/latest/setup.html)
@@ -26,6 +24,8 @@ git clone https://github.com/mThorlak/Heptathlon.git
 * Connect to it : http://localhost/phpmyadmin
 
 * Import Heptathlon_Shop.sql and Heptathlon_Siege.sql (available into the project : Heptathlon/InstallProject/DB)
+
+* In RMI/src/rmi_general/Database, change "user" and "password" (line 19 and 20) with your own ID to connect to your phpMyAdmin account
 
 * And it's done !
 

@@ -22,9 +22,8 @@ public class FamilySiege implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "FamilySiege{" +
-                "Family='" + Family + '\'' +
-                ", Reference='" + Reference + '\'' +
-                '}';
+        return "Family siege" +
+                "Family = '" + Family + '\'' +
+                ", Reference = '" + Reference;
     }
 }

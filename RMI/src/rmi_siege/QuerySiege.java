@@ -62,7 +62,7 @@ public class QuerySiege implements QuerySiegeInterface {
     /**
      * Request to DB siege to get all article with family name given in param
      * @param familyName String
-     * @return @return list of object ArticleSiege
+     * @return list of object ArticleSiege
      * @throws Exception exception
      */
     @Override

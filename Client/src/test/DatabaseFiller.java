@@ -12,6 +12,7 @@ public class DatabaseFiller {
 
     /**
      * Fill DB Siege with some references and articles
+     * @throws Exception exception
      */
     public static void FillSiege() throws Exception {
 
@@ -48,6 +49,7 @@ public class DatabaseFiller {
 
     /**
      * Fill DB Shop with some references and articles
+     * @throws Exception exception
      */
     public static void FillShop() throws Exception {
 

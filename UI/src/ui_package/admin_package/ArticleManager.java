@@ -3,6 +3,8 @@ package ui_package.admin_package;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.image.BufferedImage;
@@ -38,12 +40,13 @@ public class ArticleManager extends Container {
     private JLabel jLabelHeader;
     private JButton buttonAddReferenceShop;
     private JButton buttonAddArticleShop;
-    private JButton buttonUpdatePriceShop;
+    private JButton buttonImportPriceShop;
     private JButton buttonAddReferenceSiege;
     private JButton buttonAddArticleSiege;
     private JButton buttonImportBillSiege;
     private JButton buttonAddStockArticle;
     private JLabel labelState;
+    private JButton buttonUpdatePriceArticle;
 
 
     public ArticleManager() throws Exception {
@@ -123,7 +126,7 @@ public class ArticleManager extends Container {
 
         buttonAddArticleShop.addActionListener(e -> new InsertNewArticleShop());
 
-        buttonUpdatePriceShop.addActionListener(e -> {
+        buttonImportPriceShop.addActionListener(e -> {
             try {
                 new ImportPriceShop();
             } catch (RemoteException | NotBoundException remoteException) {
@@ -181,9 +184,6 @@ public class ArticleManager extends Container {
             }
         });
 
-        articleManagerFrame.pack();
-        articleManagerFrame.setVisible(true);
-
         comboBoxFamilyShop.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -229,6 +229,11 @@ public class ArticleManager extends Container {
                 }
             }
         });
+
+        buttonUpdatePriceArticle.addActionListener(e -> new UpdatePriceSiege());
+
+        articleManagerFrame.pack();
+        articleManagerFrame.setVisible(true);
     }
 
     // place custom component creation code here

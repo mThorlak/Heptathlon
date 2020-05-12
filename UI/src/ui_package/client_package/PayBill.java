@@ -96,7 +96,7 @@ public class PayBill {
                         textPaneStateBill.setText("The bill is already paid or does not exist");
                         textPaneStateBill.setForeground(Color.RED);
                     }
-
+                    textPaneStateBill.setVisible(true);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -106,13 +106,12 @@ public class PayBill {
                     if (bill.isPaid()) {
                         textPaneStateBill.setText("The bill is already paid or does not exist");
                         textPaneStateBill.setForeground(Color.RED);
-                        textPaneStateBill.setVisible(true);
                     } else {
                         clientSiege.getQuerySiegeInterface().updateBillIsPaid(textFieldFindBill.getText(), (String) comboBoxPayment.getSelectedItem());
                         textPaneStateBill.setText("Bill is paid, thanks !");
                         textPaneStateBill.setForeground(Color.GREEN);
-                        textPaneStateBill.setVisible(true);
                     }
+                    textPaneStateBill.setVisible(true);
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }

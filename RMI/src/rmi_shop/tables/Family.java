@@ -22,9 +22,8 @@ public class Family implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "Family{" +
-                "Family='" + Family + '\'' +
-                ", Reference='" + Reference + '\'' +
-                '}';
+        return "Family : " +
+                "Name = '" + Family + '\'' +
+                ", Reference = '" + Reference;
     }
 }

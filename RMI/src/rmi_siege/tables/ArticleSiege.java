@@ -31,10 +31,9 @@ public class ArticleSiege implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "ArticleSiege{" +
-                "Reference='" + Reference + '\'' +
-                ", Description='" + Description + '\'' +
-                ", Price=" + Price +
-                '}';
+        return "Article siege : " +
+                " Reference = '" + Reference + '\'' +
+                ", Description = '" + Description + '\'' +
+                ", Price = " + Price;
     }
 }

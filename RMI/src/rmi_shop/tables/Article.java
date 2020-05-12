@@ -56,11 +56,10 @@ public class Article implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "Article{" +
-                "Reference='" + Reference + '\'' +
-                ", Description='" + Description + '\'' +
-                ", Price=" + Price +
-                ", Stock=" + Stock +
-                '}';
+        return "Article : " +
+                "Reference ='" + Reference + '\'' +
+                ", Description = '" + Description + '\'' +
+                ", Price = " + Price +
+                ", Stock = " + Stock;
     }
 }

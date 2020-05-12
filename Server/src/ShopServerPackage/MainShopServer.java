@@ -28,7 +28,7 @@ public class MainShopServer extends QueryShop {
             // Binding the remote object (stub) in the registry
             Registry registry = LocateRegistry.createRegistry(PORT_SHOP);
 
-            registry.bind("articleShop", stub);
+            registry.bind("Shop", stub);
             System.out.println("Server ready");
         } catch (Exception e) {
             System.err.println("Server exception: " + e.toString());

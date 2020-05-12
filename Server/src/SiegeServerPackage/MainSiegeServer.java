@@ -27,7 +27,7 @@ public class MainSiegeServer extends QuerySiege {
             // Binding the remote object (stub) in the registry
             Registry registry = LocateRegistry.createRegistry(PORT_SIEGE);
 
-            registry.bind("articleSiege", stub);
+            registry.bind("Siege", stub);
             System.out.println("Server ready");
         } catch (Exception e) {
             System.err.println("Server exception: " + e.toString());

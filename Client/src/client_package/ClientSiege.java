@@ -15,7 +15,7 @@ public class ClientSiege {
     public ClientSiege() throws RemoteException, NotBoundException {
         MainSiegeServer siegeServer = new MainSiegeServer();
         Registry registrySiege = LocateRegistry.getRegistry(siegeServer.getPort());
-        this.querySiegeInterface = (QuerySiegeInterface) registrySiege.lookup("articleSiege");
+        this.querySiegeInterface = (QuerySiegeInterface) registrySiege.lookup("Siege");
     }
 
     public QuerySiegeInterface getQuerySiegeInterface() {

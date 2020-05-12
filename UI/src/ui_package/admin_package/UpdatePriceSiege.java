@@ -9,48 +9,44 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class InsertNewArticleSiege {
+public class UpdatePriceSiege {
     private JPanel panelMain;
     private JTextField textFieldReference;
     private JButton buttonValidate;
     private JTextField textFieldPrice;
-    private JTextField textFieldDescription;
     private JLabel labelState;
     private JLabel jLabelHeader;
     private JButton exitButton;
 
-    public InsertNewArticleSiege() {
-        JFrame addArticleFrame = new JFrame("Heptathlon");
-        addArticleFrame.setContentPane(panelMain);
-        addArticleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    public UpdatePriceSiege() {
+        JFrame updateArticleFrame = new JFrame("Heptathlon");
+        updateArticleFrame.setContentPane(panelMain);
+        updateArticleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         labelState.setVisible(false);
 
         buttonValidate.addActionListener(e -> {
             try {
                 ClientSiege clientSiege = new ClientSiege();
-                clientSiege.getQuerySiegeInterface().insertNewArticle(
+                clientSiege.getQuerySiegeInterface().updatePrice(
                         textFieldReference.getText(),
-                        Double.parseDouble(textFieldPrice.getText()),
-                        textFieldDescription.getText()
+                        Double.parseDouble(textFieldPrice.getText())
                 );
-                labelState.setText("Article is added with success !");
+                labelState.setText("Article price is updated with success !");
                 labelState.setForeground(Color.GREEN);
                 labelState.setVisible(true);
             } catch (Exception remoteException) {
-                labelState.setText("Error : cannot add article");
+                labelState.setText("Error : cannot update price of this article");
                 labelState.setForeground(Color.RED);
                 labelState.setVisible(true);
                 remoteException.printStackTrace();
             }
-            addArticleFrame.pack();
+            updateArticleFrame.pack();
         });
 
-        exitButton.addActionListener(e -> {
-            addArticleFrame.dispose();
-        });
+        exitButton.addActionListener(e -> updateArticleFrame.dispose());
 
-        addArticleFrame.pack();
-        addArticleFrame.setVisible(true);
+        updateArticleFrame.pack();
+        updateArticleFrame.setVisible(true);
     }
 
     private void createUIComponents() throws IOException {

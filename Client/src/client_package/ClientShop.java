@@ -16,7 +16,7 @@ public class ClientShop {
     public ClientShop() throws RemoteException, NotBoundException {
         MainShopServer shopServer = new MainShopServer();
         Registry registryShop = LocateRegistry.getRegistry(shopServer.getPort());
-        this.queryShopInterface = (QueryShopInterface) registryShop.lookup("articleShop");
+        this.queryShopInterface = (QueryShopInterface) registryShop.lookup("Shop");
     }
 
     public QueryShopInterface getQueryShopInterface() {

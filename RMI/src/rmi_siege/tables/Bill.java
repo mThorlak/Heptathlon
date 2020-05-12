@@ -102,14 +102,13 @@ public class Bill implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "Bill{" +
-                "date='" + date + '\'' +
-                ", id='" + id + '\'' +
-                ", shop='" + shop + '\'' +
-                ", total=" + total +
-                ", payment='" + payment + '\'' +
-                ", articles=" + articles +
-                ", paid=" + paid +
-                '}';
+        return "Bill :" +
+                " date = '" + date + '\'' +
+                ", id = '" + id + '\'' +
+                ", shop = '" + shop + '\'' +
+                ", total = " + total +
+                ", payment = '" + payment + '\'' +
+                ", articles = " + articles +
+                ", paid = " + paid;
     }
 }

@@ -28,7 +28,7 @@ public class BillCSVManager {
 
     /**
      * Read a csv file line by line
-     * @param filePath -> relative path of the file
+     * @param filePath : relative path of the file
      * @return csv line by line in List of String[] where each index of String[] represent a column
      */
     public List<String[]> readLineByLine(String filePath) {
